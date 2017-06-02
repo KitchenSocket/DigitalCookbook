@@ -8,7 +8,7 @@ import java.util.LinkedList;
  *
  * @author breukerm
  * 
- * @author breukerm2
+ * @author breukerm23
  */
 public class CookBook {
 	private DatabaseAccess dataBaseAccess;
