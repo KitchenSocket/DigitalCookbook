@@ -138,6 +138,7 @@ public class CookBook {
       cb.dataBaseAccess.retrieveRecipe();
       
       System.out.println("Hello from Gang");
+      System.out.println("This is another test.");
 
     }
 
