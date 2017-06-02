@@ -7,6 +7,8 @@ import java.util.LinkedList;
  * A class for the program entry point and some test recipes.
  *
  * @author breukerm
+ * 
+ * @author breukerm2
  */
 public class CookBook {
 	private DatabaseAccess dataBaseAccess;
