@@ -3,6 +3,9 @@ package model;
 import java.sql.*;
 import java.util.LinkedList;
 
+import javafx.application.Application;
+import view.MainApp;
+
 /**
  * A class for the program entry point and some test recipes.
  *
@@ -19,7 +22,7 @@ public class CookBook {
      *
      * @return  the new recipe
      */
-    private static Recipe createGongBaoJiding() {
+    public static Recipe createGongBaoJiding() {
         Recipe recipe = new Recipe("Gong Bao Jiding", "Sichuan Dish", 4);
 
         recipe.addIngredient(new Ingredient("cornstarch", 1.0, "tablespoon"));
@@ -53,7 +56,7 @@ public class CookBook {
      *
      * @return  the recipe
      */
-    static Recipe createHongShaoRou() {
+    public static Recipe createHongShaoRou() {
         Recipe recipe = new Recipe("Hong Shao Rou", "Hunan Dish", 4);
 
      //   recipe.addIngredient(new Ingredient("pork belly", 0.5, "kg", "cut into 2cm pieces"));
@@ -87,7 +90,7 @@ public class CookBook {
      *
      * @return  the recipe
      */
-    private static Recipe createSuanLaFen() {
+    public static Recipe createSuanLaFen() {
         Recipe recipe = new Recipe("Suan La Fen", "Sichuan Dish", 2);
 
         recipe.addIngredient(new Ingredient("potato noodles", 1.0, "bunch"));
@@ -125,7 +128,7 @@ public class CookBook {
     public static void main(String[] args) throws SQLException {
     	
     
-        CookBook cb = new CookBook();
+       CookBook cb = new CookBook();
         
        cb.dataBaseAccess = new DatabaseAccess();
        
@@ -137,9 +140,7 @@ public class CookBook {
       
       cb.dataBaseAccess.insertRecipe(createGongBaoJiding());
 
-      cb.dataBaseAccess.retrieveRecipe();
-      
-      System.out.println("Hello from Gang");
+      Application.launch(MainApp.class, args);
 
     }
 

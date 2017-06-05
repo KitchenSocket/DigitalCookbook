@@ -35,7 +35,7 @@ public class MainApp extends Application {
         
         tabletLayout = (BorderPane) loader.load();
         
-        tabletLayout.setRight((BorderPane)loader.load(getClass().getResource("../view/MainPage.fxml")));
+        tabletLayout.setCenter((BorderPane)loader.load(getClass().getResource("../view/MainPage.fxml")));
         
         // Show the scene containing the root layout.
         
@@ -47,7 +47,4 @@ public class MainApp extends Application {
 		
 	}
 
-	public static void main(String[] args) {
-		launch(args);
-	}
 }

@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.Loader;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -36,19 +38,18 @@ public class TabletController implements Initializable {
     @FXML
     void favViewClick(ActionEvent event) throws IOException {
     	
-        FXMLLoader loader = new FXMLLoader();
-    	
-    	MainApp.tabletLayout.setRight((BorderPane)loader.load(getClass().getResource("../view/MainPage.fxml")));
-
+    	MainApp.tabletLayout.setCenter(null);
+    	    	
+    	MainApp.tabletLayout.setCenter((BorderPane)FXMLLoader.load(getClass().getResource("../view/FavouriteView.fxml")));
 
     }
 
     @FXML
     void mainPageClick(ActionEvent event) throws IOException {
     	
-        FXMLLoader loader = new FXMLLoader();
+    	MainApp.tabletLayout.setCenter(null);
     	
-    	MainApp.tabletLayout.setRight((BorderPane)loader.load(getClass().getResource("../view/MainPage.fxml")));
+    	MainApp.tabletLayout.setCenter((BorderPane)FXMLLoader.load(getClass().getResource("../view/MainPage.fxml")));
 
     }
     

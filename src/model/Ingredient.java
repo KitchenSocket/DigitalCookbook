@@ -40,7 +40,8 @@ public class Ingredient implements Serializable {
 	
 	@Override
     public String toString() {
-        return "> " + name + " " + amount + unit + '\n';
+		
+        return  name + " " + amount + " " + unit + '\n';
     }
 	
 }

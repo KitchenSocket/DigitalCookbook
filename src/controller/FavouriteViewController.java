@@ -30,9 +30,9 @@ import model.Recipe;
 import model.Step;
 import view.MainApp;
 
-public class MainPageController implements Initializable  {
+public class FavouriteViewController implements Initializable  {
 	
-	public static Stack<Recipe> matchRecipes = new Stack<Recipe>();
+	public static Stack<Recipe> favouriteRecipes = new Stack<Recipe>();
 	
 	public static ArrayList<Recipe> recipeCopies = new ArrayList<>();
 
@@ -79,9 +79,11 @@ public class MainPageController implements Initializable  {
     @FXML
     void search(ActionEvent event) throws IOException {
     	
-    	matchRecipes.push(CookBook.createHongShaoRou());
+    	favouriteRecipes.push(CookBook.createHongShaoRou());
     	
-    	matchRecipes.push(CookBook.createGongBaoJiding());	
+    	favouriteRecipes.push(CookBook.createGongBaoJiding());	
+    	
+    	favouriteRecipes.push(CookBook.createGongBaoJiding());	
 
     	showRecipeList();
 
@@ -108,18 +110,18 @@ public class MainPageController implements Initializable  {
 	}
 	
 	private void iniRecipeList() {
-		
-    	matchRecipes.push(CookBook.createHongShaoRou());
+			
+    	favouriteRecipes.push(CookBook.createGongBaoJiding());	
     	
-    	matchRecipes.push(CookBook.createGongBaoJiding());	
+    	favouriteRecipes.push(CookBook.createSuanLaFen());
     	
-    	matchRecipes.push(CookBook.createSuanLaFen());
+    	favouriteRecipes.push(CookBook.createHongShaoRou());
     	
-    	matchRecipes.push(CookBook.createHongShaoRou());
+    	favouriteRecipes.push(CookBook.createGongBaoJiding());	
     	
-    	matchRecipes.push(CookBook.createGongBaoJiding());	
+    	favouriteRecipes.push(CookBook.createSuanLaFen());
     	
-    	matchRecipes.push(CookBook.createSuanLaFen());
+    	favouriteRecipes.push(CookBook.createHongShaoRou());
     	
 	}
 	
@@ -131,12 +133,12 @@ public class MainPageController implements Initializable  {
 		
 		LinkedList<AnchorPane> recipes = new LinkedList<>();
 		
-		while(!matchRecipes.isEmpty()){
+		while(!favouriteRecipes.isEmpty()){
 			
 	        // Load root layout from fxml file.
 	        FXMLLoader loader = new FXMLLoader();
 	        
-	        loader.setLocation(MainApp.class.getResource("../view/BriefRecipeInMainPage.fxml"));
+	        loader.setLocation(MainApp.class.getResource("../view/BriefRecipeInFavouriteView.fxml"));
 	        
 	        AnchorPane eachRecipe = (AnchorPane) loader.load();
 			
@@ -192,3 +194,4 @@ public class MainPageController implements Initializable  {
 	}
 
 }
+
