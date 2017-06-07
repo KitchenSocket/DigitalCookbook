@@ -14,9 +14,13 @@ import javax.sound.midi.VoiceStatus;
 
 public class Step {
 	
-	private String stepDescription;
+	private int recipeId;
 	
-	private String picUri;
+	private int stepOrder;
+	
+	private String description;
+	
+	private String pic;
 	
 	/**
 	 * Constructor to construct a Step object with step description and picUri.
@@ -29,78 +33,42 @@ public class Step {
 	 * 
 	 * */
 	
-	public Step(String stepDescription, String picUri) {
+	public Step() {
 		
-		this.setStepDescription(stepDescription);
-		
-		this.setPicUri(picUri);
+		//
 		
 	}
 	
-	/**
-	 * Edit a Step object with the new step description and picUri.
-	 * 
-	 * @param stepDescription String. 
-	 * 
-	 * @param picUri uri which points to the picture.
-	 * 
-	 * @return null.
-	 * 
-	 * */
-	
-	public void editStep(String stepDescription, String picUri){
-				
-		this.setStepDescription(stepDescription);
-		
-		this.setPicUri(picUri);
-		
-	}
-	
-	/**
-	 * A static method to return a new Step object initialized by inputing step description and picUri.
-	 * 
-	 * @param stepDescription String. 
-	 * 
-	 * @param picUri uri which points to the picture.
-	 * 
-	 * @return Step. Return the created Step object for further operation.
-	 * 
-	 * */
-	
-	public static Step addStep(String stepDescription, String picUri){
-		
-		return new Step(stepDescription, picUri);
-		
+	public int getRecipeId() {		
+		return this.recipeId;		
 	}
 
-	public String getStepDescription() {
-		
-		return stepDescription;
-		
-	}
-
-	public void setStepDescription(String stepDescription) {
-		
-		this.stepDescription = stepDescription;
-		
-	}
-
-	public String getPicUri() {
-		
-		return picUri;
-		
-	}
-
-	public void setPicUri(String picUri) {
-		
-		this.picUri = picUri;
-		
+	public void setRecipeId(int recipeId) {	
+		this.recipeId = recipeId;		
 	}
 	
-	public String toString(){
-		
-		return stepDescription;
-			
+	public int getStepOrder() {		
+		return this.stepOrder;		
+	}
+
+	public void setStepOrder(int stepOrder) {	
+		this.stepOrder = stepOrder;		
+	}
+
+	public String getStepDescription() {		
+		return this.description;		
+	}
+
+	public void setDescription(String description) {	
+		this.description = description;		
+	}
+
+	public String getPic() {		
+		return this.pic;		
+	}
+
+	public void setPic(String pic) {		
+		this.pic = pic;		
 	}
 
 }
