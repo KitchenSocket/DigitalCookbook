@@ -54,8 +54,7 @@ public class Recipe implements Serializable {
 	}
 
 	public Recipe(String name, String tag, int servingNum,String description, String briefDescription, String thumbnail,
-			ArrayList<Ingredient> ingredients, ArrayList<Step> steps, int preparationTime, int cookTime,
-			Date createdAt) {
+			ArrayList<Ingredient> ingredients, ArrayList<Step> steps, int preparationTime, int cookTime) {
 		super();
 		this.name = name;
 		this.tag = tag;
@@ -67,7 +66,6 @@ public class Recipe implements Serializable {
 		this.steps = steps;
 		this.preparationTime = preparationTime;
 		this.cookTime = cookTime;
-		this.createdAt = createdAt;
 	}
 
 	public String getName() {

@@ -341,6 +341,63 @@ public class DatabaseAccess {
 		preparedStmt.execute();
 	}
 
+	
+	/**
+	 * @author CHANDIM, Liu Yuefeng
+	 * @param ingredientName
+	 *            String
+	 * @return recipeList ArrayList<Recipe>
+	 * @throws SQLException
+	 */
+	public ArrayList<Recipe> searchByIngredientName(String ingredientName) throws SQLException {
+
+		ArrayList<Recipe> recipeList = null;
+
+		Statement stmt = con.createStatement();
+
+		ResultSet rset = stmt
+				.executeQuery("SELECT recipe_id FROM cookbook.ingredient where name='" + ingredientName + "';");
+
+		while (rset.next()) {
+
+			ResultSet rSet2 = stmt
+					.executeQuery("SELECT * FROM cookbook.recipe where recipe_id='" + rset.getInt("recipe_id") + "';");
+
+			while (rSet2.next()) {
+				int recipeId = rSet2.getInt("recipe_id");
+
+				int serveNum = rSet2.getInt("servings");
+
+				int preparationTime = rSet2.getInt("preparationTime");
+
+				int cookingTime = rSet2.getInt("cookingTime");
+
+				int isFavourite = rSet2.getInt("isFavourite");
+
+				String name = rSet2.getString("name");
+
+				String description = rSet2.getString("description");
+
+				String briefDescription = rSet2.getString("briefDescription");
+
+				String thumbnail = rSet2.getString("thumbnail");
+
+				Date createdAt = new Date(rSet2.getTimestamp("createdAt").getTime());
+
+				// TODO should a recipe has default update and delete time?
+				Timestamp updatedAt = rSet2.getTimestamp("updatedAt");
+
+				Timestamp deletedAt = rSet2.getTimestamp("deletedAt");
+
+				System.out.println(new Recipe(name, "", serveNum, description, briefDescription, thumbnail, null, null,
+						preparationTime, cookingTime));
+
+			}
+
+		}
+		return recipeList;
+
+	}
 
 
 }
