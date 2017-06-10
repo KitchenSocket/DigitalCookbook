@@ -56,11 +56,11 @@ public class TabletController implements Initializable {
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
      
-        mainPageBtn.setGraphic(new ImageView(new Image( new File("src/resources/unclick_home.png").toURI().toString(),  40, 40, false, false)));
+        mainPageBtn.setGraphic(new ImageView(new Image( new File("src/resources/unclick_home.png").toURI().toString(),  31, 31, false, false)));
         
-        addFavBtn.setGraphic(new ImageView(new Image( new File("src/resources/add_fav_recipe.png").toURI().toString(),  40, 40, false, false)));
+        addFavBtn.setGraphic(new ImageView(new Image( new File("src/resources/add_fav_recipe.png").toURI().toString(),  31, 31, false, false)));
         
-        addRecipeBtn.setGraphic(new ImageView(new Image( new File("src/resources/add_recipe_btn.png").toURI().toString(),  40, 40, false, false)));
+        addRecipeBtn.setGraphic(new ImageView(new Image( new File("src/resources/add_recipe_btn.png").toURI().toString(),  31, 31, false, false)));
     	
         
     }

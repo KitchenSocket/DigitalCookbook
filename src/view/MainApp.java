@@ -14,11 +14,14 @@ public class MainApp extends Application {
     public static Stage primaryStage;
     
     public static BorderPane tabletLayout;
+    
+    public static Scene scene;
 
 	@Override
 	public void start(Stage primaryStage) throws IOException {
 		
         MainApp.primaryStage = primaryStage;
+
         
         MainApp.primaryStage.setTitle("CookbookApp");
         
@@ -35,11 +38,9 @@ public class MainApp extends Application {
         
         tabletLayout = (BorderPane) loader.load();
         
-        tabletLayout.setCenter((BorderPane)loader.load(getClass().getResource("../view/MainPage.fxml")));
-        
         // Show the scene containing the root layout.
         
-        Scene scene = new Scene(tabletLayout);
+        scene = new Scene(tabletLayout);
         
         primaryStage.setScene(scene);
         

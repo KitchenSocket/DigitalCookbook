@@ -43,7 +43,11 @@ public class CookBook {
         recipe.addPreparationStep(new Step("3. step for GongBaoJiding.","picUri"));
         recipe.addPreparationStep(new Step("4. step for GongBaoJiding.","picUri"));
         recipe.addPreparationStep(new Step("5. step for GongBaoJiding.","picUri"));
-     
+        
+        
+        recipe.setThumbnail("src/resources/pizza_img.png");
+        
+        recipe.setBriefDescription("Brief Description of Gong Bao Ji ding.");
 
         recipe.setPreparationTime(30);
         recipe.setCookTime(10);
@@ -72,6 +76,8 @@ public class CookBook {
         recipe.setBriefDescription("Brief Description of Hong Shao Rou.");
         
         recipe.setDescription("Description of Hong Shao Rou.");
+        
+        recipe.setThumbnail("src/resources/pizza_img.png");
 
         recipe.addPreparationStep(new Step("1. step for Hong Shao Rou","picUri"));
         recipe.addPreparationStep(new Step("2. step for Hong Shao Rou.","picUri"));
@@ -112,6 +118,11 @@ public class CookBook {
         recipe.addPreparationStep(new Step("3. step for SuanLaFen.","picUri"));
         recipe.addPreparationStep(new Step("4. step for SuanLaFen.","picUri"));
         recipe.addPreparationStep(new Step("5. step for SuanLaFen.","picUri"));
+        
+        
+        recipe.setThumbnail("src/resources/pizza_img.png");
+        
+        recipe.setBriefDescription("Brief Description of Suan La Fen.");
 
         recipe.setPreparationTime(30);
         recipe.setCookTime(5);

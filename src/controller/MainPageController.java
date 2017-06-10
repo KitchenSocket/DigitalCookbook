@@ -8,6 +8,8 @@ import java.util.LinkedList;
 import java.util.ResourceBundle;
 import java.util.Stack;
 
+import com.sun.xml.internal.bind.v2.runtime.Name;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -20,12 +22,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import model.CookBook;
+import model.Ingredient;
 import model.Recipe;
 import model.Step;
 import view.MainApp;
@@ -61,10 +67,24 @@ public class MainPageController implements Initializable  {
     private Button addFavBtn;
 
     @FXML
-    private TextArea ingredientList;
+    private ListView<String> stepList;
+    
+    @FXML
+    private Button deleteRecipeBtn;
+    
+    @FXML
+    private TableView<Ingredient> ingredientTable;
+    
+    private TableColumn<Ingredient, String> name = new TableColumn<>("Name");
+    
+    private TableColumn<Ingredient, Double> amount = new TableColumn<>("Amount");
+    
+    private TableColumn<Ingredient, String> unit = new TableColumn<>("Unit");
 
     @FXML
-    private ListView<String> stepList;
+    void deleteRecipe(ActionEvent event) {
+
+    }
 
     @FXML
     void addFavRecipe(ActionEvent event) {
@@ -92,6 +112,14 @@ public class MainPageController implements Initializable  {
 
 		searchBtn.setGraphic(new ImageView(new Image( new File("src/resources/recipe_search_button.png").toURI().toString(),  15, 17, false, false)));
     	
+		editRecipeBtn.setGraphic(new ImageView(new Image( new File("src/resources/edit.png").toURI().toString(),  15, 17, false, false)));
+    	
+		deleteRecipeBtn.setGraphic(new ImageView(new Image( new File("src/resources/delete.png").toURI().toString(),  15, 17, false, false)));
+    	
+		addFavBtn.setGraphic(new ImageView(new Image( new File("src/resources/add_fav_recipe.png").toURI().toString(),  15, 17, false, false)));
+    	
+		initableValueType();
+		
 		iniRecipeList();
 		
 		addRecipeListListenner();
@@ -107,6 +135,22 @@ public class MainPageController implements Initializable  {
 		
 	}
 	
+	private void initableValueType() {
+		
+		name.setMinWidth(196);
+
+		name.setCellValueFactory(new PropertyValueFactory<>("name"));
+		
+		amount.setMinWidth(83);
+		
+		amount.setCellValueFactory(new PropertyValueFactory<>("amount"));
+		
+		unit.setMinWidth(136);
+		
+		unit.setCellValueFactory(new PropertyValueFactory<>("unit"));
+		
+	}
+
 	private void iniRecipeList() {
 		
     	matchRecipes.push(CookBook.createHongShaoRou());
@@ -158,19 +202,38 @@ public class MainPageController implements Initializable  {
 		        
 		    	try{
 		    		
+		    		ingredientTable.getColumns().clear();
+		    		
 		    		Recipe selectedRecipe = recipeCopies.get(matchRecipeList.getSelectionModel().getSelectedIndex());
 			    	
 			    	recipeName.setText(selectedRecipe.getName());
 			    	
-			    	ingredientList.setText(selectedRecipe.getIngredients().toString());
-			    	
 			    	showStepList(selectedRecipe);
+			    	
+			    	ingredientTable.setItems(convertArrayListToOberservableList(selectedRecipe.getIngredients()));
 		    		
+			    	ingredientTable.getColumns().addAll(name, amount, unit);
+			    	
 		    	} catch (Exception e) {
 		    		//System.out.println("ignored error: ArrayIndexOutOfBoundsException.");
 				}
 		    	
 		    }
+
+			private ObservableList<Ingredient> convertArrayListToOberservableList(ArrayList<Ingredient> ingredients) {
+				
+				int size = ingredients.size();
+				
+				ObservableList<Ingredient> reIngredients = FXCollections.observableArrayList();
+				
+				for (int i = 0; i<size; i++){
+					
+					reIngredients.add(ingredients.get(i));
+					
+				}
+				
+				return reIngredients;
+			}
 		});
 		
 	}
