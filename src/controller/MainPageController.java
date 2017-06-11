@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.ResourceBundle;
 import java.util.Stack;
 
-import com.sun.xml.internal.bind.v2.runtime.Name;
+import javax.swing.JOptionPane;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -22,236 +22,275 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import model.CookBook;
-import model.Ingredient;
+import model.DatabaseAccess;
 import model.Recipe;
 import model.Step;
 import view.MainApp;
 
-public class MainPageController implements Initializable  {
-	
+public class MainPageController implements Initializable {
+
 	public static Stack<Recipe> matchRecipes = new Stack<Recipe>();
-	
+
 	public static ArrayList<Recipe> recipeCopies = new ArrayList<>();
 
-    @FXML
-    private TextField searchbar;
+	public static Recipe selectedRecipe;
 
-    @FXML
-    private Button searchBtn;
+	@FXML
+	private TextField searchbar;
 
-    @FXML
-    private ListView<AnchorPane> matchRecipeList;
+	@FXML
+	private Button searchBtn;
 
-    @FXML
-    private RadioButton recipeNameRadioBtn;
+	@FXML
+	private ListView<AnchorPane> matchRecipeList;
 
-    @FXML
-    private RadioButton ingredientNameRadioBtn;
+	@FXML
+	private RadioButton recipeNameRadioBtn;
 
-    @FXML
-    private Label recipeName;
+	@FXML
+	private RadioButton ingredientNameRadioBtn;
 
-    @FXML
-    private Button editRecipeBtn;
+	@FXML
+	private Label recipeName;
 
-    @FXML
-    private Button addFavBtn;
+	@FXML
+	private Button editRecipeBtn;
 
-    @FXML
-    private ListView<String> stepList;
-    
-    @FXML
-    private Button deleteRecipeBtn;
-    
-    @FXML
-    private TableView<Ingredient> ingredientTable;
-    
-    private TableColumn<Ingredient, String> name = new TableColumn<>("Name");
-    
-    private TableColumn<Ingredient, Double> amount = new TableColumn<>("Amount");
-    
-    private TableColumn<Ingredient, String> unit = new TableColumn<>("Unit");
+	@FXML
+	private Button addFavBtn;
 
-    @FXML
-    void deleteRecipe(ActionEvent event) {
+	@FXML
+	private TextArea ingredientList;
 
-    }
-
-    @FXML
-    void addFavRecipe(ActionEvent event) {
-
-    }
-
-    @FXML
-    void editRecipe(ActionEvent event) {
-
-    }
-
-    @FXML
-    void search(ActionEvent event) throws IOException {
-    	
-    	matchRecipes.push(CookBook.createHongShaoRou());
-    	
-    	matchRecipes.push(CookBook.createGongBaoJiding());	
-
-    	showRecipeList();
-
-    }
+	@FXML
+	private ListView<String> stepList;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-		searchBtn.setGraphic(new ImageView(new Image( new File("src/resources/recipe_search_button.png").toURI().toString(),  15, 17, false, false)));
-    	
-		editRecipeBtn.setGraphic(new ImageView(new Image( new File("src/resources/edit.png").toURI().toString(),  15, 17, false, false)));
-    	
-		deleteRecipeBtn.setGraphic(new ImageView(new Image( new File("src/resources/delete.png").toURI().toString(),  15, 17, false, false)));
-    	
-		addFavBtn.setGraphic(new ImageView(new Image( new File("src/resources/add_fav_recipe.png").toURI().toString(),  15, 17, false, false)));
-    	
-		initableValueType();
-		
+		searchBtn.setGraphic(new ImageView(new Image(
+				new File("src/resources/recipe_search_button.png").toURI().toString(), 15, 17, false, false)));
+
 		iniRecipeList();
-		
+
 		addRecipeListListenner();
-    	
-    	try {
+
+		try {
 			showRecipeList();
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	
-		
-		
-	}
-	
-	private void initableValueType() {
-		
-		name.setMinWidth(196);
+		ingredientList.setEditable(false);// user cannot edit textArea at main
+											// page
+		editRecipeBtn.setDisable(true);
 
-		name.setCellValueFactory(new PropertyValueFactory<>("name"));
-		
-		amount.setMinWidth(83);
-		
-		amount.setCellValueFactory(new PropertyValueFactory<>("amount"));
-		
-		unit.setMinWidth(136);
-		
-		unit.setCellValueFactory(new PropertyValueFactory<>("unit"));
-		
+		addFavBtn.setDisable(true);
+
 	}
 
 	private void iniRecipeList() {
-		
-    	matchRecipes.push(CookBook.createHongShaoRou());
-    	
-    	matchRecipes.push(CookBook.createGongBaoJiding());	
-    	
-    	matchRecipes.push(CookBook.createSuanLaFen());
-    	
-    	matchRecipes.push(CookBook.createHongShaoRou());
-    	
-    	matchRecipes.push(CookBook.createGongBaoJiding());	
-    	
-    	matchRecipes.push(CookBook.createSuanLaFen());
-    	
-	}
-	
-	private void showRecipeList() throws IOException {
-		
-		ObservableList<AnchorPane> recipeList =FXCollections.observableArrayList ();
-		
-		recipeCopies.clear();
-		
-		LinkedList<AnchorPane> recipes = new LinkedList<>();
-		
-		while(!matchRecipes.isEmpty()){
-			
-	        // Load root layout from fxml file.
-	        FXMLLoader loader = new FXMLLoader();
-	        
-	        loader.setLocation(MainApp.class.getResource("../view/BriefRecipeInMainPage.fxml"));
-	        
-	        AnchorPane eachRecipe = (AnchorPane) loader.load();
-			
-	        recipes.add(eachRecipe);	        
-	        
-		}
-		
-		recipeList.setAll(recipes);
-		
-		matchRecipeList.setItems(recipeList);
-				
-	}
-	
-	private void addRecipeListListenner() {
-		
-		matchRecipeList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<AnchorPane>() {
-		    @Override
-		    public void changed(ObservableValue<? extends AnchorPane> observable, AnchorPane oldValue, AnchorPane newValue) {
-		        
-		    	try{
-		    		
-		    		ingredientTable.getColumns().clear();
-		    		
-		    		Recipe selectedRecipe = recipeCopies.get(matchRecipeList.getSelectionModel().getSelectedIndex());
-			    	
-			    	recipeName.setText(selectedRecipe.getName());
-			    	
-			    	showStepList(selectedRecipe);
-			    	
-			    	ingredientTable.setItems(convertArrayListToOberservableList(selectedRecipe.getIngredients()));
-		    		
-			    	ingredientTable.getColumns().addAll(name, amount, unit);
-			    	
-		    	} catch (Exception e) {
-		    		//System.out.println("ignored error: ArrayIndexOutOfBoundsException.");
-				}
-		    	
-		    }
 
-			private ObservableList<Ingredient> convertArrayListToOberservableList(ArrayList<Ingredient> ingredients) {
-				
-				int size = ingredients.size();
-				
-				ObservableList<Ingredient> reIngredients = FXCollections.observableArrayList();
-				
-				for (int i = 0; i<size; i++){
-					
-					reIngredients.add(ingredients.get(i));
-					
+		matchRecipes.push(CookBook.createHongShaoRou());
+
+		matchRecipes.push(CookBook.createGongBaoJiding());
+
+		matchRecipes.push(CookBook.createSuanLaFen());
+
+		matchRecipes.push(CookBook.createHongShaoRou());
+
+		matchRecipes.push(CookBook.createGongBaoJiding());
+
+		matchRecipes.push(CookBook.createSuanLaFen());
+
+	}
+
+	/*
+	 * need to change on Ingredients(this method name is not understandable)
+	 */
+	private void addRecipeListListenner() {
+
+		matchRecipeList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<AnchorPane>() {
+			@Override
+			public void changed(ObservableValue<? extends AnchorPane> observable, AnchorPane oldValue,
+					AnchorPane newValue) {
+
+				try {
+
+					selectedRecipe = recipeCopies.get(matchRecipeList.getSelectionModel().getSelectedIndex());// get
+																												// user
+																												// clicked
+																												// recipe
+
+					recipeName.setText(selectedRecipe.getName());
+
+					ingredientList.setText(selectedRecipe.getIngredients().toString());
+
+					editRecipeBtn.setDisable(false);// button active
+
+					addFavBtn.setDisable(false);
+
+					showStepList(selectedRecipe);
+
+				} catch (Exception e) {
+					// System.out.println("ignored error:
+					// ArrayIndexOutOfBoundsException.");
 				}
-				
-				return reIngredients;
+
 			}
 		});
-		
+
 	}
 
 	private void showStepList(Recipe selectedRecipe) {
-		
-		ObservableList<String> recipeSteps =FXCollections.observableArrayList ();
-		
+
+		ObservableList<String> recipeSteps = FXCollections.observableArrayList();
+
 		ArrayList<Step> steps = selectedRecipe.getSteps();
-		
-		for(int i = 0; i < steps.size(); i++){
-			
+
+		for (int i = 0; i < steps.size(); i++) {
+
 			recipeSteps.add(steps.get(i).getStepDescription());
-			
+
 		}
-			
+
 		stepList.setItems(recipeSteps);
-		
+
 	}
 
+	private void showRecipeList() throws IOException {
+
+		ObservableList<AnchorPane> recipeList = FXCollections.observableArrayList();
+
+		recipeCopies.clear();
+
+		LinkedList<AnchorPane> recipes = new LinkedList<>();
+
+		while (!matchRecipes.isEmpty()) {
+
+			// Load root layout from fxml file.
+			FXMLLoader loader = new FXMLLoader();
+
+			loader.setLocation(MainApp.class.getResource("../view/BriefRecipeInMainPage.fxml"));
+
+			AnchorPane eachRecipe = (AnchorPane) loader.load();
+
+			recipes.add(eachRecipe);
+
+		}
+
+		recipeList.setAll(recipes);
+
+		matchRecipeList.setItems(recipeList);
+
+	}
+
+	/*
+	 * add favorite recipe method(button color change need to be done)
+	 * 
+	 * @param event search click event
+	 * 
+	 * @author Qiwen Gu
+	 */
+	@FXML
+	void addFavRecipe(ActionEvent event) {
+
+		boolean isFav = selectedRecipe.isFavourite();
+
+		if (isFav == false) {
+
+			int favorite = JOptionPane.showConfirmDialog(null, "Add this recipe into Favorite?", null,
+					JOptionPane.YES_NO_OPTION);// Jpane check
+
+			if (favorite == JOptionPane.YES_OPTION) {
+
+				selectedRecipe.addFavourite();
+				// DatabaseAccess.updateRecipe(selectedRecipe);//not complete
+				// method
+
+				System.out.print(selectedRecipe.getName() + " add favorite " + selectedRecipe.isFavourite());
+
+			}
+
+		} else {
+
+			int favorite = JOptionPane.showConfirmDialog(null, "Remove this recipe from Favorite?", null,
+					JOptionPane.YES_NO_OPTION);// Jpane check
+
+			if (favorite == JOptionPane.YES_OPTION) {
+
+				selectedRecipe.removeFavourite();// DatabaseAccess.updateRecipe(selectedRecipe);//not
+													// complete
+				// method
+
+				System.out.print(selectedRecipe.getName() + " remove favorite " + selectedRecipe.isFavourite());
+
+			}
+		}
+	}
+
+	/*
+	 * edit recipe method(need a new view to be done)
+	 */
+	@FXML
+	void editRecipe(ActionEvent event) {
+
+	}
+
+	/*
+	 * search method
+	 * 
+	 * @param event search click event
+	 * 
+	 * @author Qiwen Gu
+	 */
+	@FXML
+	void search(ActionEvent event) throws IOException {
+
+		String searchWord = new String(searchbar.getText());
+
+		ArrayList<Recipe> recipes = null;
+
+		if (searchWord.equals("")) {
+			JOptionPane.showMessageDialog(null, "No entry word", null, JOptionPane.ERROR_MESSAGE);// Jpane alert
+
+		} else {
+
+			if (recipeNameRadioBtn.isSelected()) {
+
+				System.out.println("searchByRecipeName");
+				// recipes =
+				// DatabaseAccess.searchByIngredientName(searchWord);//I
+				// have no Sijie's search method
+
+			} else if (ingredientNameRadioBtn.isSelected()) {
+
+				System.out.println("searchByIngredientName");
+				// recipes = DatabaseAccess.searchByRecipeName(searchWord);//I
+				// have
+				// no Sijie's search method
+
+			}
+
+			/*
+			 * for (int recipeNumber = 0; recipeNumber < recipes.size();
+			 * recipeNumber++){ matchRecipes.push(recipes.get(recipeNumber)); }
+			 */
+
+			matchRecipes.push(CookBook.createGongBaoJiding());
+
+			matchRecipes.push(CookBook.createHongShaoRou());
+
+			showRecipeList();
+
+		}
+	}
 }
