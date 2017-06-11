@@ -13,20 +13,20 @@ import java.util.LinkedList;
 
 public class Recipe implements Serializable {
 
+	private int id;
 	private String name;
-	private String briefDescription;
-	private String description;
+	private String briefDescription;	
 	private String thumbnail;
-	private ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
-	private ArrayList<Step> steps = new ArrayList<Step>();
+	private String description;
+	private int servingNum;
+	private int isFavourite;
+//	private ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
+//	private ArrayList<Step> steps = new ArrayList<Step>();
 	private int preparationTime;
-	private int cookTime;
+	private int cookingTime;
 	private Date createdAt;
 	private Date deletedAt;
 	private Date updatedAt;
-	private boolean isFavourite;
-	private int servingNum;
-	private String tag;
 
 	public Recipe() {
 		super();
@@ -34,44 +34,25 @@ public class Recipe implements Serializable {
 		this.briefDescription = "";
 		this.description = "";
 		this.thumbnail = "";
-		this.ingredients = null;
-		this.steps = null;
 		this.preparationTime = 0;
-		this.cookTime = 0;
+		this.cookingTime = 0;
 		this.createdAt = null;
 		this.deletedAt = null;
 		this.updatedAt = null;
-		this.isFavourite = false;
+		this.isFavourite = 0;
 		this.servingNum = 0;
-		this.tag = "";
+	}
+	
+	public int getId() {
+		return this.id;
 	}
 
-	public Recipe(String name, String tag, int servingNum) {
-		super();
-		this.name = name;
-		this.tag = tag;
-		this.servingNum = servingNum;
-	}
-
-	public Recipe(String name, String tag, int servingNum,String description, String briefDescription, String thumbnail,
-			ArrayList<Ingredient> ingredients, ArrayList<Step> steps, int preparationTime, int cookTime,
-			Date createdAt) {
-		super();
-		this.name = name;
-		this.tag = tag;
-		this.servingNum = servingNum;
-		this.briefDescription = briefDescription;
-		this.description = description;
-		this.thumbnail = thumbnail;
-		this.ingredients = ingredients;
-		this.steps = steps;
-		this.preparationTime = preparationTime;
-		this.cookTime = cookTime;
-		this.createdAt = createdAt;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	public void setName(String name) {
@@ -87,7 +68,7 @@ public class Recipe implements Serializable {
 	}
 
 	public String getDescription(){
-		return description;
+		return this.description;
 	}
 	
 	public void setDescription(String description){
@@ -95,47 +76,47 @@ public class Recipe implements Serializable {
 	}
 	
 	public String getThumbnail() {
-		return thumbnail;
+		return this.thumbnail;
 	}
 
 	public void setThumbnail(String thumbnail) {
 		this.thumbnail = thumbnail;
 	}
 
-	public ArrayList<Ingredient> getIngredients() {
-		return ingredients;
-	}
-
-	public void setIngredients(ArrayList<Ingredient> ingredients) {
-		this.ingredients = ingredients;
-	}
-
-	public ArrayList<Step> getSteps() {
-		return steps;
-	}
-
-	public void setSteps(ArrayList<Step> steps) {
-		this.steps = steps;
-	}
+//	public ArrayList<Ingredient> getIngredients() {
+//		return ingredients;
+//	}
+//
+//	public void setIngredients(ArrayList<Ingredient> ingredients) {
+//		this.ingredients = ingredients;
+//	}
+//
+//	public ArrayList<Step> getSteps() {
+//		return steps;
+//	}
+//
+//	public void setSteps(ArrayList<Step> steps) {
+//		this.steps = steps;
+//	}
 
 	public int getPreparationTime() {
-		return preparationTime;
+		return this.preparationTime;
 	}
 
 	public void setPreparationTime(int preparationTime) {
 		this.preparationTime = preparationTime;
 	}
 
-	public int getCookTime() {
-		return cookTime;
+	public int getCookingTime() {
+		return this.cookingTime;
 	}
 
-	public void setCookTime(int cookTime) {
-		this.cookTime = cookTime;
+	public void setCookingTime(int cookingTime) {
+		this.cookingTime = cookingTime;
 	}
 
 	public Date getCreatedAt() {
-		return createdAt;
+		return this.createdAt;
 	}
 
 	public void setCreatedAt(Date createdAt) {
@@ -143,7 +124,7 @@ public class Recipe implements Serializable {
 	}
 
 	public Date getDeletedAt() {
-		return deletedAt;
+		return this.deletedAt;
 	}
 
 	public void setDeletedAt(Date deletedAt) {
@@ -151,39 +132,27 @@ public class Recipe implements Serializable {
 	}
 
 	public Date getUpdatedAt() {
-		return updatedAt;
+		return this.updatedAt;
 	}
 
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
 
-	public boolean isFavourite() {
-		return isFavourite;
+	public int isFavourite() {
+		return this.isFavourite;
 	}
-
-	public void addFavourite() {
-		this.isFavourite = true;
-	}
-
-	public void removeFavourite() {
-		this.isFavourite = false;
+	
+	public void setIsFavourite(int isFavouritet) {
+		this.isFavourite = isFavouritet;
 	}
 
 	public int getServingNum() {
-		return servingNum;
+		return this.servingNum;
 	}
 
 	public void setServingNum(int servingNum) {
 		this.servingNum = servingNum;
-	}
-
-	public String getTag() {
-		return tag;
-	}
-
-	public void setTag(String tag) {
-		this.tag = tag;
 	}
 
 	/**
@@ -220,33 +189,12 @@ public class Recipe implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Recipe" + '\n' + "====================" + '\n' + "Name: " + name + '\n' + "Tag: " + tag + '\n'
-				+ "ServingNum: " + servingNum + '\n' + "BriefDescription: " + briefDescription + '\n' + "Thumbnail: "
-				+ thumbnail + '\n' + "PreparationTime: " + preparationTime + '\n' + "CookTime: " + cookTime + '\n'
-				+ "CreatedAt: " + createdAt + '\n' + "DeletedAt:" + '\n' + deletedAt + "UpdatedAt: " + updatedAt + '\n'
-				+ "IsFavourite=" + isFavourite + '\n' + "====================" + '\n' + "Ingredients:" + '\n'
-				+ "====================" + '\n' + ingredients + '\n' + "====================" + '\n' + "Steps:" + '\n'
-				+ "====================" + '\n' + showSteps(steps) + '\n';
+		return "Recipe" + '\n' + "====================" + '\n' + 
+				"Name: " + name + '\n' + "ServingNum: " + servingNum + '\n' + 
+				"BriefDescription: " + briefDescription + '\n' + 
+				"Thumbnail: " + thumbnail + '\n' + "PreparationTime: " + preparationTime + '\n' + 
+				"CreatedAt: " + createdAt + '\n' + "DeletedAt:" + '\n' + deletedAt + 
+				"UpdatedAt: " + updatedAt + '\n'
+				+ "IsFavourite=" + isFavourite + '\n' + "====================" + '\n';
 	}
-
-	private String showSteps(ArrayList<Step> steps) {
-		// TODO Auto-generated method stub
-		String stepsS = "";
-		for (Step item : steps) {
-			stepsS += item.getStepDescription() + "\n";
-		}
-		return stepsS;
-	}
-
-	public void addIngredient(Ingredient ingredient) {
-		// TODO Auto-generated method stub
-		ingredients.add(ingredient);
-	}
-
-	public void addPreparationStep(Step step) {
-		// TODO Auto-generated method stub
-		steps.add(step);
-
-	}
-
 }
