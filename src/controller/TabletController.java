@@ -18,6 +18,14 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import view.MainApp;
 
+/*
+ * A Tablet whose center area holds all other GUIs, like Main Page, add page, Favourite View.
+ * 
+ * @version 1.0
+ * 
+ * @author Shi Wenbin
+ */
+
 
 public class TabletController implements Initializable {
 

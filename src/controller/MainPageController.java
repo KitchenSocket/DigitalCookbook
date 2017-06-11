@@ -10,6 +10,8 @@ import java.util.Stack;
 
 import javax.swing.JOptionPane;
 
+import com.sun.scenario.effect.impl.prism.PrImage;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -22,6 +24,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -32,7 +35,16 @@ import model.CookBook;
 import model.DatabaseAccess;
 import model.Recipe;
 import model.Step;
+import test.RecipeTest;
 import view.MainApp;
+
+/**
+ * Controller of mainPage.
+ * 
+ * @ author Shi Wenbin, Gu Qiwen
+ * 
+ * @version 1.0
+ * */
 
 public class MainPageController implements Initializable {
 
@@ -66,30 +78,51 @@ public class MainPageController implements Initializable {
 	@FXML
 	private Button addFavBtn;
 
-	@FXML
-	private TextArea ingredientList;
 
 	@FXML
 	private ListView<String> stepList;
+	
+    @FXML
+    private Button deleteRecipeBtn;
 
+    @FXML
+    private TableView<?> ingredientTable;
+
+    @FXML
+    void deleteRecipe(ActionEvent event) {
+
+    }
+    
+    @FXML
+    void addFavRecipe(ActionEvent event) {
+
+    }
+    
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
 		searchBtn.setGraphic(new ImageView(new Image(
 				new File("src/resources/recipe_search_button.png").toURI().toString(), 15, 17, false, false)));
+		
+		addFavBtn.setGraphic(new ImageView(new Image(
+				new File("src/resources/add_fav_recipe.png").toURI().toString(), 15, 17, false, false)));
+		
+		editRecipeBtn.setGraphic(new ImageView(new Image(
+				new File("src/resources/edit.png").toURI().toString(), 15, 17, false, false)));
+		
+		deleteRecipeBtn.setGraphic(new ImageView(new Image(
+				new File("src/resources/delete.png").toURI().toString(), 15, 17, false, false)));
 
-		iniRecipeList();
+		try {
+			showRecipeList("%");
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 		addRecipeListListenner();
 
-		try {
-			showRecipeList();
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		ingredientList.setEditable(false);// user cannot edit textArea at main
+		//ingredientList.setEditable(false);// user cannot edit textArea at main
 											// page
 		editRecipeBtn.setDisable(true);
 
@@ -97,24 +130,13 @@ public class MainPageController implements Initializable {
 
 	}
 
-	private void iniRecipeList() {
-
-		matchRecipes.push(CookBook.createHongShaoRou());
-
-		matchRecipes.push(CookBook.createGongBaoJiding());
-
-		matchRecipes.push(CookBook.createSuanLaFen());
-
-		matchRecipes.push(CookBook.createHongShaoRou());
-
-		matchRecipes.push(CookBook.createGongBaoJiding());
-
-		matchRecipes.push(CookBook.createSuanLaFen());
-
-	}
 
 	/*
-	 * need to change on Ingredients(this method name is not understandable)
+	 * A listener method set to monitor the recipeList, if user click one of those recipes, this recipe's detailed info will be shown at the right side. 
+	 * 
+	 * @param 
+	 * 
+	 * @author Shi Wenbin
 	 */
 	private void addRecipeListListenner() {
 
@@ -132,13 +154,13 @@ public class MainPageController implements Initializable {
 
 					recipeName.setText(selectedRecipe.getName());
 
-					ingredientList.setText(selectedRecipe.getIngredients().toString());
+					//ingredientList.setText(selectedRecipe.getIngredients().toString());
 
 					editRecipeBtn.setDisable(false);// button active
 
 					addFavBtn.setDisable(false);
 
-					showStepList(selectedRecipe);
+					//showStepList(selectedRecipe);
 
 				} catch (Exception e) {
 					// System.out.println("ignored error:
@@ -149,24 +171,26 @@ public class MainPageController implements Initializable {
 		});
 
 	}
+	
+	/*
+	 * A method to show searched recipes in the recipeList, for user to choose and click. 
+	 * 
+	 * @param String searchName
+	 * 
+	 * @author Shi Wenbin
+	 */
 
-	private void showStepList(Recipe selectedRecipe) {
-
-		ObservableList<String> recipeSteps = FXCollections.observableArrayList();
-
-		ArrayList<Step> steps = selectedRecipe.getSteps();
-
-		for (int i = 0; i < steps.size(); i++) {
-
-			recipeSteps.add(steps.get(i).getStepDescription());
-
-		}
-
-		stepList.setItems(recipeSteps);
-
-	}
-
-	private void showRecipeList() throws IOException {
+	private void showRecipeList(String seacrchName) throws IOException {
+		
+		ArrayList<Recipe> results = RecipeTest.getRecipeList(seacrchName );
+		
+		
+    	
+    	for(int i = 0; i < results.size(); i++){
+    		
+        	matchRecipes.push(results.get(i));
+    		
+    	}
 
 		ObservableList<AnchorPane> recipeList = FXCollections.observableArrayList();
 
@@ -200,42 +224,42 @@ public class MainPageController implements Initializable {
 	 * 
 	 * @author Qiwen Gu
 	 */
-	@FXML
-	void addFavRecipe(ActionEvent event) {
-
-		boolean isFav = selectedRecipe.isFavourite();
-
-		if (isFav == false) {
-
-			int favorite = JOptionPane.showConfirmDialog(null, "Add this recipe into Favorite?", null,
-					JOptionPane.YES_NO_OPTION);// Jpane check
-
-			if (favorite == JOptionPane.YES_OPTION) {
-
-				selectedRecipe.addFavourite();
-				// DatabaseAccess.updateRecipe(selectedRecipe);//not complete
-				// method
-
-				System.out.print(selectedRecipe.getName() + " add favorite " + selectedRecipe.isFavourite());
-
-			}
-
-		} else {
-
-			int favorite = JOptionPane.showConfirmDialog(null, "Remove this recipe from Favorite?", null,
-					JOptionPane.YES_NO_OPTION);// Jpane check
-
-			if (favorite == JOptionPane.YES_OPTION) {
-
-				selectedRecipe.removeFavourite();// DatabaseAccess.updateRecipe(selectedRecipe);//not
-													// complete
-				// method
-
-				System.out.print(selectedRecipe.getName() + " remove favorite " + selectedRecipe.isFavourite());
-
-			}
-		}
-	}
+//	@FXML
+//	void addFavRecipe(ActionEvent event) {
+//
+//		//boolean isFav = selectedRecipe.isFavourite();
+//
+//		if (isFav == false) {
+//
+//			int favorite = JOptionPane.showConfirmDialog(null, "Add this recipe into Favorite?", null,
+//					JOptionPane.YES_NO_OPTION);// Jpane check
+//
+//			if (favorite == JOptionPane.YES_OPTION) {
+//
+//				//selectedRecipe.addFavourite();
+//				// DatabaseAccess.updateRecipe(selectedRecipe);//not complete
+//				// method
+//
+//				System.out.print(selectedRecipe.getName() + " add favorite " + selectedRecipe.isFavourite());
+//
+//			}
+//
+//		} else {
+//
+//			int favorite = JOptionPane.showConfirmDialog(null, "Remove this recipe from Favorite?", null,
+//					JOptionPane.YES_NO_OPTION);// Jpane check
+//
+//			if (favorite == JOptionPane.YES_OPTION) {
+//
+//				selectedRecipe.removeFavourite();// DatabaseAccess.updateRecipe(selectedRecipe);//not
+//													// complete
+//				// method
+//
+//				System.out.print(selectedRecipe.getName() + " remove favorite " + selectedRecipe.isFavourite());
+//
+//			}
+//		}
+//	}
 
 	/*
 	 * edit recipe method(need a new view to be done)
@@ -267,6 +291,7 @@ public class MainPageController implements Initializable {
 			if (recipeNameRadioBtn.isSelected()) {
 
 				System.out.println("searchByRecipeName");
+				showRecipeList(searchbar.getText());
 				// recipes =
 				// DatabaseAccess.searchByIngredientName(searchWord);//I
 				// have no Sijie's search method
@@ -285,11 +310,11 @@ public class MainPageController implements Initializable {
 			 * recipeNumber++){ matchRecipes.push(recipes.get(recipeNumber)); }
 			 */
 
-			matchRecipes.push(CookBook.createGongBaoJiding());
-
-			matchRecipes.push(CookBook.createHongShaoRou());
-
-			showRecipeList();
+//			matchRecipes.push(CookBook.createGongBaoJiding());
+//
+//			matchRecipes.push(CookBook.createHongShaoRou());
+//
+//			showRecipeList();
 
 		}
 	}

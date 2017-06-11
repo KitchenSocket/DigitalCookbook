@@ -1,6 +1,7 @@
 package test;
 
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.io.Resources;
@@ -42,46 +43,49 @@ public class RecipeTest {
         testRecipe.getRecipeList("%");
     }
     
-    public void getRecipeList(String name){
+    public static ArrayList<Recipe> getRecipeList(String name){
         SqlSession session = sqlSessionFactory.openSession();
+        
+        ArrayList<Recipe> results = new ArrayList<>();
         try {
         	RecipeOperation recipeOperation=session.getMapper(RecipeOperation.class);           
             List<Recipe> recipes = recipeOperation.selectRecipes(name);
             for(Recipe recipe:recipes){
-                System.out.println(recipe.getName()+":"+recipe.getDescription());
+                results.add(recipe);
             }
 
         } finally {
             session.close();
         }
+		return results;
     }
     
     /**
-     * 测试增加,增加后，必须提交事务，否则不会写入到数据库.
+     * 娴嬭瘯澧炲姞,澧炲姞鍚庯紝蹇呴』鎻愪氦浜嬪姟锛屽惁鍒欎笉浼氬啓鍏ュ埌鏁版嵁搴�.
      */
 //    public void addUser(){
 //        User user=new User();
-//        user.setUserAddress("家庭住址");
-//        user.setUserName("飞鸟");
+//        user.setUserAddress("瀹跺涵浣忓潃");
+//        user.setUserName("椋為笩");
 //        user.setUserAge(80);
 //        SqlSession session = sqlSessionFactory.openSession();
 //        try {
 //            IUserOperation userOperation=session.getMapper(IUserOperation.class);
 //            userOperation.addUser(user);
 //            session.commit();
-//            System.out.println("当前增加的用户 id为:"+user.getId());
+//            System.out.println("褰撳墠澧炲姞鐨勭敤鎴� id涓�:"+user.getId());
 //        } finally {
 //            session.close();
 //        }
 //    }
 //    
 //    public void updateUser(){
-//        //先得到用户,然后修改，提交。
+//        //鍏堝緱鍒扮敤鎴�,鐒跺悗淇敼锛屾彁浜ゃ��
 //        SqlSession session = sqlSessionFactory.openSession();
 //        try {
 //            IUserOperation userOperation=session.getMapper(IUserOperation.class);
 //            User user = userOperation.selectUserByID(5);            
-//            user.setUserAddress("原来是魔都的浦东创新园区");
+//            user.setUserAddress("鍘熸潵鏄瓟閮界殑娴︿笢鍒涙柊鍥尯");
 //            userOperation.updateUser(user);
 //            session.commit();
 //
@@ -91,7 +95,7 @@ public class RecipeTest {
 //    }
 //    
 //    /**
-//     * 删除数据，删除一定要 commit.
+//     * 鍒犻櫎鏁版嵁锛屽垹闄や竴瀹氳 commit.
 //     * @param id
 //     */
 //    public void deleteUser(int id){
@@ -100,7 +104,7 @@ public class RecipeTest {
 //            IUserOperation userOperation=session.getMapper(IUserOperation.class);           
 //            userOperation.deleteUser(id);
 //            session.commit(); 
-//            System.out.println("当前增加的用户 id为:"+id);
+//            System.out.println("褰撳墠澧炲姞鐨勭敤鎴� id涓�:"+id);
 //        } finally {
 //            session.close();
 //        }

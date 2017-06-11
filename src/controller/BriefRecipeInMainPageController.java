@@ -11,6 +11,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import model.Recipe;
 
+/*
+ * One Anchor in a listview, this class put each recipes' info to this anchor. And all the anchorView makes up the brief info list in the Main Page.
+ * Waiting for user to click.
+ * 
+ * @version 1.0
+ * 
+ * @author Shi Wenbin
+ */
+
 public class BriefRecipeInMainPageController implements Initializable {
 
     @FXML
@@ -27,15 +36,22 @@ public class BriefRecipeInMainPageController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
+
 		eachBriefRecipe = MainPageController.matchRecipes.pop();
+
+		
 		
 		MainPageController.recipeCopies.add(eachBriefRecipe);
+		
+
 
 		recipeName.setText(eachBriefRecipe.getName());
 		
-		recipeDescription.setText(eachBriefRecipe.getBriefDescription());
+		recipeDescription.setText(eachBriefRecipe.getDescription());
 		
 		recipeImg.setImage(new Image( new File(eachBriefRecipe.getThumbnail()).toURI().toString(),  80, 80, false, false));
+		
+
 		
 	}
 
