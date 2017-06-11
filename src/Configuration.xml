@@ -3,7 +3,6 @@
 "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
     <typeAliases> 
-        <typeAlias alias="User" type="model.User"/> 
         <typeAlias alias="Recipe" type="model.Recipe"/> 
         <typeAlias alias="Ingredient" type="model.Ingredient"/> 
         <typeAlias alias="Step" type="model.Step"/> 

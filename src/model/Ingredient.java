@@ -51,15 +51,4 @@ public class Ingredient implements Serializable {
 	}
 	
 
-	public void setAmount(double amount) {
-		this.amount = amount;
-	}
-	
-	@Override
-    public String toString() {
-		
-        return  name + " " + amount + " " + unit + '\n';
-    }
-	
-
 }
