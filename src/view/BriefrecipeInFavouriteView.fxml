@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="106.0" prefWidth="266.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.BriefRecipeInFavouriteViewController">
+   <children>
+      <ImageView fx:id="recipeImg" fitHeight="80.0" fitWidth="80.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="recipeName" layoutY="3.0" text="Name" />
+      <Label fx:id="recipeDescription" layoutX="80.0" layoutY="23.0" prefHeight="80.0" prefWidth="183.0" />
+   </children>
+</AnchorPane>

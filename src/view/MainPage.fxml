@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainPageController">
+   <left>
+      <AnchorPane prefHeight="500.0" prefWidth="280.0" BorderPane.alignment="CENTER">
+         <children>
+            <ListView fx:id="matchRecipeList" layoutX="11.0" layoutY="73.0" prefHeight="391.0" prefWidth="259.0" AnchorPane.topAnchor="93.0" />
+            <TextField fx:id="searchbar" layoutX="7.0" layoutY="-1.0" prefHeight="30.0" prefWidth="266.0" AnchorPane.topAnchor="10.0" />
+            <Button fx:id="searchBtn" layoutX="240.0" layoutY="-1.0" maxHeight="26.0" maxWidth="26.0" mnemonicParsing="false" onAction="#search" prefHeight="26.0" prefWidth="26.0" AnchorPane.topAnchor="10.0" />
+            <RadioButton fx:id="recipeNameRadioBtn" layoutX="15.0" layoutY="40.0" mnemonicParsing="false" text="recipe" AnchorPane.topAnchor="50.0">
+               <padding>
+                  <Insets top="2.0" />
+               </padding>
+            </RadioButton>
+            <RadioButton fx:id="ingredientNameRadioBtn" layoutX="149.0" layoutY="51.0" mnemonicParsing="false" text="ingredient" AnchorPane.topAnchor="51.0" />
+         </children>
+      </AnchorPane>
+   </left>
+   <center>
+      <AnchorPane maxHeight="500.0" prefWidth="466.0" BorderPane.alignment="TOP_LEFT">
+         <children>
+            <Label fx:id="recipeName" contentDisplay="CENTER" graphicTextGap="10.0" layoutY="-1.0" prefWidth="463.0" text="Title">
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <padding>
+                  <Insets left="20.0" top="20.0" />
+               </padding>
+            </Label>
+            <Label contentDisplay="CENTER" layoutX="382.0" layoutY="105.0" prefHeight="21.0" prefWidth="57.0" text="Serving" />
+            <Label layoutX="-1.0" layoutY="49.0" prefHeight="21.0" prefWidth="145.0" text="time">
+               <padding>
+                  <Insets left="23.0" />
+               </padding>
+            </Label>
+            <Label layoutX="20.0" layoutY="105.0" prefHeight="21.0" prefWidth="120.0" text="Ingredients" />
+            <Button fx:id="editRecipeBtn" layoutX="368.0" layoutY="44.0" mnemonicParsing="false" onAction="#editRecipe" prefHeight="31.0" prefWidth="28.0" />
+            <Button fx:id="addFavBtn" layoutX="408.0" layoutY="44.0" mnemonicParsing="false" onAction="#addFavRecipe" prefHeight="31.0" prefWidth="28.0" />
+            <AnchorPane layoutX="17.0" layoutY="126.0" prefHeight="390.0" prefWidth="437.0">
+               <children>
+                  <ListView fx:id="stepList" layoutX="1.0" layoutY="154.0" prefHeight="169.0" prefWidth="414.0" />
+                  <Label layoutX="1.0" layoutY="121.0" prefHeight="21.0" prefWidth="120.0" text="Steps" />
+                  <Button fx:id="deleteRecipeBtn" layoutX="387.0" layoutY="336.0" mnemonicParsing="false" onAction="#deleteRecipe" prefHeight="31.0" prefWidth="28.0" />
+                  <TableView fx:id="ingredientTable" layoutY="10.0" prefHeight="106.0" prefWidth="416.0" />
+               </children>
+               <padding>
+                  <Insets bottom="20.0" right="20.0" />
+               </padding>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>
