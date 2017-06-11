@@ -14,6 +14,7 @@ import view.MainApp;
  * @author breukerm254
  */
 public class CookBook {
+
 	private DatabaseAccess dataBaseAccess;
 	private LinkedList<Recipe> myRecipeList = new LinkedList<>();
 	
@@ -166,5 +167,7 @@ public class CookBook {
 		System.out.println(Recipe.search(recipeName, myRecipeList));
 		
 	}
+
+
 	
 }
