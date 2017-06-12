@@ -36,15 +36,10 @@ public class BriefRecipeInMainPageController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
-
 		eachBriefRecipe = MainPageController.matchRecipes.pop();
 
-		
-		
 		MainPageController.recipeCopies.add(eachBriefRecipe);
 		
-
-
 		recipeName.setText(eachBriefRecipe.getName());
 		
 		recipeDescription.setText(eachBriefRecipe.getDescription());
