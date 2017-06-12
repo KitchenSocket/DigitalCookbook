@@ -27,6 +27,7 @@ public class Recipe implements Serializable {
 	private Date createdAt;
 	private Date deletedAt;
 	private Date updatedAt;
+	private String test;
 
 	public Recipe() {
 		super();
@@ -41,6 +42,14 @@ public class Recipe implements Serializable {
 		this.updatedAt = null;
 		this.isFavourite = 0;
 		this.servingNum = 0;
+	}
+	
+	public String getTest(){
+		return this.test;
+	}
+	
+	public void setTest(String test) {
+		this.test = test;
 	}
 	
 	public int getId() {

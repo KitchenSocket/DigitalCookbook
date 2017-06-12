@@ -50,5 +50,13 @@ public class Ingredient implements Serializable {
 		this.unit = unit;
 	}
 	
+	@Override
+	public String toString() {
+		return "Ingredient" + '\n' + "====================" + '\n' + 
+				"recipeId: " + recipeId + '\n' + "name: " + name + '\n' + 
+				"quantity: " + quantity + '\n' + 
+				"unit: " + unit + '\n' + "====================" + '\n';
+	}
+	
 
 }

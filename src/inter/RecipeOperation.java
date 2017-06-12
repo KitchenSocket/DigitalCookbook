@@ -8,7 +8,11 @@ public interface RecipeOperation {
 	
 	public Recipe selectRecipeByID(int id);
 	
+	public Recipe selectRecipeByIDInFavourite(int id);
+	
 	public List<Recipe> selectRecipes(String name);
+	
+	public List<Recipe> selectRecipesInFavourite(String name);
 	
 	public void addRecipe(Recipe recipe);
 	

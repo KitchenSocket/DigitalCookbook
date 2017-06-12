@@ -22,5 +22,6 @@
 
     <mappers>
         <mapper resource="mapper/Recipe.xml"/>
+        <mapper resource="mapper/Ingredient.xml"/>
     </mappers>
 </configuration>

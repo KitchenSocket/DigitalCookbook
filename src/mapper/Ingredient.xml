@@ -1,1 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="inter.IngredientOperation">
+    <select id="selectIngredientByID" parameterType="int" resultType="Ingredient">
+        select * from `ingredient` where id = #{id}
+    </select>
+    
+    <!-- 为了返回list 类型而定义的returnMap -->
+    <resultMap type="Ingredient" id="resultIngredientList">
+        <id column="recipeId" property="recipeId" />
+        <result column="name" property="name" />       
+        <result column="quantity" property="quantity" />
+        <result column="unit" property="unit" />
+    </resultMap>
+    
+    <!-- 返回list 的select 语句，注意 resultMap 的值是指向前面定义好的 -->
+    <select id="selectIngredients" parameterType="string" resultMap="resultIngredientList">
+        select * from ingredient where name like #{name}
+    </select>
+
+    <insert id="addIngredient" parameterType="Ingredient" useGeneratedKeys="false"> 
+        insert into ingredient(recipeId,name,quantity,unit)  
+             values(#{recipeId},#{name},#{quantity},#{unit})  
+    </insert>
+    
+    <update id="updateIngredient" parameterType="Ingredient" >
+        update ingredient set recipeId=#{recipeId},name=#{name},
+        	quantity=#{quantity},unit=#{unit} where id=#{id}
+    </update>
+    
+    <delete id="deleteIngredient" parameterType="int">
+        delete from ingredient where id=#{id}
+    </delete>
+    
+</mapper>

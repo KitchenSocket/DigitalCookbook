@@ -7,37 +7,45 @@
         select * from `recipe` where id = #{id}
     </select>
     
+    <select id="selectRecipeByIDInFavourite" parameterType="int" resultType="Recipe">
+        select * from `recipe` where id = #{id} and isFavourite = 1
+    </select>
+    
     <!-- 为了返回list 类型而定义的returnMap -->
     <resultMap type="Recipe" id="resultRecipeList">
         <id column="id" property="id" />
         <result column="name" property="name" />       
-        <result column="briefDescription" property="brief_description" />
+        <result column="briefDescription" property="briefDescription" />
         <result column="thumbnail" property="thumbnail" />
-        <result column="servingNum" property="serving_num" />
-        <result column="preparationTime" property="preparation_time" />
-        <result column="cookingTime" property="cooking_time" />
+        <result column="servingNum" property="servingNum" />
+        <result column="preparationTime" property="preparationTime" />
+        <result column="cookingTime" property="cookingTime" />
         <result column="description" property="description" />
-        <result column="isFavourite" property="is_favourite" />
-        <result column="createdAt" property="created_at" />
-        <result column="updatedAt" property="updated_at" />
-        <result column="deletedAt" property="deleted_at" />
+        <result column="isFavourite" property="isFavourite" />
+        <result column="createdAt" property="createdAt" />
+        <result column="updatedAt" property="updatedAt" />
+        <result column="deletedAt" property="deletedAt" />
     </resultMap>
     
     <!-- 返回list 的select 语句，注意 resultMap 的值是指向前面定义好的 -->
     <select id="selectRecipes" parameterType="string" resultMap="resultRecipeList">
         select * from recipe where name like #{name}
     </select>
+    
+    <select id="selectRecipesInFavourite" parameterType="string" resultMap="resultRecipeList">
+        select * from recipe where name like #{name} and isFavourite = 1
+    </select>
 
     <insert id="addRecipe" parameterType="Recipe" useGeneratedKeys="true" keyProperty="id"> 
-        insert into user(name,brief_description,thumbnail,serving_num,preparation_time,cooking_time,description,is_favourite)  
+        insert into recipe(name,briefDescription,thumbnail,servingNum,preparationTime,cookingTime,description,isFavourite)  
              values(#{name},#{briefDescription},#{thumbnail},#{servingNum},#{preparationTime},#{cookingTime},#{description},#{isFavourite})  
     </insert>
     
     <update id="updateRecipe" parameterType="Recipe" >
-        update recipe set name=#{name},brief_description=#{briefDescription},thumbnail=#{thumbnail},
-        					 serving_num=#{servingNum},preparation_time=#{preparationTime},
-        					 cooking_time=#{cookingTime},description=#{description},
-        					 is_favourite=#{isFavourite} where id=#{id}
+        update recipe set name=#{name},briefDescription=#{briefDescription},thumbnail=#{thumbnail},
+        					 servingNum=#{servingNum},preparationTime=#{preparationTime},
+        					 cookingTime=#{cookingTime},description=#{description},
+        					 isFavourite=#{isFavourite} where id=#{id}
     </update>
     
     <delete id="deleteRecipe" parameterType="int">
