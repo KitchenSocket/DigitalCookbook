@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 
 import com.sun.scenario.effect.impl.prism.PrImage;
 
+import DAO.RecipeDAO;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -122,7 +123,11 @@ public class MainPageController implements Initializable {
 				new Image(new File("src/resources/delete.png").toURI().toString(), 15, 17, false, false)));
 
 		try {
-			showRecipeList("%");
+			RecipeDAO recipeDAO = new RecipeDAO();
+
+			ArrayList<Recipe> results = recipeDAO.getRecipeListByName("%");
+			
+			showRecipeList(results);
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -143,6 +148,8 @@ public class MainPageController implements Initializable {
 		editRecipeBtn.setDisable(true);
 
 		addFavBtn.setDisable(true);
+		
+		deleteRecipeBtn.setDisable(true);
 
 	}
 
@@ -176,6 +183,8 @@ public class MainPageController implements Initializable {
 					editRecipeBtn.setDisable(false);// button active
 
 					addFavBtn.setDisable(false);
+					
+					deleteRecipeBtn.setDisable(false);
 
 					// showStepList(selectedRecipe);
 
@@ -198,9 +207,9 @@ public class MainPageController implements Initializable {
 	 * @author Shi Wenbin
 	 */
 
-	private void showRecipeList(String seacrchName) throws IOException {
+	private void showRecipeList(ArrayList<Recipe> results) throws IOException {
+		
 
-		ArrayList<Recipe> results = RecipeTest.getRecipeList(seacrchName);
 
 		for (int i = 0; i < results.size(); i++) {
 
@@ -308,7 +317,11 @@ public class MainPageController implements Initializable {
 			if (recipeNameRadioBtn.isSelected()) {
 
 				System.out.println("searchByRecipeName");
-				showRecipeList(searchbar.getText());
+				
+				RecipeDAO recipeDAO = new RecipeDAO();
+
+				ArrayList<Recipe> results = recipeDAO.getRecipeListByName(searchbar.getText());
+				showRecipeList( results);
 				// recipes =
 				// DatabaseAccess.searchByIngredientName(searchWord);//I
 				// have no Sijie's search method
@@ -316,6 +329,11 @@ public class MainPageController implements Initializable {
 			} else if (ingredientNameRadioBtn.isSelected()) {
 
 				System.out.println("searchByIngredientName");
+				
+				RecipeDAO recipeDAO = new RecipeDAO();
+
+				ArrayList<Recipe> results = recipeDAO.getRecipeListByIngredientName(searchbar.getText());
+				showRecipeList( results);
 				// recipes = DatabaseAccess.searchByRecipeName(searchWord);//I
 				// have
 				// no Sijie's search method
