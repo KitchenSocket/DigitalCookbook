@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 
 import com.sun.scenario.effect.impl.prism.PrImage;
 
+import DAO.IngredientDAO;
 import DAO.RecipeDAO;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -25,16 +26,19 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import model.CookBook;
 import model.DatabaseAccess;
+import model.Ingredient;
 import model.Recipe;
 import model.Step;
 import test.RecipeTest;
@@ -89,7 +93,19 @@ public class MainPageController implements Initializable {
 	protected Button deleteRecipeBtn;
 
 	@FXML
-	protected TableView<?> ingredientTable;
+	protected TableView<Ingredient> ingredientTable;
+	
+	protected IngredientDAO myIngredientDAO = new IngredientDAO();	
+
+	protected TableColumn<Ingredient, String> name = new TableColumn<>("Name");
+
+    
+
+	protected TableColumn<Ingredient, Double> amount = new TableColumn<>("Amount");
+
+    
+
+	protected TableColumn<Ingredient, String> unit = new TableColumn<>("Unit");
 
 	@FXML
 	public void deleteRecipe(ActionEvent event) {
@@ -135,6 +151,8 @@ public class MainPageController implements Initializable {
 
 		addRecipeListListenner();
 
+		initableValueType();
+		
 		recipeNameRadioBtn.setToggleGroup(group);// set the radio button into
 													// group
 
@@ -150,6 +168,74 @@ public class MainPageController implements Initializable {
 		addFavBtn.setDisable(true);
 		
 		deleteRecipeBtn.setDisable(true);
+
+	}
+	
+	protected void initableValueType() {
+
+		
+
+		name.setMinWidth(270);
+
+
+
+		name.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+		
+
+		amount.setMinWidth(135);
+
+		
+
+		amount.setCellValueFactory(new PropertyValueFactory<>("amount"));
+
+		
+
+		unit.setMinWidth(270);
+
+		
+
+		unit.setCellValueFactory(new PropertyValueFactory<>("unit"));
+
+		
+
+	}
+
+	protected void showIngredientTable(String recipeName) throws IOException {
+		
+		ingredientTable.getColumns().clear();
+		
+		ingredientTable.setItems(convertArrayListToOberservableList(myIngredientDAO.getIngredientListByName(recipeName)));	
+
+    	ingredientTable.getColumns().addAll(name, amount, unit);
+		
+	}
+	
+	protected ObservableList<Ingredient> convertArrayListToOberservableList(ArrayList<Ingredient> ingredients) {
+
+		
+
+		int size = ingredients.size();
+
+		
+
+		ObservableList<Ingredient> reIngredients = FXCollections.observableArrayList();
+
+		
+
+		for (int i = 0; i<size; i++){
+
+			
+
+			reIngredients.add(ingredients.get(i));
+
+			
+
+		}
+
+		
+
+		return reIngredients;
 
 	}
 
@@ -174,7 +260,7 @@ public class MainPageController implements Initializable {
 					selectedRecipe = recipeCopies.get(matchRecipeList.getSelectionModel().getSelectedIndex());// get
 																												// user
 																												// clicked
-																												// recipe
+					showIngredientTable("%");																							// recipe
 
 					recipeName.setText(selectedRecipe.getName());
 

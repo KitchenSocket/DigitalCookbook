@@ -152,6 +152,8 @@ public class FavouriteViewController  extends MainPageController implements Init
 		}
 
 		addRecipeListListenner();
+		
+		initableValueType();
 
 		recipeNameRadioBtn.setToggleGroup(group);// set the radio button into
 		// group
@@ -233,6 +235,8 @@ public class FavouriteViewController  extends MainPageController implements Init
 				try {
 
 					Recipe selectedRecipe = recipeCopies.get(matchRecipeList.getSelectionModel().getSelectedIndex());
+					
+					showIngredientTable("%");	
 
 					recipeName.setText(selectedRecipe.getName());
 
