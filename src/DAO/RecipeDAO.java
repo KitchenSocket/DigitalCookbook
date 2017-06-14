@@ -11,7 +11,6 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 import inter.IngredientOperation;
 import inter.RecipeOperation;
-import model.CookBookPDF;
 import model.Ingredient;
 import model.Recipe;
 

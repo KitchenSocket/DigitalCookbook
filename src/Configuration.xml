@@ -23,5 +23,6 @@
     <mappers>
         <mapper resource="mapper/Recipe.xml"/>
         <mapper resource="mapper/Ingredient.xml"/>
+        <mapper resource="mapper/Step.xml"/>
     </mappers>
 </configuration>
