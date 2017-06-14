@@ -94,30 +94,14 @@ public class MainPageController implements Initializable {
 
 	@FXML
 	protected TableView<Ingredient> ingredientTable;
-	
-	protected IngredientDAO myIngredientDAO = new IngredientDAO();	
+
+	protected IngredientDAO myIngredientDAO = new IngredientDAO();
 
 	protected TableColumn<Ingredient, String> name = new TableColumn<>("Name");
 
 	protected TableColumn<Ingredient, Double> quantity = new TableColumn<>("Quantity");
 
 	protected TableColumn<Ingredient, String> unit = new TableColumn<>("Unit");
-
-	@FXML
-	public void deleteRecipe(ActionEvent event) {
-
-		int delete = JOptionPane.showConfirmDialog(null, "Do you want to delete this recipe?", null,
-				JOptionPane.YES_NO_OPTION);
-
-		if (JOptionPane.YES_OPTION == delete)
-
-			System.out.println("delete recipe");
-
-		else
-
-			System.out.println("not delete");
-
-	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -138,7 +122,7 @@ public class MainPageController implements Initializable {
 			RecipeDAO recipeDAO = new RecipeDAO();
 
 			ArrayList<Recipe> results = recipeDAO.getRecipeListByName("%");
-			
+
 			showRecipeList(results);
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
@@ -148,7 +132,7 @@ public class MainPageController implements Initializable {
 		addRecipeListListenner();
 
 		initableValueType();
-		
+
 		recipeNameRadioBtn.setToggleGroup(group);// set the radio button into
 													// group
 
@@ -162,16 +146,16 @@ public class MainPageController implements Initializable {
 		editRecipeBtn.setDisable(true);
 
 		addFavBtn.setDisable(true);
-		
+
 		deleteRecipeBtn.setDisable(true);
 
 	}
-	
+
 	protected void initableValueType() {
 		name.setMinWidth(270);
 
 		name.setCellValueFactory(new PropertyValueFactory<>("name"));
-	
+
 		quantity.setMinWidth(135);
 
 		quantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
@@ -179,32 +163,6 @@ public class MainPageController implements Initializable {
 		unit.setMinWidth(270);
 
 		unit.setCellValueFactory(new PropertyValueFactory<>("unit"));
-
-	}
-
-	protected void showIngredientTable(String recipeName) throws IOException {
-		
-		ingredientTable.getColumns().clear();
-		
-		ingredientTable.setItems(convertArrayListToOberservableList(myIngredientDAO.getIngredientListByName(recipeName)));	
-
-    	ingredientTable.getColumns().addAll(name, quantity, unit);
-		
-	}
-	
-	protected ObservableList<Ingredient> convertArrayListToOberservableList(ArrayList<Ingredient> ingredients) {
-
-		int size = ingredients.size();
-
-		ObservableList<Ingredient> reIngredients = FXCollections.observableArrayList();
-
-		for (int i = 0; i<size; i++){
-
-			reIngredients.add(ingredients.get(i));
-
-		}
-
-		return reIngredients;
 
 	}
 
@@ -217,7 +175,7 @@ public class MainPageController implements Initializable {
 	 * 
 	 * @author Shi Wenbin
 	 */
-	public  void addRecipeListListenner() {
+	public void addRecipeListListenner() {
 
 		matchRecipeList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<AnchorPane>() {
 			@Override
@@ -229,7 +187,7 @@ public class MainPageController implements Initializable {
 					selectedRecipe = recipeCopies.get(matchRecipeList.getSelectionModel().getSelectedIndex());// get
 																												// user
 																												// clicked
-					showIngredientTable("%");																							// recipe
+					showIngredientTable("%"); // recipe
 
 					recipeName.setText(selectedRecipe.getName());
 
@@ -238,7 +196,7 @@ public class MainPageController implements Initializable {
 					editRecipeBtn.setDisable(false);// button active
 
 					addFavBtn.setDisable(false);
-					
+
 					deleteRecipeBtn.setDisable(false);
 
 					// showStepList(selectedRecipe);
@@ -262,9 +220,75 @@ public class MainPageController implements Initializable {
 	 * @author Shi Wenbin
 	 */
 
-	public void showRecipeList(ArrayList<Recipe> results) throws IOException {
-		
+	/*
+	 * search method
+	 * 
+	 * @param event search click event
+	 * 
+	 * @author Qiwen Gu
+	 */
+	@FXML
+	public void search(ActionEvent event) throws IOException {
 
+		String searchWord = new String(searchbar.getText());
+
+		if (searchWord.equals("")) {
+			JOptionPane.showMessageDialog(null, "Please enter key words.", null, JOptionPane.ERROR_MESSAGE);// Jpane
+																											// alert
+
+		} else {
+
+			if (recipeNameRadioBtn.isSelected()) {
+
+				System.out.println("searchByRecipeName");
+
+				RecipeDAO recipeDAO = new RecipeDAO();
+
+				ArrayList<Recipe> results = recipeDAO.getRecipeListByName(searchbar.getText());
+
+				if (checkSearchResult(results)) {
+
+					showRecipeList(results);
+
+				}
+				// recipes =
+				// DatabaseAccess.searchByIngredientName(searchWord);//I
+				// have no Sijie's search method
+
+			} else if (ingredientNameRadioBtn.isSelected()) {
+
+				System.out.println("searchByIngredientName");
+
+				RecipeDAO recipeDAO = new RecipeDAO();
+
+				ArrayList<Recipe> results = recipeDAO.getRecipeListByIngredientName(searchbar.getText());
+
+				if (checkSearchResult(results)) {
+
+					showRecipeList(results);
+
+				}
+				// recipes = DatabaseAccess.searchByRecipeName(searchWord);//I
+				// have
+				// no Sijie's search method
+
+				/*
+				 * for (int recipeNumber = 0; recipeNumber < recipes.size();
+				 * recipeNumber++){
+				 * matchRecipes.push(recipes.get(recipeNumber)); }
+				 */
+
+				// matchRecipes.push(CookBook.createGongBaoJiding());
+				//
+				// matchRecipes.push(CookBook.createHongShaoRou());
+				//
+				// showRecipeList();
+
+			}
+		}
+	}
+
+	public void showRecipeList(ArrayList<Recipe> results) throws IOException {
 
 		for (int i = 0; i < results.size(); i++) {
 
@@ -297,6 +321,33 @@ public class MainPageController implements Initializable {
 
 	}
 
+	protected void showIngredientTable(String recipeName) throws IOException {
+
+		ingredientTable.getColumns().clear();
+
+		ingredientTable
+				.setItems(convertArrayListToOberservableList(myIngredientDAO.getIngredientListByName(recipeName)));
+
+		ingredientTable.getColumns().addAll(name, quantity, unit);
+
+	}
+
+	protected ObservableList<Ingredient> convertArrayListToOberservableList(ArrayList<Ingredient> ingredients) {
+
+		int size = ingredients.size();
+
+		ObservableList<Ingredient> reIngredients = FXCollections.observableArrayList();
+
+		for (int i = 0; i < size; i++) {
+
+			reIngredients.add(ingredients.get(i));
+
+		}
+
+		return reIngredients;
+
+	}
+
 	/*
 	 * add favorite recipe method(button color change need to be done)
 	 * 
@@ -320,7 +371,7 @@ public class MainPageController implements Initializable {
 				// DatabaseAccess.updateRecipe(selectedRecipe);//not complete
 				// method
 
-				System.out.print(selectedRecipe.getName() + " remove favorite " );
+				System.out.print(selectedRecipe.getName() + " remove favorite ");
 
 			}
 
@@ -331,11 +382,12 @@ public class MainPageController implements Initializable {
 
 			if (favorite == JOptionPane.YES_OPTION) {
 
-				//selectedRecipe.removeFavourite();// DatabaseAccess.updateRecipe(selectedRecipe);//not
-													// complete
+				// selectedRecipe.removeFavourite();//
+				// DatabaseAccess.updateRecipe(selectedRecipe);//not
+				// complete
 				// method
 
-				System.out.print(selectedRecipe.getName() + " add favorite " );
+				System.out.print(selectedRecipe.getName() + " add favorite ");
 
 			}
 		}
@@ -349,63 +401,30 @@ public class MainPageController implements Initializable {
 
 	}
 
-	/*
-	 * search method
-	 * 
-	 * @param event search click event
-	 * 
-	 * @author Qiwen Gu
-	 */
 	@FXML
-	public void search(ActionEvent event) throws IOException {
+	public void deleteRecipe(ActionEvent event) {
 
-		String searchWord = new String(searchbar.getText());
+		int delete = JOptionPane.showConfirmDialog(null, "Do you want to delete this recipe?", null,
+				JOptionPane.YES_NO_OPTION);
 
-		ArrayList<Recipe> recipes = null;
+		if (JOptionPane.YES_OPTION == delete)
 
-		if (searchWord.equals("")) {
-			JOptionPane.showMessageDialog(null, "Please enter key words.", null, JOptionPane.ERROR_MESSAGE);// Jpane
-																											// alert
+			System.out.println("delete recipe");
 
+		else
+
+			System.out.println("not delete");
+
+	}
+
+	public boolean checkSearchResult(ArrayList<Recipe> results) {
+
+		if (results.size() == 0) {
+			JOptionPane.showMessageDialog(null, "Sorry, no recipe is found.", null, JOptionPane.ERROR_MESSAGE);// Jpane
+			// alert
+			return false;
 		} else {
-
-			if (recipeNameRadioBtn.isSelected()) {
-
-				System.out.println("searchByRecipeName");
-				
-				RecipeDAO recipeDAO = new RecipeDAO();
-
-				ArrayList<Recipe> results = recipeDAO.getRecipeListByName(searchbar.getText());
-				showRecipeList( results);
-				// recipes =
-				// DatabaseAccess.searchByIngredientName(searchWord);//I
-				// have no Sijie's search method
-
-			} else if (ingredientNameRadioBtn.isSelected()) {
-
-				System.out.println("searchByIngredientName");
-				
-				RecipeDAO recipeDAO = new RecipeDAO();
-
-				ArrayList<Recipe> results = recipeDAO.getRecipeListByIngredientName(searchbar.getText());
-				showRecipeList( results);
-				// recipes = DatabaseAccess.searchByRecipeName(searchWord);//I
-				// have
-				// no Sijie's search method
-
-				/*
-				 * for (int recipeNumber = 0; recipeNumber < recipes.size();
-				 * recipeNumber++){
-				 * matchRecipes.push(recipes.get(recipeNumber)); }
-				 */
-
-				// matchRecipes.push(CookBook.createGongBaoJiding());
-				//
-				// matchRecipes.push(CookBook.createHongShaoRou());
-				//
-				// showRecipeList();
-
-			}
+			return true;
 		}
 	}
 }

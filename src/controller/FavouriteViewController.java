@@ -44,7 +44,7 @@ import view.MainApp;
  * @version 1.0
  */
 
-public class FavouriteViewController  extends MainPageController implements Initializable {
+public class FavouriteViewController extends MainPageController implements Initializable {
 
 	public static Stack<Recipe> favouriteRecipes = new Stack<Recipe>();
 
@@ -56,8 +56,6 @@ public class FavouriteViewController  extends MainPageController implements Init
 	 * @ return
 	 */
 
-
-
 	/**
 	 * The behaviour after clicking add button.
 	 * 
@@ -65,7 +63,6 @@ public class FavouriteViewController  extends MainPageController implements Init
 	 * 
 	 * @ return
 	 */
-
 
 	/*
 	 * search method
@@ -75,7 +72,7 @@ public class FavouriteViewController  extends MainPageController implements Init
 	 * @author Qiwen Gu
 	 */
 	@FXML
-	public  void search(ActionEvent event) throws IOException {
+	public void search(ActionEvent event) throws IOException {
 
 		String searchWord = new String(searchbar.getText());
 
@@ -94,7 +91,13 @@ public class FavouriteViewController  extends MainPageController implements Init
 				RecipeDAO recipeDAO = new RecipeDAO();
 
 				ArrayList<Recipe> results = recipeDAO.getRecipeListByNameInFavourite(searchbar.getText());
-				showRecipeList(results);
+
+				if (checkSearchResult(results)) {
+
+					showRecipeList(results);
+
+				}
+
 				// recipes =
 				// DatabaseAccess.searchByIngredientName(searchWord);//I
 				// have no Sijie's search method
@@ -105,7 +108,12 @@ public class FavouriteViewController  extends MainPageController implements Init
 				RecipeDAO recipeDAO = new RecipeDAO();
 
 				ArrayList<Recipe> results = recipeDAO.getRecipeListByIngredientNameInFavourite(searchbar.getText());
-				showRecipeList(results);
+
+				if (checkSearchResult(results)) {
+
+					showRecipeList(results);
+
+				}
 				// recipes = DatabaseAccess.searchByRecipeName(searchWord);//I
 				// have
 				// no Sijie's search method
@@ -152,7 +160,7 @@ public class FavouriteViewController  extends MainPageController implements Init
 		}
 
 		addRecipeListListenner();
-		
+
 		initableValueType();
 
 		recipeNameRadioBtn.setToggleGroup(group);// set the radio button into
@@ -168,7 +176,7 @@ public class FavouriteViewController  extends MainPageController implements Init
 		editRecipeBtn.setDisable(true);
 
 		addFavBtn.setDisable(true);
-		
+
 		deleteRecipeBtn.setDisable(true);
 
 	}
@@ -235,8 +243,8 @@ public class FavouriteViewController  extends MainPageController implements Init
 				try {
 
 					Recipe selectedRecipe = recipeCopies.get(matchRecipeList.getSelectionModel().getSelectedIndex());
-					
-					showIngredientTable("%");	
+
+					showIngredientTable("%");
 
 					recipeName.setText(selectedRecipe.getName());
 
@@ -245,7 +253,7 @@ public class FavouriteViewController  extends MainPageController implements Init
 					editRecipeBtn.setDisable(false);// button active
 
 					addFavBtn.setDisable(false);
-					
+
 					deleteRecipeBtn.setDisable(false);
 
 					// showStepList(selectedRecipe);
