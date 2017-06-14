@@ -99,11 +99,7 @@ public class MainPageController implements Initializable {
 
 	protected TableColumn<Ingredient, String> name = new TableColumn<>("Name");
 
-    
-
-	protected TableColumn<Ingredient, Double> amount = new TableColumn<>("Amount");
-
-    
+	protected TableColumn<Ingredient, Double> quantity = new TableColumn<>("Quantity");
 
 	protected TableColumn<Ingredient, String> unit = new TableColumn<>("Unit");
 
@@ -172,32 +168,17 @@ public class MainPageController implements Initializable {
 	}
 	
 	protected void initableValueType() {
-
-		
-
 		name.setMinWidth(270);
 
-
-
 		name.setCellValueFactory(new PropertyValueFactory<>("name"));
+	
+		quantity.setMinWidth(135);
 
-		
-
-		amount.setMinWidth(135);
-
-		
-
-		amount.setCellValueFactory(new PropertyValueFactory<>("amount"));
-
-		
+		quantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 
 		unit.setMinWidth(270);
 
-		
-
 		unit.setCellValueFactory(new PropertyValueFactory<>("unit"));
-
-		
 
 	}
 
@@ -207,33 +188,21 @@ public class MainPageController implements Initializable {
 		
 		ingredientTable.setItems(convertArrayListToOberservableList(myIngredientDAO.getIngredientListByName(recipeName)));	
 
-    	ingredientTable.getColumns().addAll(name, amount, unit);
+    	ingredientTable.getColumns().addAll(name, quantity, unit);
 		
 	}
 	
 	protected ObservableList<Ingredient> convertArrayListToOberservableList(ArrayList<Ingredient> ingredients) {
 
-		
-
 		int size = ingredients.size();
-
-		
 
 		ObservableList<Ingredient> reIngredients = FXCollections.observableArrayList();
 
-		
-
 		for (int i = 0; i<size; i++){
-
-			
 
 			reIngredients.add(ingredients.get(i));
 
-			
-
 		}
-
-		
 
 		return reIngredients;
 
