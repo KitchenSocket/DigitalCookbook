@@ -59,40 +59,40 @@ public class MainPageController implements Initializable {
 	final ToggleGroup group = new ToggleGroup();
 
 	@FXML
-	private TextField searchbar;
+	protected TextField searchbar;
 
 	@FXML
-	private Button searchBtn;
+	protected Button searchBtn;
 
 	@FXML
-	private ListView<AnchorPane> matchRecipeList;
+	protected ListView<AnchorPane> matchRecipeList;
 
 	@FXML
-	private RadioButton recipeNameRadioBtn;
+	protected RadioButton recipeNameRadioBtn;
 
 	@FXML
-	private RadioButton ingredientNameRadioBtn;
+	protected RadioButton ingredientNameRadioBtn;
 
 	@FXML
-	private Label recipeName;
+	protected Label recipeName;
 
 	@FXML
-	private Button editRecipeBtn;
+	protected Button editRecipeBtn;
 
 	@FXML
-	private Button addFavBtn;
+	protected Button addFavBtn;
 
 	@FXML
-	private ListView<String> stepList;
+	protected ListView<String> stepList;
 
 	@FXML
-	private Button deleteRecipeBtn;
+	protected Button deleteRecipeBtn;
 
 	@FXML
-	private TableView<?> ingredientTable;
+	protected TableView<?> ingredientTable;
 
 	@FXML
-	void deleteRecipe(ActionEvent event) {
+	protected void deleteRecipe(ActionEvent event) {
 
 		int delete = JOptionPane.showConfirmDialog(null, "Do you want to delete this recipe?", null,
 				JOptionPane.YES_NO_OPTION);
@@ -162,7 +162,7 @@ public class MainPageController implements Initializable {
 	 * 
 	 * @author Shi Wenbin
 	 */
-	private void addRecipeListListenner() {
+	protected void addRecipeListListenner() {
 
 		matchRecipeList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<AnchorPane>() {
 			@Override
@@ -207,7 +207,7 @@ public class MainPageController implements Initializable {
 	 * @author Shi Wenbin
 	 */
 
-	private void showRecipeList(ArrayList<Recipe> results) throws IOException {
+	protected void showRecipeList(ArrayList<Recipe> results) throws IOException {
 		
 
 
@@ -250,7 +250,7 @@ public class MainPageController implements Initializable {
 	 * @author Qiwen Gu
 	 */
 	@FXML
-	void addFavRecipe(ActionEvent event) {
+	protected void addFavRecipe(ActionEvent event) {
 
 		int isFav = selectedRecipe.isFavourite();
 
@@ -290,7 +290,7 @@ public class MainPageController implements Initializable {
 	 * edit recipe method(need a new view to be done)
 	 */
 	@FXML
-	void editRecipe(ActionEvent event) {
+	protected void editRecipe(ActionEvent event) {
 
 	}
 
@@ -302,7 +302,7 @@ public class MainPageController implements Initializable {
 	 * @author Qiwen Gu
 	 */
 	@FXML
-	void search(ActionEvent event) throws IOException {
+	protected void search(ActionEvent event) throws IOException {
 
 		String searchWord = new String(searchbar.getText());
 
