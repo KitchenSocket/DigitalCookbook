@@ -244,7 +244,9 @@ public class FavouriteViewController extends MainPageController implements Initi
 
 					Recipe selectedRecipe = recipeCopies.get(matchRecipeList.getSelectionModel().getSelectedIndex());
 
-					showIngredientTable("%");
+					showIngredientTable(selectedRecipe.getId());
+					
+					showStepList(selectedRecipe.getId());
 
 					recipeName.setText(selectedRecipe.getName());
 

@@ -14,6 +14,7 @@ import com.sun.scenario.effect.impl.prism.PrImage;
 
 import DAO.IngredientDAO;
 import DAO.RecipeDAO;
+import DAO.StepDAO;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -96,6 +97,8 @@ public class MainPageController implements Initializable {
 	protected TableView<Ingredient> ingredientTable;
 
 	protected IngredientDAO myIngredientDAO = new IngredientDAO();
+	
+	protected StepDAO myStepDAO = new StepDAO();
 
 	protected TableColumn<Ingredient, String> name = new TableColumn<>("Name");
 
@@ -153,6 +156,8 @@ public class MainPageController implements Initializable {
 
 	protected void initableValueType() {
 		name.setMinWidth(270);
+		
+		
 
 		name.setCellValueFactory(new PropertyValueFactory<>("name"));
 
@@ -185,9 +190,12 @@ public class MainPageController implements Initializable {
 				try {
 
 					selectedRecipe = recipeCopies.get(matchRecipeList.getSelectionModel().getSelectedIndex());// get
-																												// user
+						
+					// user
 																												// clicked
-					showIngredientTable("%"); // recipe
+					showIngredientTable(selectedRecipe.getId()); // recipe
+					
+					showStepList(selectedRecipe.getId());
 
 					recipeName.setText(selectedRecipe.getName());
 
@@ -321,12 +329,12 @@ public class MainPageController implements Initializable {
 
 	}
 
-	protected void showIngredientTable(String recipeName) throws IOException {
+	protected void showIngredientTable(int recipeId) throws IOException {
 
 		ingredientTable.getColumns().clear();
 
 		ingredientTable
-				.setItems(convertArrayListToOberservableList(myIngredientDAO.getIngredientListByName(recipeName)));
+				.setItems(convertArrayListToOberservableList(myIngredientDAO.getIngredientListByRecipyId(recipeId)));
 
 		ingredientTable.getColumns().addAll(name, quantity, unit);
 
@@ -426,5 +434,36 @@ public class MainPageController implements Initializable {
 		} else {
 			return true;
 		}
+	}
+	
+
+	void showStepList(int recipeId) {
+
+		
+
+		ObservableList<String> recipeSteps =FXCollections.observableArrayList ();
+
+		
+
+		ArrayList<Step> steps = myStepDAO.getStepListByRecipyId(recipeId);
+
+		
+
+		for(int i = 0; i < steps.size(); i++){
+
+			
+
+			recipeSteps.add(steps.get(i).getStepDescription());
+
+			
+
+		}
+
+			
+
+		stepList.setItems(recipeSteps);
+
+		
+
 	}
 }
