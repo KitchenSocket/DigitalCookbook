@@ -92,7 +92,7 @@ public class MainPageController implements Initializable {
 	protected TableView<?> ingredientTable;
 
 	@FXML
-	protected void deleteRecipe(ActionEvent event) {
+	public void deleteRecipe(ActionEvent event) {
 
 		int delete = JOptionPane.showConfirmDialog(null, "Do you want to delete this recipe?", null,
 				JOptionPane.YES_NO_OPTION);
@@ -162,7 +162,7 @@ public class MainPageController implements Initializable {
 	 * 
 	 * @author Shi Wenbin
 	 */
-	protected void addRecipeListListenner() {
+	public  void addRecipeListListenner() {
 
 		matchRecipeList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<AnchorPane>() {
 			@Override
@@ -207,7 +207,7 @@ public class MainPageController implements Initializable {
 	 * @author Shi Wenbin
 	 */
 
-	protected void showRecipeList(ArrayList<Recipe> results) throws IOException {
+	public void showRecipeList(ArrayList<Recipe> results) throws IOException {
 		
 
 
@@ -250,7 +250,7 @@ public class MainPageController implements Initializable {
 	 * @author Qiwen Gu
 	 */
 	@FXML
-	protected void addFavRecipe(ActionEvent event) {
+	public void addFavRecipe(ActionEvent event) {
 
 		int isFav = selectedRecipe.isFavourite();
 
@@ -290,7 +290,7 @@ public class MainPageController implements Initializable {
 	 * edit recipe method(need a new view to be done)
 	 */
 	@FXML
-	protected void editRecipe(ActionEvent event) {
+	public void editRecipe(ActionEvent event) {
 
 	}
 
@@ -302,7 +302,7 @@ public class MainPageController implements Initializable {
 	 * @author Qiwen Gu
 	 */
 	@FXML
-	protected void search(ActionEvent event) throws IOException {
+	public void search(ActionEvent event) throws IOException {
 
 		String searchWord = new String(searchbar.getText());
 

@@ -44,46 +44,9 @@ import view.MainApp;
  * @version 1.0
  */
 
-public class FavouriteViewController implements Initializable {
+public class FavouriteViewController  extends MainPageController implements Initializable {
 
 	public static Stack<Recipe> favouriteRecipes = new Stack<Recipe>();
-
-	public static ArrayList<Recipe> recipeCopies = new ArrayList<>();
-
-	final ToggleGroup group = new ToggleGroup();
-
-	@FXML
-	private TextField searchbar;
-
-	@FXML
-	private Button searchBtn;
-
-	@FXML
-	private ListView<AnchorPane> matchRecipeList;
-
-	@FXML
-	private RadioButton recipeNameRadioBtn;
-
-	@FXML
-	private RadioButton ingredientNameRadioBtn;
-
-	@FXML
-	private Label recipeName;
-
-	@FXML
-	private Button editRecipeBtn;
-
-	@FXML
-	private Button addFavBtn;
-
-	@FXML
-	private ListView<String> stepList;
-
-	@FXML
-	private Button deleteRecipeBtn;
-
-	@FXML
-	private TableView<?> ingredientTable;
 
 	/**
 	 * The behaviour after clicking delete button.
@@ -93,21 +56,7 @@ public class FavouriteViewController implements Initializable {
 	 * @ return
 	 */
 
-	@FXML
-	void deleteRecipe(ActionEvent event) {
 
-		int delete = JOptionPane.showConfirmDialog(null, "Do you want to delete this recipe?", null,
-				JOptionPane.YES_NO_OPTION);
-
-		if (JOptionPane.YES_OPTION == delete)
-
-			System.out.println("delete recipe");
-
-		else
-
-			System.out.println("not delete");
-
-	}
 
 	/**
 	 * The behaviour after clicking add button.
@@ -117,23 +66,6 @@ public class FavouriteViewController implements Initializable {
 	 * @ return
 	 */
 
-	@FXML
-	void addFavRecipe(ActionEvent event) {
-	
-	}
-
-	/**
-	 * The behaviour after clicking edit button.
-	 * 
-	 * @ @param
-	 * 
-	 * @ return
-	 */
-
-	@FXML
-	void editRecipe(ActionEvent event) {
-
-	}
 
 	/*
 	 * search method
@@ -143,7 +75,7 @@ public class FavouriteViewController implements Initializable {
 	 * @author Qiwen Gu
 	 */
 	@FXML
-	void search(ActionEvent event) throws IOException {
+	public  void search(ActionEvent event) throws IOException {
 
 		String searchWord = new String(searchbar.getText());
 
@@ -247,8 +179,8 @@ public class FavouriteViewController implements Initializable {
 	 * 
 	 * @author Shi Wenbin
 	 */
-
-	private void showRecipeList(ArrayList<Recipe> results) throws IOException {
+	@FXML
+	public void showRecipeList(ArrayList<Recipe> results) throws IOException {
 
 		for (int i = 0; i < results.size(); i++) {
 
@@ -290,8 +222,8 @@ public class FavouriteViewController implements Initializable {
 	 * 
 	 * @author Shi Wenbin
 	 */
-
-	private void addRecipeListListenner() {
+	@FXML
+	public void addRecipeListListenner() {
 
 		matchRecipeList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<AnchorPane>() {
 			@Override
