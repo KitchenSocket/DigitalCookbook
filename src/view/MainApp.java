@@ -4,16 +4,20 @@ import java.io.IOException;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 public class MainApp extends Application {
 	
     public static Stage primaryStage;
     
-    public static BorderPane tabletLayout;
+    private BorderPane myWindow = new BorderPane();
+    
+    public static BorderPane tabletLayout ;
     
     public static Scene scene;
 
@@ -22,6 +26,13 @@ public class MainApp extends Application {
 		
         MainApp.primaryStage = primaryStage;
 
+        //MainApp.primaryStage.setResizable(false);
+        
+        MainApp.primaryStage.setMinHeight(1000);
+        
+        MainApp.primaryStage.setMinWidth(1300);
+        
+        MainApp.primaryStage.setMaxWidth(1400);
         
         MainApp.primaryStage.setTitle("CookbookApp");
         
@@ -38,9 +49,13 @@ public class MainApp extends Application {
         
         tabletLayout = (BorderPane) loader.load();
         
+        
+        
+        myWindow.setCenter(tabletLayout);
+        
         // Show the scene containing the root layout.
         
-        scene = new Scene(tabletLayout);
+        scene = new Scene(myWindow);
         
         primaryStage.setScene(scene);
         
@@ -49,3 +64,4 @@ public class MainApp extends Application {
 	}
 
 }
+

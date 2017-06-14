@@ -47,8 +47,12 @@ public class TabletController implements Initializable {
     void favViewClick(ActionEvent event) throws IOException {
     	
     	MainApp.tabletLayout.setCenter(null);
+    	
+    	BorderPane mainView = new BorderPane();
+    	
+    	mainView.setTop(FXMLLoader.load(getClass().getResource("../view/FavouriteView.fxml")));
     	    	
-    	MainApp.tabletLayout.setCenter((BorderPane)FXMLLoader.load(getClass().getResource("../view/FavouriteView.fxml")));
+    	MainApp.tabletLayout.setCenter(mainView);
 
     }
 
@@ -57,7 +61,11 @@ public class TabletController implements Initializable {
     	
     	MainApp.tabletLayout.setCenter(null);
     	
-    	MainApp.tabletLayout.setCenter((BorderPane)FXMLLoader.load(getClass().getResource("../view/MainPage.fxml")));
+    	BorderPane mainView = new BorderPane();
+    	
+    	mainView.setTop(FXMLLoader.load(getClass().getResource("../view/MainPage.fxml")));
+    	
+    	MainApp.tabletLayout.setCenter(mainView);
 
     }
     
@@ -75,4 +83,5 @@ public class TabletController implements Initializable {
     
 
 }
+
 
