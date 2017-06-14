@@ -342,7 +342,7 @@ public class MainPageController implements Initializable {
 
 		if (isFav == 1) {
 
-			int favorite = JOptionPane.showConfirmDialog(null, "Add this recipe into Favorite?", null,
+			int favorite = JOptionPane.showConfirmDialog(null, "Remove this recipe from Favorite?", null,
 					JOptionPane.YES_NO_OPTION);// Jpane check
 
 			if (favorite == JOptionPane.YES_OPTION) {
@@ -351,13 +351,13 @@ public class MainPageController implements Initializable {
 				// DatabaseAccess.updateRecipe(selectedRecipe);//not complete
 				// method
 
-				System.out.print(selectedRecipe.getName() + " add favorite " );
+				System.out.print(selectedRecipe.getName() + " remove favorite " );
 
 			}
 
 		} else {
 
-			int favorite = JOptionPane.showConfirmDialog(null, "Remove this recipe from Favorite?", null,
+			int favorite = JOptionPane.showConfirmDialog(null, "Add this recipe into Favorite?", null,
 					JOptionPane.YES_NO_OPTION);// Jpane check
 
 			if (favorite == JOptionPane.YES_OPTION) {
@@ -366,7 +366,7 @@ public class MainPageController implements Initializable {
 													// complete
 				// method
 
-				System.out.print(selectedRecipe.getName() + " remove favorite " );
+				System.out.print(selectedRecipe.getName() + " add favorite " );
 
 			}
 		}
