@@ -10,6 +10,8 @@ public interface IngredientOperation {
 	
 	public List<Ingredient> selectIngredients(String name);
 	
+	public List<Ingredient> selectIngredientsByRecipeId(int recipeId);
+	
 	public void addIngredient(Ingredient ingredient);
 	
 	public void updateIngredient(Ingredient ingredient);

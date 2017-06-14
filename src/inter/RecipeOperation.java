@@ -20,4 +20,8 @@ public interface RecipeOperation {
 	
 	public void deleteRecipe(int id);
 
+	public void addFavorite(int id);
+	
+	public void removeFavorite(int id);
+
 }

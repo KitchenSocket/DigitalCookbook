@@ -33,7 +33,10 @@ public class IngredientDAO {
     public static void main(String[] args) {
     	
     	IngredientDAO DAO=new IngredientDAO();
-    	DAO.getIngredientListByName("pork");
+    	//DAO.getIngredientListByName("pork");
+
+    	DAO.getIngredientListByRecipyId(2);
+    	//DAO.getIngredientById(2);
   }
     
     public Ingredient getIngredientById(int id){
@@ -56,7 +59,7 @@ public class IngredientDAO {
     }
   
     /**
-     * get Receipe list by name
+     * get Ingredient list by name
      * @param name
      * @return
      */
@@ -72,6 +75,27 @@ public class IngredientDAO {
 		    List<Ingredient> ingredients = ingredientOperation.selectIngredients(searchName);
 		    for(Ingredient ingredient:ingredients){
 		    	
+		    	//test code
+		    	System.out.println(ingredient);
+		        results.add(ingredient);
+		    }
+		
+		} finally {
+		    session.close();
+		}
+		return results;
+	  }
+    
+    public ArrayList<Ingredient> getIngredientListByRecipyId(int recipeId){
+    	//get resources 
+    	ArrayList<Ingredient> results = new ArrayList<Ingredient>();
+	  
+    	//execute sql
+		SqlSession session = sqlSessionFactory.openSession();
+		try {
+			IngredientOperation ingredientOperation=session.getMapper(IngredientOperation.class);           
+		    List<Ingredient> ingredients = ingredientOperation.selectIngredientsByRecipeId(recipeId);
+		    for(Ingredient ingredient:ingredients){
 		    	//test code
 		    	System.out.println(ingredient);
 		        results.add(ingredient);

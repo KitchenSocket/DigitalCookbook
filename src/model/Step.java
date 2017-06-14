@@ -70,5 +70,13 @@ public class Step {
 	public void setPic(String pic) {		
 		this.pic = pic;		
 	}
+	
+	@Override
+	public String toString() {
+		return  "Step" + '\n' + "====================" + '\n' + 
+				"recipeId: " + recipeId + '\n' + "stepOrder: " + stepOrder + '\n' + 
+				"description: " + description + '\n' + 
+				"pic: " + pic + '\n' + "====================" + '\n';
+	}
 
 }
