@@ -80,7 +80,7 @@ public class FavouriteViewController extends MainPageController implements Initi
 
 				RecipeDAO recipeDAO = new RecipeDAO();
 
-				ArrayList<Recipe> results = recipeDAO.getRecipeListByNameInFavourite(searchbar.getText());
+				ArrayList<Recipe> results = recipeDAO.getRecipeListByNameInFavorite(searchbar.getText());
 
 				if (checkSearchResult(results)) {
 
@@ -88,39 +88,20 @@ public class FavouriteViewController extends MainPageController implements Initi
 
 				}
 
-				// recipes =
-				// DatabaseAccess.searchByIngredientName(searchWord);//I
-				// have no Sijie's search method
 
 			} else if (ingredientNameRadioBtn.isSelected()) {
 
 				System.out.println("searchByIngredientName");
 				RecipeDAO recipeDAO = new RecipeDAO();
 
-				ArrayList<Recipe> results = recipeDAO.getRecipeListByIngredientNameInFavourite(searchbar.getText());
+				ArrayList<Recipe> results = recipeDAO.getRecipeListByIngredientNameInFavorite(searchbar.getText());
 
 				if (checkSearchResult(results)) {
 
 					showRecipeList(results);
 
 				}
-				// recipes = DatabaseAccess.searchByRecipeName(searchWord);//I
-				// have
-				// no Sijie's search method
-
 			}
-
-			/*
-			 * for (int recipeNumber = 0; recipeNumber < recipes.size();
-			 * recipeNumber++){ matchRecipes.push(recipes.get(recipeNumber)); }
-			 */
-
-			// matchRecipes.push(CookBook.createGongBaoJiding());
-			//
-			// matchRecipes.push(CookBook.createHongShaoRou());
-			//
-			// showRecipeList();
-
 		}
 	}
 
@@ -141,7 +122,7 @@ public class FavouriteViewController extends MainPageController implements Initi
 
 		try {
 
-			ArrayList<Recipe> results = recipeDAO.getRecipeListByNameInFavourite("%");
+			ArrayList<Recipe> results = recipeDAO.getRecipeListByNameInFavorite("%");
 
 			showRecipeList(results);
 
@@ -265,11 +246,11 @@ public class FavouriteViewController extends MainPageController implements Initi
 
 			recipeDAO.removeFavorite(selectedRecipe.getId());
 
-			selectedRecipe.setIsFavourite(0);
+			selectedRecipe.setIsFavorite(0);
 
 			try {
 
-				ArrayList<Recipe> results = recipeDAO.getRecipeListByNameInFavourite("%");
+				ArrayList<Recipe> results = recipeDAO.getRecipeListByNameInFavorite("%");
 
 				showRecipeList(results);
 

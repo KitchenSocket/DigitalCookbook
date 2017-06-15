@@ -31,7 +31,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import model.DatabaseAccess;
 import model.Ingredient;
 import model.Recipe;
 import model.Step;
@@ -351,7 +350,7 @@ public class MainPageController implements Initializable {
 	@FXML
 	public void addFavRecipe(ActionEvent event) {
 
-		int isFav = selectedRecipe.isFavourite();
+		int isFav = selectedRecipe.getIsFavorite();
 
 		if (isFav == 1) {
 
@@ -364,7 +363,7 @@ public class MainPageController implements Initializable {
 
 				recipeDAO.removeFavorite(selectedRecipe.getId());
 
-				selectedRecipe.setIsFavourite(0);
+				selectedRecipe.setIsFavorite(0);
 
 			}
 
@@ -379,7 +378,7 @@ public class MainPageController implements Initializable {
 
 				recipeDAO.addFavorite(selectedRecipe.getId());
 
-				selectedRecipe.setIsFavourite(1);
+				selectedRecipe.setIsFavorite(1);
 
 			}
 		}
