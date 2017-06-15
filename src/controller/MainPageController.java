@@ -453,7 +453,7 @@ public class MainPageController implements Initializable {
 
 			
 
-			recipeSteps.add(steps.get(i).getStepDescription());
+			recipeSteps.add((i+1)+". "+steps.get(i).getStepDescription());
 
 			
 
