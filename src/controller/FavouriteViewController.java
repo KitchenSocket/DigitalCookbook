@@ -7,9 +7,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
 import java.util.Stack;
-
 import javax.swing.JOptionPane;
-
 import DAO.RecipeDAO;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -19,14 +17,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -150,12 +140,13 @@ public class FavouriteViewController extends MainPageController implements Initi
 				new Image(new File("src/resources/delete.png").toURI().toString(), 15, 17, false, false)));
 
 		try {
-			RecipeDAO recipeDAO = new RecipeDAO();
 
 			ArrayList<Recipe> results = recipeDAO.getRecipeListByNameInFavourite("%");
+
 			showRecipeList(results);
+
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
+
 			e1.printStackTrace();
 		}
 
@@ -242,15 +233,9 @@ public class FavouriteViewController extends MainPageController implements Initi
 
 				try {
 
-					Recipe selectedRecipe = recipeCopies.get(matchRecipeList.getSelectionModel().getSelectedIndex());
+					selectedRecipe = recipeCopies.get(matchRecipeList.getSelectionModel().getSelectedIndex());
 
-					showIngredientTable(selectedRecipe.getId());
-					
-					showStepList(selectedRecipe.getId());
-
-					recipeName.setText(selectedRecipe.getName());
-
-					// ingredientList.setText(selectedRecipe.getIngredients().toString());
+					showDetailedRecipe(selectedRecipe);
 
 					editRecipeBtn.setDisable(false);// button active
 
@@ -264,26 +249,43 @@ public class FavouriteViewController extends MainPageController implements Initi
 					// System.out.println("ignored error:
 					// ArrayIndexOutOfBoundsException.");
 				}
-
 			}
 		});
-
 	}
 
-	// private void showStepList(Recipe selectedRecipe) {
-	//
-	// ObservableList<String> recipeSteps = FXCollections.observableArrayList();
-	//
-	// ArrayList<Step> steps = selectedRecipe.getSteps();
-	//
-	// for (int i = 0; i < steps.size(); i++) {
-	//
-	// recipeSteps.add(steps.get(i).getStepDescription());
-	//
-	// }
-	//
-	// stepList.setItems(recipeSteps);
-	//
-	// }
+	@FXML
+	public void addFavRecipe(ActionEvent event) {
 
+		int favorite = JOptionPane.showConfirmDialog(null, "Remove this recipe from Favorite?", null,
+				JOptionPane.YES_NO_OPTION);// Jpane check
+
+		if (favorite == JOptionPane.YES_OPTION) {
+
+			System.out.print(selectedRecipe.getName() + " remove favorite ");
+
+			recipeDAO.removeFavorite(selectedRecipe.getId());
+
+			selectedRecipe.setIsFavourite(0);
+
+			try {
+
+				ArrayList<Recipe> results = recipeDAO.getRecipeListByNameInFavourite("%");
+
+				showRecipeList(results);
+
+				showDetailedRecipe(new Recipe());
+				
+				editRecipeBtn.setDisable(true);
+
+				addFavBtn.setDisable(true);
+
+				deleteRecipeBtn.setDisable(true);
+
+			} catch (IOException e) {
+
+				e.printStackTrace();
+
+			}
+		}
+	}
 }

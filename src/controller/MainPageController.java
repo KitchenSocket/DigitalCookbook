@@ -7,11 +7,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
 import java.util.Stack;
-
 import javax.swing.JOptionPane;
-
-import com.sun.scenario.effect.impl.prism.PrImage;
-
 import DAO.IngredientDAO;
 import DAO.RecipeDAO;
 import DAO.StepDAO;
@@ -29,15 +25,12 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import model.CookBook;
 import model.DatabaseAccess;
 import model.Ingredient;
 import model.Recipe;
@@ -96,8 +89,10 @@ public class MainPageController implements Initializable {
 	@FXML
 	protected TableView<Ingredient> ingredientTable;
 
+	protected RecipeDAO recipeDAO = new RecipeDAO();
+
 	protected IngredientDAO myIngredientDAO = new IngredientDAO();
-	
+
 	protected StepDAO myStepDAO = new StepDAO();
 
 	protected TableColumn<Ingredient, String> name = new TableColumn<>("Name");
@@ -122,13 +117,12 @@ public class MainPageController implements Initializable {
 				new Image(new File("src/resources/delete.png").toURI().toString(), 15, 17, false, false)));
 
 		try {
-			RecipeDAO recipeDAO = new RecipeDAO();
 
 			ArrayList<Recipe> results = recipeDAO.getRecipeListByName("%");
 
 			showRecipeList(results);
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
+
 			e1.printStackTrace();
 		}
 
@@ -154,10 +148,8 @@ public class MainPageController implements Initializable {
 
 	}
 
-	protected void initableValueType() {
+	public void initableValueType() {
 		name.setMinWidth(270);
-		
-		
 
 		name.setCellValueFactory(new PropertyValueFactory<>("name"));
 
@@ -190,24 +182,17 @@ public class MainPageController implements Initializable {
 				try {
 
 					selectedRecipe = recipeCopies.get(matchRecipeList.getSelectionModel().getSelectedIndex());// get
-						
+
 					// user
-																												// clicked
-					showIngredientTable(selectedRecipe.getId()); // recipe
+					// clicked
 					
-					showStepList(selectedRecipe.getId());
-
-					recipeName.setText(selectedRecipe.getName());
-
-					// ingredientList.setText(selectedRecipe.getIngredients().toString());
-
+					showDetailedRecipe(selectedRecipe);
+					
 					editRecipeBtn.setDisable(false);// button active
 
 					addFavBtn.setDisable(false);
 
 					deleteRecipeBtn.setDisable(false);
-
-					// showStepList(selectedRecipe);
 
 				} catch (Exception e) {
 					// System.out.println("ignored error:
@@ -329,7 +314,7 @@ public class MainPageController implements Initializable {
 
 	}
 
-	protected void showIngredientTable(int recipeId) throws IOException {
+	public void showIngredientTable(int recipeId) throws IOException {
 
 		ingredientTable.getColumns().clear();
 
@@ -340,7 +325,7 @@ public class MainPageController implements Initializable {
 
 	}
 
-	protected ObservableList<Ingredient> convertArrayListToOberservableList(ArrayList<Ingredient> ingredients) {
+	public ObservableList<Ingredient> convertArrayListToOberservableList(ArrayList<Ingredient> ingredients) {
 
 		int size = ingredients.size();
 
@@ -375,11 +360,11 @@ public class MainPageController implements Initializable {
 
 			if (favorite == JOptionPane.YES_OPTION) {
 
-				// selectedRecipe.addFavourite();
-				// DatabaseAccess.updateRecipe(selectedRecipe);//not complete
-				// method
-
 				System.out.print(selectedRecipe.getName() + " remove favorite ");
+
+				recipeDAO.removeFavorite(selectedRecipe.getId());
+
+				selectedRecipe.setIsFavourite(0);
 
 			}
 
@@ -390,12 +375,11 @@ public class MainPageController implements Initializable {
 
 			if (favorite == JOptionPane.YES_OPTION) {
 
-				// selectedRecipe.removeFavourite();//
-				// DatabaseAccess.updateRecipe(selectedRecipe);//not
-				// complete
-				// method
-
 				System.out.print(selectedRecipe.getName() + " add favorite ");
+
+				recipeDAO.addFavorite(selectedRecipe.getId());
+
+				selectedRecipe.setIsFavourite(1);
 
 			}
 		}
@@ -415,11 +399,13 @@ public class MainPageController implements Initializable {
 		int delete = JOptionPane.showConfirmDialog(null, "Do you want to delete this recipe?", null,
 				JOptionPane.YES_NO_OPTION);
 
-		if (JOptionPane.YES_OPTION == delete)
+		if (JOptionPane.YES_OPTION == delete) {
 
 			System.out.println("delete recipe");
 
-		else
+			recipeDAO.deleteRecipe(selectedRecipe.getId());
+
+		} else
 
 			System.out.println("not delete");
 
@@ -435,35 +421,30 @@ public class MainPageController implements Initializable {
 			return true;
 		}
 	}
-	
 
-	void showStepList(int recipeId) {
+	public void showStepList(int recipeId) {
 
-		
-
-		ObservableList<String> recipeSteps =FXCollections.observableArrayList ();
-
-		
+		ObservableList<String> recipeSteps = FXCollections.observableArrayList();
 
 		ArrayList<Step> steps = myStepDAO.getStepListByRecipyId(recipeId);
 
-		
+		for (int i = 0; i < steps.size(); i++) {
 
-		for(int i = 0; i < steps.size(); i++){
-
-			
-
-			recipeSteps.add((i+1)+". "+steps.get(i).getStepDescription());
-
-			
+			recipeSteps.add((i + 1) + ". " + steps.get(i).getStepDescription());
 
 		}
 
-			
-
 		stepList.setItems(recipeSteps);
 
-		
+	}
+	
+	public void showDetailedRecipe(Recipe recipe) throws IOException {
+
+		showIngredientTable(recipe.getId()); // recipe
+
+		showStepList(recipe.getId());
+
+		recipeName.setText(recipe.getName());
 
 	}
 }
