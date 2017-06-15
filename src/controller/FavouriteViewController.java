@@ -266,50 +266,36 @@ public class FavouriteViewController extends MainPageController implements Initi
 	@FXML
 	public void addFavRecipe(ActionEvent event) {
 
-		int isFav = selectedRecipe.isFavourite();
+		int favorite = JOptionPane.showConfirmDialog(null, "Remove this recipe from Favorite?", null,
+				JOptionPane.YES_NO_OPTION);// Jpane check
 
-		if (isFav == 1) {
+		if (favorite == JOptionPane.YES_OPTION) {
 
-			int favorite = JOptionPane.showConfirmDialog(null, "Remove this recipe from Favorite?", null,
-					JOptionPane.YES_NO_OPTION);// Jpane check
+			System.out.print(selectedRecipe.getName() + " remove favorite ");
 
-			if (favorite == JOptionPane.YES_OPTION) {
+			recipeDAO.removeFavorite(selectedRecipe.getId());
 
-				System.out.print(selectedRecipe.getName() + " remove favorite ");
+			selectedRecipe.setIsFavourite(0);
 
-				recipeDAO.removeFavorite(selectedRecipe.getId());
+			try {
 
-				selectedRecipe.setIsFavourite(0);
+				ArrayList<Recipe> results = recipeDAO.getRecipeListByNameInFavourite("%");
+
+				showRecipeList(results);
+
+				showDetailedRecipe(new Recipe());
+				
+				editRecipeBtn.setDisable(true);
+
+				addFavBtn.setDisable(true);
+
+				deleteRecipeBtn.setDisable(true);
+
+			} catch (IOException e) {
+
+				e.printStackTrace();
 
 			}
-		} else {
-
-			int favorite = JOptionPane.showConfirmDialog(null, "Add this recipe into Favorite?", null,
-					JOptionPane.YES_NO_OPTION);// Jpane check
-
-			if (favorite == JOptionPane.YES_OPTION) {
-
-				System.out.print(selectedRecipe.getName() + " add favorite ");
-
-				recipeDAO.addFavorite(selectedRecipe.getId());
-
-				selectedRecipe.setIsFavourite(1);
-
-			}
-		}
-
-		try {
-
-			ArrayList<Recipe> results = recipeDAO.getRecipeListByNameInFavourite("%");
-
-			showRecipeList(results);
-			
-			showDetailedRecipe(new Recipe());
-
-		} catch (IOException e) {
-
-			e.printStackTrace();
-
 		}
 	}
 }
