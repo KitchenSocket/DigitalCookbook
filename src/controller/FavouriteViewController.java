@@ -150,12 +150,13 @@ public class FavouriteViewController extends MainPageController implements Initi
 				new Image(new File("src/resources/delete.png").toURI().toString(), 15, 17, false, false)));
 
 		try {
-			RecipeDAO recipeDAO = new RecipeDAO();
 
 			ArrayList<Recipe> results = recipeDAO.getRecipeListByNameInFavourite("%");
+
 			showRecipeList(results);
+
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
+
 			e1.printStackTrace();
 		}
 
@@ -242,15 +243,9 @@ public class FavouriteViewController extends MainPageController implements Initi
 
 				try {
 
-					Recipe selectedRecipe = recipeCopies.get(matchRecipeList.getSelectionModel().getSelectedIndex());
+					selectedRecipe = recipeCopies.get(matchRecipeList.getSelectionModel().getSelectedIndex());
 
-					showIngredientTable(selectedRecipe.getId());
-					
-					showStepList(selectedRecipe.getId());
-
-					recipeName.setText(selectedRecipe.getName());
-
-					// ingredientList.setText(selectedRecipe.getIngredients().toString());
+					showDetailedRecipe(selectedRecipe);
 
 					editRecipeBtn.setDisable(false);// button active
 
@@ -264,26 +259,57 @@ public class FavouriteViewController extends MainPageController implements Initi
 					// System.out.println("ignored error:
 					// ArrayIndexOutOfBoundsException.");
 				}
-
 			}
 		});
-
 	}
 
-	// private void showStepList(Recipe selectedRecipe) {
-	//
-	// ObservableList<String> recipeSteps = FXCollections.observableArrayList();
-	//
-	// ArrayList<Step> steps = selectedRecipe.getSteps();
-	//
-	// for (int i = 0; i < steps.size(); i++) {
-	//
-	// recipeSteps.add(steps.get(i).getStepDescription());
-	//
-	// }
-	//
-	// stepList.setItems(recipeSteps);
-	//
-	// }
+	@FXML
+	public void addFavRecipe(ActionEvent event) {
 
+		int isFav = selectedRecipe.isFavourite();
+
+		if (isFav == 1) {
+
+			int favorite = JOptionPane.showConfirmDialog(null, "Remove this recipe from Favorite?", null,
+					JOptionPane.YES_NO_OPTION);// Jpane check
+
+			if (favorite == JOptionPane.YES_OPTION) {
+
+				System.out.print(selectedRecipe.getName() + " remove favorite ");
+
+				recipeDAO.removeFavorite(selectedRecipe.getId());
+
+				selectedRecipe.setIsFavourite(0);
+
+			}
+		} else {
+
+			int favorite = JOptionPane.showConfirmDialog(null, "Add this recipe into Favorite?", null,
+					JOptionPane.YES_NO_OPTION);// Jpane check
+
+			if (favorite == JOptionPane.YES_OPTION) {
+
+				System.out.print(selectedRecipe.getName() + " add favorite ");
+
+				recipeDAO.addFavorite(selectedRecipe.getId());
+
+				selectedRecipe.setIsFavourite(1);
+
+			}
+		}
+
+		try {
+
+			ArrayList<Recipe> results = recipeDAO.getRecipeListByNameInFavourite("%");
+
+			showRecipeList(results);
+			
+			showDetailedRecipe(new Recipe());
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
+
+		}
+	}
 }
