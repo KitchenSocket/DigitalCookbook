@@ -12,6 +12,14 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import inter.IngredientOperation;
 import model.Ingredient;
 
+/**
+ * Ingredient data access object class
+ * contains public functions for front end to call
+ * 
+ * @author VanillaChocola CHANDIM
+ * @version 1.0
+ *
+ */
 public class IngredientDAO {
 	
 	private static SqlSessionFactory sqlSessionFactory;
@@ -30,6 +38,11 @@ public class IngredientDAO {
         return sqlSessionFactory;
     }
     
+    /**
+     * main function, mainly for testing
+     * 
+     * @param args
+     */
     public static void main(String[] args) {
     	
     	IngredientDAO DAO=new IngredientDAO();
@@ -39,6 +52,12 @@ public class IngredientDAO {
     	//DAO.getIngredientById(2);
   }
     
+    /**
+     * returns the required Ingredient class by the received id
+     * 
+     * @param id
+     * @return Ingredient class
+     */
     public Ingredient getIngredientById(int id){
     	
     	//get resources
@@ -59,9 +78,10 @@ public class IngredientDAO {
     }
   
     /**
-     * get Ingredient list by name
+     * returns an ArrayList of class Ingredient by name
+     * 
      * @param name
-     * @return
+     * @return ArrayList<Ingredient>
      */
     public ArrayList<Ingredient> getIngredientListByName(String name){
     	//get resources
@@ -76,7 +96,7 @@ public class IngredientDAO {
 		    for(Ingredient ingredient:ingredients){
 		    	
 		    	//test code
-		    	System.out.println(ingredient);
+		    	//System.out.println(ingredient);
 		        results.add(ingredient);
 		    }
 		
@@ -86,6 +106,12 @@ public class IngredientDAO {
 		return results;
 	  }
     
+    /**
+     * returns an ArrayList contains all the ingredients belonging to a recipe
+     * 
+     * @param recipeId
+     * @return ArrayList<Ingredient>
+     */
     public ArrayList<Ingredient> getIngredientListByRecipyId(int recipeId){
     	//get resources 
     	ArrayList<Ingredient> results = new ArrayList<Ingredient>();
@@ -108,9 +134,11 @@ public class IngredientDAO {
 	  }
     
     /**
-     * need alter
-     * @param recipe
+     * add a new Ingredient into database
+     * 
+     * @param step
      */
+    //TODO
     public void addIngredient(Ingredient ingredient){
     	
     	//execute sql
@@ -125,9 +153,11 @@ public class IngredientDAO {
     }
     
     /**
-     * need alter
-     * @param recipe
-     */
+     * update an Ingredient in database 
+     * 
+     * @param ingredient
+     */    
+    //TODO
     public void updateIngredient(Ingredient ingredient){
         SqlSession session = sqlSessionFactory.openSession();
         try {
@@ -140,9 +170,11 @@ public class IngredientDAO {
     }
     
     /**
-     * need alter
-     * @param recipe
+     * delete an Ingredient in database by id
+     * 
+     * @param id
      */
+    //TODO
     public void deleteIngredient(int id){
         SqlSession session = sqlSessionFactory.openSession();
         try {

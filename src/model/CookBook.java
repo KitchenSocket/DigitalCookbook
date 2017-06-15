@@ -15,7 +15,6 @@ import view.MainApp;
  */
 public class CookBook {
 
-	private DatabaseAccess dataBaseAccess;
 	private LinkedList<Recipe> myRecipeList = new LinkedList<>();
 	
   
@@ -35,17 +34,17 @@ public class CookBook {
 
     }
 
-	private void add(Recipe recipe) {
-		// TODO Auto-generated method stub
-		myRecipeList.add(recipe);
-		
-	}
+//	private void add(Recipe recipe) {
+//		// TODO Auto-generated method stub
+//		myRecipeList.add(recipe);
+//		
+//	}
 	
-	public void getRecipe(String recipeName) {
-		
-		System.out.println(Recipe.search(recipeName, myRecipeList));
-		
-	}
+//	public void getRecipe(String recipeName) {
+//		
+//		System.out.println(Recipe.search(recipeName, myRecipeList));
+//		
+//	}
 
 
 	

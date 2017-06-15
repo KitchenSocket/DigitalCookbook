@@ -2,12 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!-- mapper for ingredient model -->
 <mapper namespace="inter.IngredientOperation">
+
+	<!-- select ingredient by id -->
     <select id="selectIngredientByID" parameterType="int" resultType="Ingredient">
         select * from `ingredient` where id = #{id}
     </select>
     
-    <!-- 为了返回list 类型而定义的returnMap -->
+    <!-- define a map to formalize the return value -->
     <resultMap type="Ingredient" id="resultIngredientList">
         <id column="recipeId" property="recipeId" />
         <result column="name" property="name" />       
@@ -15,25 +18,29 @@
         <result column="unit" property="unit" />
     </resultMap>
     
-    <!-- 返回list 的select 语句，注意 resultMap 的值是指向前面定义好的 -->
+    <!-- select a result map by name, using map defined before -->
     <select id="selectIngredients" parameterType="String" resultMap="resultIngredientList">
         select * from ingredient where name like #{name}
     </select>
     
+    <!-- get all the ingredients of a recipe by recipe id -->
     <select id="selectIngredientsByRecipeId" parameterType="int" resultMap="resultIngredientList">
         select * from ingredient where recipeId = #{id}
     </select>
 
+	<!-- add ingredient -->
     <insert id="addIngredient" parameterType="Ingredient" useGeneratedKeys="false"> 
         insert into ingredient(recipeId,name,quantity,unit)  
              values(#{recipeId},#{name},#{quantity},#{unit})  
     </insert>
     
+    <!-- update ingredient -->
     <update id="updateIngredient" parameterType="Ingredient" >
         update ingredient set recipeId=#{recipeId},name=#{name},
         	quantity=#{quantity},unit=#{unit} where id=#{id}
     </update>
     
+    <!-- delete ingredient -->
     <delete id="deleteIngredient" parameterType="int">
         delete from ingredient where id=#{id}
     </delete>

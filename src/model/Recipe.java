@@ -1,17 +1,15 @@
-/**
- * A Recipe Class
- * 
- * @author Qiwen Gu, Gang Shao
- */
-
 package model;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.sql.Date;
-import java.util.LinkedList;
 
-public class Recipe implements Serializable {
+/**
+ * Java object for recipe model
+ * 
+ * @author VanillaChocola CHANDIM
+ * @version 1.0
+ * 
+ */
+public class Recipe {
 
 	private int id;
 	private String name;
@@ -19,9 +17,7 @@ public class Recipe implements Serializable {
 	private String thumbnail;
 	private String description;
 	private int servingNum;
-	private int isFavourite;
-//	private ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
-//	private ArrayList<Step> steps = new ArrayList<Step>();
+	private int isFavorite;
 	private int preparationTime;
 	private int cookingTime;
 	private Date createdAt;
@@ -30,18 +26,9 @@ public class Recipe implements Serializable {
 	private String test;
 
 	public Recipe() {
-		super();
-		this.name = "";
-		this.briefDescription = "";
-		this.description = "";
-		this.thumbnail = "";
-		this.preparationTime = 0;
-		this.cookingTime = 0;
-		this.createdAt = null;
-		this.deletedAt = null;
-		this.updatedAt = null;
-		this.isFavourite = 0;
-		this.servingNum = 0;
+		
+		//
+		
 	}
 	
 	public String getTest(){
@@ -92,22 +79,6 @@ public class Recipe implements Serializable {
 		this.thumbnail = thumbnail;
 	}
 
-//	public ArrayList<Ingredient> getIngredients() {
-//		return ingredients;
-//	}
-//
-//	public void setIngredients(ArrayList<Ingredient> ingredients) {
-//		this.ingredients = ingredients;
-//	}
-//
-//	public ArrayList<Step> getSteps() {
-//		return steps;
-//	}
-//
-//	public void setSteps(ArrayList<Step> steps) {
-//		this.steps = steps;
-//	}
-
 	public int getPreparationTime() {
 		return this.preparationTime;
 	}
@@ -148,12 +119,12 @@ public class Recipe implements Serializable {
 		this.updatedAt = updatedAt;
 	}
 
-	public int isFavourite() {
-		return this.isFavourite;
+	public int getIsFavorite() {
+		return this.isFavorite;
 	}
 	
-	public void setIsFavourite(int isFavouritet) {
-		this.isFavourite = isFavouritet;
+	public void setIsFavorite(int isFavorite) {
+		this.isFavorite = isFavorite;
 	}
 
 	public int getServingNum() {
@@ -164,46 +135,14 @@ public class Recipe implements Serializable {
 		this.servingNum = servingNum;
 	}
 
-	/**
-	 * Search for Recipes
-	 * 
-	 * @param name
-	 *            Recipe name
-	 * @return target recipes
-	 */
-	public static String search(String name, LinkedList<Recipe> myRecipeList) {
-
-		String results = "";
-
-		String[] search = name.toLowerCase().split(" ");
-		for (int recipeId = 0; recipeId < myRecipeList.size(); recipeId++) {// ArrayList
-			// Recipes
-			String recipeName = myRecipeList.get(recipeId).getName().toLowerCase();
-			String[] recipe = recipeName.split(" ");
-			for (int recipeNum = 0; recipeNum < recipe.length; recipeNum++) {
-
-				for (int searchNum = 0; searchNum < search.length; searchNum++) {
-
-					if (recipe[recipeNum].equals(search[searchNum])) {
-						results = results + myRecipeList.get(recipeId).toString();
-						break;
-					}
-				}
-				break;
-			}
-
-		}
-		return results;
-	}
-
 	@Override
 	public String toString() {
 		return "Recipe" + '\n' + "====================" + '\n' + 
 				"Name: " + name + '\n' + "ServingNum: " + servingNum + '\n' + 
 				"BriefDescription: " + briefDescription + '\n' + 
 				"Thumbnail: " + thumbnail + '\n' + "PreparationTime: " + preparationTime + '\n' + 
-				"CreatedAt: " + createdAt + '\n' + "DeletedAt:" + '\n' + deletedAt + 
+				"CreatedAt: " + createdAt + '\n' + "DeletedAt: " + deletedAt + '\n' +
 				"UpdatedAt: " + updatedAt + '\n'
-				+ "IsFavourite=" + isFavourite + '\n' + "====================" + '\n';
+				+ "IsFavorite=" + isFavorite + '\n' + "====================" + '\n';
 	}
 }

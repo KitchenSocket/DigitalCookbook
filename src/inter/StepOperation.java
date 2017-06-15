@@ -1,6 +1,6 @@
 package inter;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import model.Step;
 
@@ -8,9 +8,9 @@ public interface StepOperation {
 	
 	public Step selectStepByID(int id);
 	
-	public List<Step> selectSteps(String name);
+	public ArrayList<Step> selectStepsByDescription(String description);
 	
-	public List<Step> selectStepsByRecipeId(int recipeId);
+	public ArrayList<Step> selectStepsByRecipeId(int recipeId);
 	
 	public void addStep(Step step);
 	

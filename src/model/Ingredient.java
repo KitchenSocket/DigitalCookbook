@@ -1,8 +1,13 @@
 package model;
 
-import java.io.Serializable;
-
-public class Ingredient implements Serializable {
+/**
+ * Java object for ingredient model
+ * 
+ * @author VanillaChocola CHANDIM
+ * @version 1.0
+ *
+ */
+public class Ingredient {
 	
 	private int recipeId;
 	

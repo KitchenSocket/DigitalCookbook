@@ -12,6 +12,14 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import inter.StepOperation;
 import model.Step;
 
+/**
+ * Step data access object class
+ * contains public functions for front end to call
+ * 
+ * @author VanillaChocola CHANDIM
+ * @version 1.0
+ * 
+ */
 public class StepDAO {
 	private static SqlSessionFactory sqlSessionFactory;
     private static Reader reader; 
@@ -29,14 +37,25 @@ public class StepDAO {
         return sqlSessionFactory;
     }
     
+    /**
+     * main function, mainly for testing
+     * 
+     * @param args
+     */
     public static void main(String[] args) {
     	
     	StepDAO DAO=new StepDAO();
     	//DAO.getStepById(2);
-    	DAO.getStepListByName("pork");
+    	DAO.getStepListByDescription("pork");
     	//DAO.getStepListByRecipyId(1);
   }
     
+    /**
+     * returns the required Step class by the received id
+     * 
+     * @param id
+     * @return Step class
+     */
     public Step getStepById(int id){
     	
     	//get resources
@@ -57,24 +76,25 @@ public class StepDAO {
     }
   
     /**
-     * get step list by name
-     * @param name
-     * @return
+     * returns an ArrayList of class Step by description
+     * 
+     * @param description
+     * @return ArrayList<Step>
      */
-    public ArrayList<Step> getStepListByName(String name){
+    public ArrayList<Step> getStepListByDescription(String description){
     	//get resources
-    	String searchName = "%"+name+"%";	     
+    	String searchDescription = "%"+description+"%";	     
     	ArrayList<Step> results = new ArrayList<Step>();
 	  
     	//execute sql
 		SqlSession session = sqlSessionFactory.openSession();
 		try {
 			StepOperation stepOperation=session.getMapper(StepOperation.class);           
-		    List<Step> steps = stepOperation.selectSteps(searchName);
+		    List<Step> steps = stepOperation.selectStepsByDescription(searchDescription);
 		    for(Step step:steps){
 		    	
 		    	//test code
-		    	System.out.println(step);
+		    	//System.out.println(step);
 		        results.add(step);
 		    }
 		
@@ -84,6 +104,12 @@ public class StepDAO {
 		return results;
 	  }
     
+    /**
+     * returns an ArrayList contains all the steps belonging to a recipe
+     * 
+     * @param recipeId
+     * @return ArrayList<Step>
+     */
     public ArrayList<Step> getStepListByRecipyId(int recipeId){
     	//get resources     
     	ArrayList<Step> results = new ArrayList<Step>();
@@ -107,9 +133,11 @@ public class StepDAO {
     
     
     /**
-     * need alter
-     * @param recipe
+     * add a new Step into database
+     * 
+     * @param step
      */
+    //TODO
     public void addStep(Step step){
     	
     	//execute sql
@@ -124,9 +152,11 @@ public class StepDAO {
     }
     
     /**
-     * need alter
-     * @param recipe
-     */
+     * update a step in database 
+     * 
+     * @param step
+     */    
+    //TODO
     public void updateStep(Step step){
         SqlSession session = sqlSessionFactory.openSession();
         try {
@@ -139,9 +169,11 @@ public class StepDAO {
     }
     
     /**
-     * need alter
-     * @param recipe
+     * delete a step in database by id
+     * 
+     * @param id
      */
+    //TODO
     public void deleteStep(int id){
         SqlSession session = sqlSessionFactory.openSession();
         try {

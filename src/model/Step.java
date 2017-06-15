@@ -1,16 +1,12 @@
 package model;
 
-import javax.sound.midi.VoiceStatus;
-
 /**
+ * Java object for step model
  * 
- * A Step Class which contains a step description and a Uri of picture depicting the step. 
- * 
- * @author Wenbin Shi
- * 
+ * @author VanillaChocola CHANDIM
  * @version 1.0
  * 
- * */
+ */
 
 public class Step {
 	
@@ -21,18 +17,7 @@ public class Step {
 	private String description;
 	
 	private String pic;
-	
-	/**
-	 * Constructor to construct a Step object with step description and picUri.
-	 * 
-	 * @param stepDescription String. 
-	 * 
-	 * @param picUri uri which points to the picture.
-	 * 
-	 * @return null.
-	 * 
-	 * */
-	
+		
 	public Step() {
 		
 		//

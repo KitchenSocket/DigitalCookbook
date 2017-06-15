@@ -1,6 +1,6 @@
 package inter;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import model.Recipe;
 
@@ -8,11 +8,11 @@ public interface RecipeOperation {
 	
 	public Recipe selectRecipeByID(int id);
 	
-	public Recipe selectRecipeByIDInFavourite(int id);
+	public Recipe selectRecipeByIDInFavorite(int id);
 	
-	public List<Recipe> selectRecipes(String name);
+	public ArrayList<Recipe> selectRecipes(String name);
 	
-	public List<Recipe> selectRecipesInFavourite(String name);
+	public ArrayList<Recipe> selectRecipesInFavorite(String name);
 	
 	public void addRecipe(Recipe recipe);
 	

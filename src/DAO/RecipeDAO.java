@@ -14,6 +14,14 @@ import inter.RecipeOperation;
 import model.Ingredient;
 import model.Recipe;
 
+/**
+ * Recipe data access object class
+ * contains public functions for front end to call
+ * 
+ * @author VanillaChocola CHANDIM
+ * @version 1.0
+ *
+ */
 public class RecipeDAO {
 	
 	private static SqlSessionFactory sqlSessionFactory;
@@ -32,6 +40,11 @@ public class RecipeDAO {
         return sqlSessionFactory;
     }
     
+    /**
+     * main function, mainly for testing
+     * 
+     * @param args
+     */
     public static void main(String[] args) {
     	//Recipe r = new Recipe();
     	
@@ -42,17 +55,25 @@ public class RecipeDAO {
     	System.out.println();
     	System.out.println("===============================");
     	System.out.println();
-    	DAO.getRecipeListByName("rou");
+    	//DAO.getRecipeListByIngredientNameInFavorite("pork");
+    	Recipe r = new Recipe();
+    	r = DAO.getRecipeById(2);
+    	DAO.addRecipe(r);
     	System.out.println();
     	System.out.println("===============================");
     	System.out.println();
     	//DAO.addFavorite(3);
-    	DAO.removeFavorite(3);
+    	//DAO.removeFavorite(3);
     	//DAO.getRecipeListByIngredientName("a");
     	//DAO.getRecipeListByIngredientNameInFavourite("o");
     }
     
-    
+    /**
+     * returns the required Recipe class by the received id
+     * 
+     * @param id
+     * @return Recipe class
+     */
     public Recipe getRecipeById(int id){
     	
     	//get resources
@@ -65,14 +86,20 @@ public class RecipeDAO {
 			result = recipeOperation.selectRecipeByID(id);	
 			
 			//test code
-			//System.out.println(result);
+			System.out.println(result);
 		} finally {
 		    session.close();
 		}
 		return result;
     }
     
-    public Recipe getRecipeByIdInFavourite(int id){
+    /**
+     * returns the required Recipe class by the received id in favorite
+     * 
+     * @param id
+     * @return Recipe class
+     */
+    public Recipe getRecipeByIdInFavorite(int id){
     	
     	//get resources
     	Recipe result = new Recipe();
@@ -81,7 +108,7 @@ public class RecipeDAO {
 		SqlSession session = sqlSessionFactory.openSession();
 		try {
 			RecipeOperation recipeOperation=session.getMapper(RecipeOperation.class);           
-			result = recipeOperation.selectRecipeByIDInFavourite(id);	
+			result = recipeOperation.selectRecipeByIDInFavorite(id);	
 			
 			//test code
 			//System.out.println(result);
@@ -92,9 +119,10 @@ public class RecipeDAO {
     }
   
     /**
-     * get Receipe list by name
+     * returns an ArrayList of class recipe by name
+     * 
      * @param name
-     * @return
+     * @return ArrayList<Recipe>
      */
     public ArrayList<Recipe> getRecipeListByName(String name){
     	//get resources
@@ -125,11 +153,12 @@ public class RecipeDAO {
     
     
     /**
-     * get Receipes by name in favourite
+     * returns an ArrayList of class recipe by name in favorite
+     * 
      * @param name
-     * @return
+     * @return ArrayList<Recipe>
      */
-    public ArrayList<Recipe> getRecipeListByNameInFavourite(String name){
+    public ArrayList<Recipe> getRecipeListByNameInFavorite(String name){
     	//get resources
     	String searchName = "%"+name+"%";	     
     	ArrayList<Recipe> results = new ArrayList<>();
@@ -138,7 +167,7 @@ public class RecipeDAO {
 		SqlSession session = sqlSessionFactory.openSession();
 		try {
 			RecipeOperation recipeOperation=session.getMapper(RecipeOperation.class);           
-		    List<Recipe> recipes = recipeOperation.selectRecipesInFavourite(searchName);
+		    List<Recipe> recipes = recipeOperation.selectRecipesInFavorite(searchName);
 		    for(Recipe recipe:recipes){
 		    	
 		    	//test code
@@ -153,6 +182,12 @@ public class RecipeDAO {
 		return results;
 	  }
     
+    /**
+     * returns an ArrayList of class recipe by an ingredient name
+     * 
+     * @param name
+     * @return ArrayList<Recipe>
+     */
     public ArrayList<Recipe> getRecipeListByIngredientName(String name){
     	//get resources
     	String searchName = "%"+name+"%";
@@ -195,7 +230,13 @@ public class RecipeDAO {
 		return results;    	
     }
     
-    public ArrayList<Recipe> getRecipeListByIngredientNameInFavourite(String name){
+    /**
+     * returns an ArrayList of class recipe by an ingredient name in favorite
+     * 
+     * @param name
+     * @return
+     */
+    public ArrayList<Recipe> getRecipeListByIngredientNameInFavorite(String name){
     	//get resources
     	String searchName = "%"+name+"%";
     	Recipe temp = new Recipe();
@@ -220,7 +261,7 @@ public class RecipeDAO {
 	    			noRepeat.add(recipeId);
 	    	}
 	    	for (int recipeId:noRepeat){
-	    		temp = this.getRecipeByIdInFavourite(recipeId);
+	    		temp = this.getRecipeByIdInFavorite(recipeId);
 	    		if(temp != null)
 	    			results.add(temp);
 	    		
@@ -240,9 +281,11 @@ public class RecipeDAO {
     }
     
     /**
-     * need alter
+     * add a new Recipe into database
+     * 
      * @param recipe
      */
+    //TODO
     public void addRecipe(Recipe recipe){
     	
     	//execute sql
@@ -257,9 +300,11 @@ public class RecipeDAO {
     }
     
     /**
-     * need alter
+     * update a Recipe in database 
+     * 
      * @param recipe
-     */
+     */    
+    //TODO
     public void updateRecipe(Recipe recipe){
         SqlSession session = sqlSessionFactory.openSession();
         try {
@@ -270,11 +315,31 @@ public class RecipeDAO {
             session.close();
         }
     }
+        
+    /**
+     * delete a Recipe in database by id
+     * 
+     * @param id
+     */
+    //TODO
+    public void deleteRecipe(int id){
+        SqlSession session = sqlSessionFactory.openSession();
+        try {
+        	RecipeOperation recipeOperation=session.getMapper(RecipeOperation.class);
+        	recipeOperation.deleteRecipe(id);
+            session.commit();
+        } finally {
+            session.close();
+        }
+    }
+    
     
     /**
-     * need alter
-     * @param int
+     * add a Recipe into favorite
+     * 
+     * @param id
      */
+    //TODO
     public void addFavorite(int id){
         SqlSession session = sqlSessionFactory.openSession();
         try {
@@ -287,31 +352,16 @@ public class RecipeDAO {
     }
     
     /**
-     * need alter
-     * @param int
+     * remove a Recipe from favorite
+     * 
+     * @param id
      */
+    //TODO
     public void removeFavorite(int id){
         SqlSession session = sqlSessionFactory.openSession();
         try {
         	RecipeOperation recipeOperation=session.getMapper(RecipeOperation.class);
         	recipeOperation.removeFavorite(id);
-            session.commit();
-        } finally {
-            session.close();
-        }
-    }
-    
-    
-    
-    /**
-     * need alter
-     * @param recipe
-     */
-    public void deleteRecipe(int id){
-        SqlSession session = sqlSessionFactory.openSession();
-        try {
-        	RecipeOperation recipeOperation=session.getMapper(RecipeOperation.class);
-        	recipeOperation.deleteRecipe(id);
             session.commit();
         } finally {
             session.close();

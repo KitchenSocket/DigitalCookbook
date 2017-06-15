@@ -3,11 +3,13 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="inter.StepOperation">
+
+	<!-- select step by id -->
     <select id="selectStepByID" parameterType="int" resultType="Step">
         select * from `step` where id = #{id}
     </select>
     
-    <!-- 为了返回list 类型而定义的returnMap -->
+    <!-- define a map to formalize the return value -->
     <resultMap type="Step" id="resultStepList">
         <id column="recipeId" property="recipeId" />
         <result column="stepOrder" property="stepOrder" />       
@@ -15,25 +17,29 @@
         <result column="pic" property="pic" />
     </resultMap>
     
-    <!-- 返回list 的select 语句，注意 resultMap 的值是指向前面定义好的 -->
-    <select id="selectSteps" parameterType="string" resultMap="resultStepList">
+    <!-- select a result map by step description, using map defined before -->
+    <select id="selectStepsByDescription" parameterType="string" resultMap="resultStepList">
         select * from step where description like #{description}
     </select>
     
+    <!-- get all the steps of a recipe by recipe id -->
     <select id="selectStepsByRecipeId" parameterType="int" resultMap="resultStepList">
         select * from step where recipeId = #{id}
     </select>
-
+	
+	<!-- add step -->
     <insert id="addStep" parameterType="Step" useGeneratedKeys="false"> 
         insert into step(recipeId,stepOrder,description,pic)  
              values(#{recipeId},#{stepOrder},#{description},#{pic})  
     </insert>
     
+    <!-- update step -->
     <update id="updateStep" parameterType="Step" >
         update ingredient set recipeId=#{recipeId},stepOrder=#{stepOrder},
         	description=#{description},pic=#{pic} where id=#{id}
     </update>
     
+    <!-- delete step -->
     <delete id="deleteStep" parameterType="int">
         delete from step where id=#{id}
     </delete>

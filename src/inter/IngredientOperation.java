@@ -1,6 +1,6 @@
 package inter;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import model.Ingredient;
 
@@ -8,9 +8,9 @@ public interface IngredientOperation {
 	
 	public Ingredient selectIngredientByID(int id);
 	
-	public List<Ingredient> selectIngredients(String name);
+	public ArrayList<Ingredient> selectIngredients(String name);
 	
-	public List<Ingredient> selectIngredientsByRecipeId(int recipeId);
+	public ArrayList<Ingredient> selectIngredientsByRecipeId(int recipeId);
 	
 	public void addIngredient(Ingredient ingredient);
 	

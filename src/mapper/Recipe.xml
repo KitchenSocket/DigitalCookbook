@@ -2,16 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!-- mapper for recipe model -->
 <mapper namespace="inter.RecipeOperation">
+
+	<!-- select recipe by id -->
     <select id="selectRecipeByID" parameterType="int" resultType="Recipe">
         select * from `recipe` where id = #{id}
     </select>
     
-    <select id="selectRecipeByIDInFavourite" parameterType="int" resultType="Recipe">
-        select * from `recipe` where id = #{id} and isFavourite = 1
+    <!-- select recipe by id in favorite -->
+    <select id="selectRecipeByIDInFavorite" parameterType="int" resultType="Recipe">
+        select * from `recipe` where id = #{id} and isFavorite = 1
     </select>
     
-    <!-- 为了返回list 类型而定义的returnMap -->
+    <!-- define a map to formalize the return value -->
     <resultMap type="Recipe" id="resultRecipeList">
         <id column="id" property="id" />
         <result column="name" property="name" />       
@@ -21,42 +25,47 @@
         <result column="preparationTime" property="preparationTime" />
         <result column="cookingTime" property="cookingTime" />
         <result column="description" property="description" />
-        <result column="isFavourite" property="isFavourite" />
+        <result column="isFavorite" property="isFavorite" />
         <result column="createdAt" property="createdAt" />
         <result column="updatedAt" property="updatedAt" />
         <result column="deletedAt" property="deletedAt" />
     </resultMap>
     
-    <!-- 返回list 的select 语句，注意 resultMap 的值是指向前面定义好的 -->
-    <select id="selectRecipes" parameterType="string" resultMap="resultRecipeList">
-        
+    <!-- select a result map by name, using map defined before -->
+    <select id="selectRecipes" parameterType="string" resultMap="resultRecipeList">      
         select * from recipe where name like #{pattern,jdbcType=VARCHAR}
     </select>
     
-    <select id="selectRecipesInFavourite" parameterType="string" resultMap="resultRecipeList">
-        select * from recipe where name like #{name} and isFavourite = 1
+    <!-- select recipe in favorite -->
+    <select id="selectRecipesInFavorite" parameterType="string" resultMap="resultRecipeList">
+        select * from recipe where name like #{name} and isFavorite = 1
     </select>
 
+	<!-- add recipe -->
     <insert id="addRecipe" parameterType="Recipe" useGeneratedKeys="true" keyProperty="id"> 
-        insert into recipe(name,briefDescription,thumbnail,servingNum,preparationTime,cookingTime,description,isFavourite)  
-             values(#{name},#{briefDescription},#{thumbnail},#{servingNum},#{preparationTime},#{cookingTime},#{description},#{isFavourite})  
+        insert into recipe(name,briefDescription,thumbnail,servingNum,preparationTime,cookingTime,description,isFavorite)  
+             values(#{name},#{briefDescription},#{thumbnail},#{servingNum},#{preparationTime},#{cookingTime},#{description},#{isFavorite})  
     </insert>
     
+    <!-- update recipe -->
     <update id="updateRecipe" parameterType="Recipe" >
         update recipe set name=#{name},briefDescription=#{briefDescription},thumbnail=#{thumbnail},
         					 servingNum=#{servingNum},preparationTime=#{preparationTime},
         					 cookingTime=#{cookingTime},description=#{description},
-        					 isFavourite=#{isFavourite} where id=#{id}
+        					 isFavorite=#{isFavorite} where id=#{id}
     </update>
     
+    <!-- add recipe into favorite -->
     <update id="addFavorite" parameterType="int" >
-        update recipe set isFavourite="1" where id=#{id}
+        update recipe set isFavorite="1" where id=#{id}
     </update>
     
+    <!-- remove recipe from favorite -->
     <update id="removeFavorite" parameterType="int" >
-        update recipe set isFavourite="0" where id=#{id}
+        update recipe set isFavorite="0" where id=#{id}
     </update>
     
+    <!-- delete recipe -->
     <delete id="deleteRecipe" parameterType="int">
         delete from recipe where id=#{id}
     </delete>
