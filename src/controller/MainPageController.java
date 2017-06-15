@@ -7,11 +7,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
 import java.util.Stack;
-
 import javax.swing.JOptionPane;
-
-import com.sun.scenario.effect.impl.prism.PrImage;
-
 import DAO.IngredientDAO;
 import DAO.RecipeDAO;
 import DAO.StepDAO;
@@ -29,15 +25,12 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import model.CookBook;
 import model.DatabaseAccess;
 import model.Ingredient;
 import model.Recipe;
