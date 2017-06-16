@@ -40,7 +40,7 @@
                   <Font size="16.0" />
                </font>
             </RadioButton>
-            <Button fx:id="searchBtn" layoutX="324.0" layoutY="14.0" maxHeight="26.0" maxWidth="26.0" mnemonicParsing="false" onAction="#search" prefHeight="26.0" prefWidth="26.0" />
+            <Button fx:id="searchBtn" layoutX="328.0" layoutY="14.0" maxHeight="26.0" maxWidth="26.0" mnemonicParsing="false" onAction="#search" prefHeight="26.0" prefWidth="26.0" />
          </children>
       </AnchorPane>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
@@ -86,7 +86,7 @@
             </Label>
             <Button fx:id="servingNumPlusBtn" layoutX="672.0" layoutY="101.0" mnemonicParsing="false" onAction="#servingNumPlus" prefHeight="31.0" prefWidth="30.0" />
             <Button fx:id="servingNumMinusBtn" layoutX="612.0" layoutY="101.0" mnemonicParsing="false" onAction="#servingNumMinus" prefHeight="31.0" prefWidth="30.0" />
-            <TextField fx:id="servingNum" layoutX="642.0" layoutY="101.0" prefHeight="31.0" prefWidth="30.0" text="1" />
+            <TextField fx:id="servingNum" editable="false" layoutX="642.0" layoutY="101.0" prefHeight="31.0" prefWidth="30.0" text="1" />
             <Label layoutX="38.0" layoutY="50.0" prefHeight="31.0" prefWidth="127.0" text="preparation time:">
                <font>
                   <Font size="16.0" />
