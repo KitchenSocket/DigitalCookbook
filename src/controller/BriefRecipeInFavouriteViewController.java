@@ -42,8 +42,10 @@ public class BriefRecipeInFavouriteViewController implements Initializable {
 			// TODO: handle exception
 		}
 		
+		recipeImg.setImage(new Image(
+				new File("src/resources/pizza_img.png").toURI().toString(), 80, 80, false, false));
 		
-		
+		//recipeImg.setImage(new Image( new File(eachBriefRecipe.getThumbnail()).toURI().toString(),  80, 80, false, false));
 		
 		FavouriteViewController.recipeCopies.add(eachBriefRecipe);
 
@@ -51,7 +53,7 @@ public class BriefRecipeInFavouriteViewController implements Initializable {
 		
 		recipeDescription.setText(eachBriefRecipe.getBriefDescription());
 		
-		recipeImg.setImage(new Image( new File(eachBriefRecipe.getThumbnail()).toURI().toString(),  80, 80, false, false));
+		
 		
 	}
 
