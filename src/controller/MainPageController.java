@@ -497,7 +497,7 @@ public class MainPageController implements Initializable {
 			try {
 				showRecipeList(results);
 				
-				Recipe blank =new Recipe();
+				Recipe blank =new Recipe();//still need improvments
 				
 				blank.setName("Title");
 				
