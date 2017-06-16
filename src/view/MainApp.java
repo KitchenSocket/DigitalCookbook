@@ -1,11 +1,13 @@
 package view;
 
+import java.io.File;
 import java.io.IOException;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -26,7 +28,7 @@ public class MainApp extends Application {
 		
         MainApp.primaryStage = primaryStage;
 
-        //MainApp.primaryStage.setResizable(false);
+        MainApp.primaryStage.getIcons().add(new Image(new File("src/resources/groot.jpg").toURI().toString(), 80, 80, false, false));
         
         MainApp.primaryStage.setMinHeight(1000);
         

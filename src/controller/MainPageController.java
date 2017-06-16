@@ -196,9 +196,9 @@ public class MainPageController implements Initializable {
 		servingNumMinusBtn.setGraphic(new ImageView(
 				new Image(new File("src/resources/minus.png").toURI().toString(), 10, 2, false, false)));
 		
-		rightViewPartTwo.setDisable(true);
+		rightViewPartTwo.setOpacity(0);
 		
-		rightViewPartOne.setDisable(true);
+		rightViewPartOne.setOpacity(0);
 
 		try {
 
@@ -263,9 +263,10 @@ public class MainPageController implements Initializable {
 			public void changed(ObservableValue<? extends AnchorPane> observable, AnchorPane oldValue,
 					AnchorPane newValue) {
 				
-				rightViewPartTwo.setDisable(false);
+				rightViewPartTwo.setOpacity(1);
 				
-				rightViewPartOne.setDisable(false);
+				rightViewPartOne.setOpacity(1);
+				
 
 				try {
 
@@ -508,9 +509,9 @@ public class MainPageController implements Initializable {
 				e.printStackTrace();
 			}
 			
-			rightViewPartTwo.setDisable(true);
+			rightViewPartTwo.setOpacity(0);
 			
-			rightViewPartOne.setDisable(true);
+			rightViewPartOne.setOpacity(0);
 			
 //			editRecipeBtn.setDisable(true);
 //

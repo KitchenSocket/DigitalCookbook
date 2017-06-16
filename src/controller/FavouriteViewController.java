@@ -180,9 +180,9 @@ public class FavouriteViewController extends MainPageController implements Initi
 		servingNumMinusBtn.setGraphic(new ImageView(
 				new Image(new File("src/resources/minus.png").toURI().toString(), 10, 2, false, false)));
 		
-		rightViewPartTwo.setDisable(true);
+		rightViewPartTwo.setOpacity(0);
 		
-		rightViewPartOne.setDisable(true);
+		rightViewPartOne.setOpacity(0);
 
 		try {
 
@@ -276,9 +276,9 @@ public class FavouriteViewController extends MainPageController implements Initi
 			public void changed(ObservableValue<? extends AnchorPane> observable, AnchorPane oldValue,
 					AnchorPane newValue) {
 				
-				rightViewPartTwo.setDisable(false);
+				rightViewPartTwo.setOpacity(1);
 				
-				rightViewPartOne.setDisable(false);
+				rightViewPartOne.setOpacity(1);
 
 				try {
 
@@ -319,6 +319,10 @@ public class FavouriteViewController extends MainPageController implements Initi
 			recipeDAO.removeFavorite(selectedRecipe.getId());
 
 			selectedRecipe.setIsFavorite(0);
+			
+			rightViewPartTwo.setOpacity(0);
+			
+			rightViewPartOne.setOpacity(0);
 
 			try {
 
