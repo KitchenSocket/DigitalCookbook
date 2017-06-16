@@ -491,6 +491,33 @@ public class MainPageController implements Initializable {
 			System.out.println("delete recipe");
 
 			recipeDAO.deleteRecipe(selectedRecipe.getId());
+			
+			ArrayList<Recipe> results = recipeDAO.getRecipeListByName("%");
+
+			try {
+				showRecipeList(results);
+				
+				Recipe blank =new Recipe();
+				
+				blank.setName("Title");
+				
+				showDetailedRecipe(new Recipe());
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			rightViewPartTwo.setDisable(true);
+			
+			rightViewPartOne.setDisable(true);
+			
+//			editRecipeBtn.setDisable(true);
+//
+//			addFavBtn.setDisable(true);
+//
+//			deleteRecipeBtn.setDisable(true);
+
 
 		} else
 

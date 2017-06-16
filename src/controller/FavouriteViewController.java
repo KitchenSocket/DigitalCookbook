@@ -209,11 +209,11 @@ public class FavouriteViewController extends MainPageController implements Initi
 		// ingredientList.setEditable(false);// user cannot edit textArea at
 		// main
 		// page
-		editRecipeBtn.setDisable(true);
-
-		addFavBtn.setDisable(true);
-
-		deleteRecipeBtn.setDisable(true);
+//		editRecipeBtn.setDisable(true);
+//
+//		addFavBtn.setDisable(true);
+//
+//		deleteRecipeBtn.setDisable(true);
 
 	}
 
