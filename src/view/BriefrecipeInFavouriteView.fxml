@@ -5,16 +5,16 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="190.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.BriefRecipeInFavouriteViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="190.0" prefWidth="320.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.BriefRecipeInFavouriteViewController">
    <children>
       <ImageView fx:id="recipeImg" fitHeight="114.0" fitWidth="124.0" layoutX="2.0" layoutY="66.0" pickOnBounds="true" preserveRatio="true" />
       <Label fx:id="recipeName" layoutY="3.0" prefHeight="46.0" prefWidth="379.0" text="Name">
          <font>
             <Font size="23.0" />
          </font></Label>
-      <Label fx:id="recipeDescription" alignment="TOP_LEFT" layoutX="140.0" layoutY="66.0" prefHeight="114.0" prefWidth="204.0" text="Test">
+      <Label fx:id="recipeDescription" alignment="TOP_LEFT" layoutX="140.0" layoutY="66.0" prefHeight="114.0" prefWidth="176.0" text="Test">
          <font>
-            <Font size="20.0" />
+            <Font size="16.0" />
          </font></Label>
    </children>
 </AnchorPane>

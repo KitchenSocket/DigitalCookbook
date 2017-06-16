@@ -26,17 +26,18 @@
    <children>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
          <children>
-            <TextField fx:id="searchbar" layoutX="14.0" layoutY="14.0" prefHeight="31.0" prefWidth="348.0" />
-            <RadioButton fx:id="ingredientNameRadioBtn" layoutX="229.0" layoutY="59.0" mnemonicParsing="false" text="ingredient">
+            <TextField fx:id="searchbar" layoutX="14.0" layoutY="14.0" onKeyPressed="#onEnter" prefHeight="31.0" prefWidth="348.0" />
+            <RadioButton fx:id="ingredientNameRadioBtn" layoutX="137.0" layoutY="59.0" mnemonicParsing="false" text="ingredient">
                <font>
-                  <Font size="21.0" />
-               </font></RadioButton>
+                  <Font size="16.0" />
+               </font>
+            </RadioButton>
             <RadioButton fx:id="recipeNameRadioBtn" layoutX="14.0" layoutY="58.0" mnemonicParsing="false" text="recipe">
                <padding>
                   <Insets top="2.0" />
                </padding>
                <font>
-                  <Font size="21.0" />
+                  <Font size="16.0" />
                </font>
             </RadioButton>
             <Button fx:id="searchBtn" layoutX="324.0" layoutY="14.0" maxHeight="26.0" maxWidth="26.0" mnemonicParsing="false" onAction="#search" prefHeight="26.0" prefWidth="26.0" />
@@ -44,10 +45,10 @@
       </AnchorPane>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
          <children>
-            <ListView fx:id="matchRecipeList" layoutX="14.0" layoutY="-50.0" prefHeight="714.0" prefWidth="348.0" />
+            <ListView fx:id="matchRecipeList" layoutX="14.0" layoutY="-59.0" prefHeight="698.0" prefWidth="348.0" />
          </children>
       </AnchorPane>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+      <AnchorPane fx:id="rightViewPartOne" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
          <children>
             <Label fx:id="recipeName" contentDisplay="CENTER" graphicTextGap="10.0" layoutX="15.0" layoutY="10.0" prefWidth="463.0" text="Title">
                <font>
@@ -57,16 +58,16 @@
                   <Insets left="20.0" />
                </padding>
             </Label>
-            <Label layoutX="24.0" layoutY="56.0" prefHeight="21.0" prefWidth="145.0" text="time">
+            <Label fx:id="prepareTime" layoutX="149.0" layoutY="50.0" prefHeight="31.0" prefWidth="78.0">
                <padding>
                   <Insets left="23.0" />
                </padding>
                <font>
-                  <Font size="21.0" />
+                  <Font size="16.0" />
                </font>
             </Label>
-            <Button fx:id="editRecipeBtn" layoutX="606.0" layoutY="53.0" mnemonicParsing="false" onAction="#editRecipe" prefHeight="33.0" prefWidth="30.0" />
-            <Button fx:id="addFavBtn" layoutX="662.0" layoutY="53.0" mnemonicParsing="false" onAction="#addFavRecipe" prefHeight="33.0" prefWidth="30.0" />
+            <Button fx:id="editRecipeBtn" layoutX="593.0" layoutY="40.0" mnemonicParsing="false" onAction="#editRecipe" prefHeight="43.0" prefWidth="38.0" />
+            <Button fx:id="addFavBtn" layoutX="653.0" layoutY="40.0" mnemonicParsing="false" onAction="#addFavRecipe" prefHeight="43.0" prefWidth="38.0" />
             <Label layoutX="14.0" layoutY="98.0" prefHeight="43.0" prefWidth="236.0" text="Ingredients">
                <font>
                   <Font size="29.0" />
@@ -75,7 +76,7 @@
                   <Insets left="20.0" />
                </padding>
             </Label>
-            <Label alignment="CENTER_RIGHT" layoutX="592.0" layoutY="104.0" prefHeight="31.0" prefWidth="109.0" text="Serving">
+            <Label alignment="CENTER_RIGHT" layoutX="478.0" layoutY="101.0" prefHeight="31.0" prefWidth="109.0" text="Serving">
                <padding>
                   <Insets left="23.0" />
                </padding>
@@ -83,9 +84,30 @@
                   <Font size="21.0" />
                </font>
             </Label>
+            <Button fx:id="servingNumPlusBtn" layoutX="672.0" layoutY="101.0" mnemonicParsing="false" onAction="#servingNumPlus" prefHeight="31.0" prefWidth="30.0" />
+            <Button fx:id="servingNumMinusBtn" layoutX="612.0" layoutY="101.0" mnemonicParsing="false" onAction="#servingNumMinus" prefHeight="31.0" prefWidth="30.0" />
+            <TextField fx:id="servingNum" layoutX="642.0" layoutY="101.0" prefHeight="31.0" prefWidth="30.0" text="1" />
+            <Label layoutX="38.0" layoutY="50.0" prefHeight="31.0" prefWidth="127.0" text="preparation time:">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label layoutX="38.0" layoutY="70.0" prefHeight="31.0" prefWidth="109.0" text="cooking time:">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="cookingTime" layoutX="149.0" layoutY="70.0" prefHeight="31.0" prefWidth="78.0">
+               <padding>
+                  <Insets left="23.0" />
+               </padding>
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
-      <AnchorPane prefHeight="801.0" prefWidth="588.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+      <AnchorPane fx:id="rightViewPartTwo" prefHeight="801.0" prefWidth="588.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
          <children>
             <ListView fx:id="stepList" layoutX="26.0" layoutY="248.0" prefHeight="410.0" prefWidth="675.0" />
             <Label layoutX="14.0" layoutY="193.0" prefHeight="21.0" prefWidth="120.0" text="Steps">
@@ -96,7 +118,7 @@
                   <Font size="29.0" />
                </font>
             </Label>
-            <Button fx:id="deleteRecipeBtn" layoutX="656.0" layoutY="671.0" mnemonicParsing="false" onAction="#deleteRecipe" prefHeight="33.0" prefWidth="30.0" />
+            <Button fx:id="deleteRecipeBtn" layoutX="652.0" layoutY="671.0" mnemonicParsing="false" onAction="#deleteRecipe" prefHeight="43.0" prefWidth="38.0" />
             <TableView fx:id="ingredientTable" layoutX="26.0" layoutY="-41.0" prefHeight="224.0" prefWidth="675.0" />
          </children>
       </AnchorPane>

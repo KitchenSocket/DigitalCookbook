@@ -31,17 +31,16 @@
          <children>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <children>
-                  <Button fx:id="addRecipeBtn" layoutX="4.0" layoutY="234.0" mnemonicParsing="false" onAction="#addViewClick" prefHeight="53.0" prefWidth="53.0" />
+                  <Button fx:id="addRecipeBtn" layoutX="4.0" layoutY="234.0" mnemonicParsing="false" onAction="#addViewClick" opacity="0.51" prefHeight="53.0" prefWidth="53.0" />
                </children>
             </AnchorPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
                <children>
-                  <Button fx:id="mainPageBtn" layoutX="4.0" layoutY="14.0" maxHeight="53.0" maxWidth="53.0" minHeight="53.0" minWidth="53.0" mnemonicParsing="false" onAction="#mainPageClick" prefHeight="53.0" prefWidth="53.0" />
-                  <Button fx:id="addFavBtn" layoutX="4.0" layoutY="99.0" mnemonicParsing="false" onAction="#favViewClick" prefHeight="53.0" prefWidth="53.0" />
+                  <Button fx:id="mainPageBtn" layoutX="4.0" layoutY="14.0" maxHeight="53.0" maxWidth="53.0" minHeight="53.0" minWidth="53.0" mnemonicParsing="false" onAction="#mainPageClick" opacity="0.51" prefHeight="53.0" prefWidth="53.0" />
+                  <Button fx:id="addFavBtn" layoutX="4.0" layoutY="99.0" mnemonicParsing="false" onAction="#favViewClick" opacity="0.51" prefHeight="53.0" prefWidth="53.0" />
                </children>
             </AnchorPane>
          </children>
       </GridPane>
    </left>
 </BorderPane>
-

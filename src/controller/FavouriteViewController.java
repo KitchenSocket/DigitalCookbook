@@ -19,6 +19,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import model.CookBook;
 import model.Recipe;
@@ -37,6 +39,58 @@ import view.MainApp;
 public class FavouriteViewController extends MainPageController implements Initializable {
 
 	public static Stack<Recipe> favouriteRecipes = new Stack<Recipe>();
+	
+	public  Recipe selectedRecipe;
+	
+    @FXML
+    void onEnter(KeyEvent event) throws IOException {
+    	
+        if (event.getCode() == KeyCode.ENTER) {
+
+        	searchBehaviour();
+        	
+          }
+    	
+    	
+    }
+	
+    @FXML
+    protected void servingNumMinus(ActionEvent event) {
+
+    	int servingNumber = new Integer(servingNum.getText());
+    	
+    	if(servingNumber>0){
+    		
+        	servingNumber--;
+        	
+        	servingNum.setText(new Integer(servingNumber).toString());
+        	
+			cookingTime.setText(new Integer(selectedRecipe.getCookingTime() * servingNumber).toString());
+
+			prepareTime.setText(new Integer(selectedRecipe.getPreparationTime() * servingNumber).toString());
+    		
+    	}
+    	
+    }
+
+    @FXML
+    protected void servingNumPlus(ActionEvent event) {
+    	
+    	int servingNumber = new Integer(servingNum.getText());
+    	
+    	if(servingNumber < 9){
+    		
+        	servingNumber++;
+        	
+        	servingNum.setText(new Integer(servingNumber).toString());
+        	
+			cookingTime.setText(new Integer(selectedRecipe.getCookingTime() * servingNumber).toString());
+
+			prepareTime.setText(new Integer(selectedRecipe.getPreparationTime() * servingNumber).toString());
+    		
+    	} 
+
+    }
 
 	/**
 	 * The behaviour after clicking delete button.
@@ -112,13 +166,23 @@ public class FavouriteViewController extends MainPageController implements Initi
 				new File("src/resources/recipe_search_button.png").toURI().toString(), 15, 17, false, false)));
 
 		addFavBtn.setGraphic(new ImageView(
-				new Image(new File("src/resources/add_fav_recipe.png").toURI().toString(), 15, 17, false, false)));
+				new Image(new File("src/resources/add_fav_recipe.png").toURI().toString(), 30, 32, false, false)));
 
 		editRecipeBtn.setGraphic(
-				new ImageView(new Image(new File("src/resources/edit.png").toURI().toString(), 15, 17, false, false)));
+				new ImageView(new Image(new File("src/resources/edit.png").toURI().toString(), 30, 32, false, false)));
 
 		deleteRecipeBtn.setGraphic(new ImageView(
-				new Image(new File("src/resources/delete.png").toURI().toString(), 15, 17, false, false)));
+				new Image(new File("src/resources/delete.png").toURI().toString(), 30, 32, false, false)));
+		
+		servingNumPlusBtn.setGraphic(new ImageView(
+				new Image(new File("src/resources/plus.png").toURI().toString(), 10, 10, false, false)));
+		
+		servingNumMinusBtn.setGraphic(new ImageView(
+				new Image(new File("src/resources/minus.png").toURI().toString(), 10, 2, false, false)));
+		
+		rightViewPartTwo.setDisable(true);
+		
+		rightViewPartOne.setDisable(true);
 
 		try {
 
@@ -211,10 +275,18 @@ public class FavouriteViewController extends MainPageController implements Initi
 			@Override
 			public void changed(ObservableValue<? extends AnchorPane> observable, AnchorPane oldValue,
 					AnchorPane newValue) {
+				
+				rightViewPartTwo.setDisable(false);
+				
+				rightViewPartOne.setDisable(false);
 
 				try {
 
 					selectedRecipe = recipeCopies.get(matchRecipeList.getSelectionModel().getSelectedIndex());
+					
+					prepareTime.setText(new Integer(selectedRecipe.getPreparationTime()).toString());
+
+					cookingTime.setText(new Integer(selectedRecipe.getCookingTime()).toString());
 
 					showDetailedRecipe(selectedRecipe);
 

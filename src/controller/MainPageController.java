@@ -1,5 +1,6 @@
 package controller;
 
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -30,6 +31,8 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import model.Ingredient;
 import model.Recipe;
@@ -54,6 +57,26 @@ public class MainPageController implements Initializable {
 	public static Recipe selectedRecipe;
 
 	final ToggleGroup group = new ToggleGroup();
+	
+    @FXML Label cookingTime;
+	
+    @FXML
+    protected AnchorPane rightViewPartOne;
+	
+    @FXML
+    protected AnchorPane rightViewPartTwo;
+    
+    @FXML Label prepareTime;
+
+    @FXML
+    protected Button servingNumPlusBtn;
+
+    @FXML
+    protected Button servingNumMinusBtn;
+
+    @FXML
+    protected TextField servingNum;
+
 
 	@FXML
 	protected TextField searchbar;
@@ -99,6 +122,58 @@ public class MainPageController implements Initializable {
 	protected TableColumn<Ingredient, Double> quantity = new TableColumn<>("Quantity");
 
 	protected TableColumn<Ingredient, String> unit = new TableColumn<>("Unit");
+	
+
+	
+    @FXML
+    void onEnter(KeyEvent event) throws IOException {
+    	
+        if (event.getCode() == KeyCode.ENTER) {
+
+        	searchBehaviour();
+        	
+          }
+    	
+    	
+    }
+
+    @FXML
+    protected void servingNumMinus(ActionEvent event) {
+
+    	int servingNumber = new Integer(servingNum.getText());
+    	
+    	if(servingNumber>0){
+    		
+        	servingNumber--;
+        	
+        	servingNum.setText(new Integer(servingNumber).toString());
+        	
+			cookingTime.setText(new Integer(selectedRecipe.getCookingTime() * servingNumber).toString());
+
+			prepareTime.setText(new Integer(selectedRecipe.getPreparationTime() * servingNumber).toString());
+    		
+    	}
+    	
+    }
+
+    @FXML
+    protected void servingNumPlus(ActionEvent event) {
+    	
+    	int servingNumber = new Integer(servingNum.getText());
+    	
+    	if(servingNumber < 9){
+    		
+        	servingNumber++;
+        	
+        	servingNum.setText(new Integer(servingNumber).toString());
+        	
+			cookingTime.setText(new Integer(selectedRecipe.getCookingTime() * servingNumber).toString());
+
+			prepareTime.setText(new Integer(selectedRecipe.getPreparationTime() * servingNumber).toString());
+    		
+    	} 
+
+    }
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -107,13 +182,23 @@ public class MainPageController implements Initializable {
 				new File("src/resources/recipe_search_button.png").toURI().toString(), 15, 17, false, false)));
 
 		addFavBtn.setGraphic(new ImageView(
-				new Image(new File("src/resources/add_fav_recipe.png").toURI().toString(), 15, 17, false, false)));
+				new Image(new File("src/resources/add_fav_recipe.png").toURI().toString(), 30, 32, false, false)));
 
 		editRecipeBtn.setGraphic(
-				new ImageView(new Image(new File("src/resources/edit.png").toURI().toString(), 15, 17, false, false)));
+				new ImageView(new Image(new File("src/resources/edit.png").toURI().toString(), 30, 32, false, false)));
 
 		deleteRecipeBtn.setGraphic(new ImageView(
-				new Image(new File("src/resources/delete.png").toURI().toString(), 15, 17, false, false)));
+				new Image(new File("src/resources/delete.png").toURI().toString(), 30, 32, false, false)));
+		
+		servingNumPlusBtn.setGraphic(new ImageView(
+				new Image(new File("src/resources/plus.png").toURI().toString(), 10, 10, false, false)));
+		
+		servingNumMinusBtn.setGraphic(new ImageView(
+				new Image(new File("src/resources/minus.png").toURI().toString(), 10, 2, false, false)));
+		
+		rightViewPartTwo.setDisable(true);
+		
+		rightViewPartOne.setDisable(true);
 
 		try {
 
@@ -148,7 +233,7 @@ public class MainPageController implements Initializable {
 	}
 
 	public void initableValueType() {
-		name.setMinWidth(270);
+		name.setMinWidth(405);
 
 		name.setCellValueFactory(new PropertyValueFactory<>("name"));
 
@@ -156,7 +241,7 @@ public class MainPageController implements Initializable {
 
 		quantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 
-		unit.setMinWidth(270);
+		unit.setMinWidth(135);
 
 		unit.setCellValueFactory(new PropertyValueFactory<>("unit"));
 
@@ -177,6 +262,10 @@ public class MainPageController implements Initializable {
 			@Override
 			public void changed(ObservableValue<? extends AnchorPane> observable, AnchorPane oldValue,
 					AnchorPane newValue) {
+				
+				rightViewPartTwo.setDisable(false);
+				
+				rightViewPartOne.setDisable(false);
 
 				try {
 
@@ -186,6 +275,14 @@ public class MainPageController implements Initializable {
 					// clicked
 					
 					showDetailedRecipe(selectedRecipe);
+					
+					servingNum.setText("1");
+
+					recipeName.setText(selectedRecipe.getName());
+
+					prepareTime.setText(new Integer(selectedRecipe.getPreparationTime()).toString());
+
+					cookingTime.setText(new Integer(selectedRecipe.getCookingTime()).toString());
 					
 					editRecipeBtn.setDisable(false);// button active
 
@@ -221,7 +318,12 @@ public class MainPageController implements Initializable {
 	 */
 	@FXML
 	public void search(ActionEvent event) throws IOException {
+		
+		searchBehaviour();
 
+	}
+
+	protected void searchBehaviour() throws IOException {
 		String searchWord = new String(searchbar.getText());
 
 		if (searchWord.equals("")) {
@@ -243,9 +345,7 @@ public class MainPageController implements Initializable {
 					showRecipeList(results);
 
 				}
-				// recipes =
-				// DatabaseAccess.searchByIngredientName(searchWord);//I
-				// have no Sijie's search method
+
 
 			} else if (ingredientNameRadioBtn.isSelected()) {
 
@@ -260,25 +360,13 @@ public class MainPageController implements Initializable {
 					showRecipeList(results);
 
 				}
-				// recipes = DatabaseAccess.searchByRecipeName(searchWord);//I
-				// have
-				// no Sijie's search method
 
-				/*
-				 * for (int recipeNumber = 0; recipeNumber < recipes.size();
-				 * recipeNumber++){
-				 * matchRecipes.push(recipes.get(recipeNumber)); }
-				 */
-
-				// matchRecipes.push(CookBook.createGongBaoJiding());
-				//
-				// matchRecipes.push(CookBook.createHongShaoRou());
-				//
-				// showRecipeList();
 
 			}
 		}
+		
 	}
+
 
 	public void showRecipeList(ArrayList<Recipe> results) throws IOException {
 
