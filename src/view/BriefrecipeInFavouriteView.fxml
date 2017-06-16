@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="190.0" prefWidth="320.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.BriefRecipeInFavouriteViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="310.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="190.0" prefWidth="310.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.BriefRecipeInFavouriteViewController">
    <children>
       <ImageView fx:id="recipeImg" fitHeight="114.0" fitWidth="124.0" layoutX="2.0" layoutY="66.0" pickOnBounds="true" preserveRatio="true" />
       <Label fx:id="recipeName" layoutY="3.0" prefHeight="46.0" prefWidth="379.0" text="Name">
