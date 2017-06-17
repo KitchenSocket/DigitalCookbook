@@ -24,6 +24,16 @@ public class Step {
 		
 	}
 	
+	/**
+	 * @param stepOrder
+	 * @param description
+	 */
+	public Step(int stepOrder, String description) {
+		super();
+		this.stepOrder = stepOrder;
+		this.description = description;
+	}
+
 	public int getRecipeId() {		
 		return this.recipeId;		
 	}

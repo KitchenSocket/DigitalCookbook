@@ -1,5 +1,6 @@
 package DAO;
 
+import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +45,9 @@ public class RecipeDAO {
      * main function, mainly for testing
      * 
      * @param args
+     * @throws IOException 
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
     	//Recipe r = new Recipe();
     	
     	RecipeDAO DAO=new RecipeDAO();
@@ -56,9 +58,15 @@ public class RecipeDAO {
     	System.out.println("===============================");
     	System.out.println();
     	//DAO.getRecipeListByIngredientNameInFavorite("pork");
-    	Recipe r = new Recipe();
-    	r = DAO.getRecipeById(2);
-    	DAO.addRecipe(r);
+    	
+    	
+    	//DAO.getRecipeListByName("yu xiang");
+    	//DAO.getRecipeListByNameInFavorite("mapo dofu rou");
+    	//DAO.getRecipeListByIngredientName("prok");
+
+    	//Recipe r = new Recipe();
+    	//r = DAO.getRecipeById(2);
+    	//DAO.addRecipe(r);
     	System.out.println();
     	System.out.println("===============================");
     	System.out.println();
@@ -86,7 +94,7 @@ public class RecipeDAO {
 			result = recipeOperation.selectRecipeByID(id);	
 			
 			//test code
-			System.out.println(result);
+			//System.out.println(result);
 		} finally {
 		    session.close();
 		}
@@ -123,10 +131,14 @@ public class RecipeDAO {
      * 
      * @param name
      * @return ArrayList<Recipe>
+     * @throws IOException 
      */
-    public ArrayList<Recipe> getRecipeListByName(String name){
+    public ArrayList<Recipe> getRecipeListByName(String name) throws IOException{
+    	//correct spell
+    	String subWord = new Correct("words.txt").correct(name);
+    	
     	//get resources
-    	String searchName = "%"+name+"%";	  
+    	String searchName = "%"+subWord+"%";	  
 
     	//String searchName = name;	
     	ArrayList<Recipe> results = new ArrayList<>();
@@ -137,7 +149,6 @@ public class RecipeDAO {
 			RecipeOperation recipeOperation=session.getMapper(RecipeOperation.class);           
 		    List<Recipe> recipes = recipeOperation.selectRecipes(searchName);
 		    for(Recipe recipe:recipes){
-		    	
 		    	//test code
 		    	System.out.println(recipe);
 		    	if(recipe != null)
@@ -157,10 +168,14 @@ public class RecipeDAO {
      * 
      * @param name
      * @return ArrayList<Recipe>
+     * @throws IOException 
      */
-    public ArrayList<Recipe> getRecipeListByNameInFavorite(String name){
+    public ArrayList<Recipe> getRecipeListByNameInFavorite(String name) throws IOException{
+    	//correct spell
+    	String subWord = new Correct("words.txt").correct(name);
+    	
     	//get resources
-    	String searchName = "%"+name+"%";	     
+    	String searchName = "%"+subWord+"%";	     
     	ArrayList<Recipe> results = new ArrayList<>();
 	  
     	//execute sql
@@ -187,10 +202,14 @@ public class RecipeDAO {
      * 
      * @param name
      * @return ArrayList<Recipe>
+     * @throws IOException 
      */
-    public ArrayList<Recipe> getRecipeListByIngredientName(String name){
+    public ArrayList<Recipe> getRecipeListByIngredientName(String name) throws IOException{
+    	//correct spell
+    	String subWord = new Correct("words.txt").correct(name);
+    	
     	//get resources
-    	String searchName = "%"+name+"%";
+    	String searchName = "%"+subWord+"%";
     	Recipe temp = new Recipe();
     	ArrayList<Recipe> results = new ArrayList<>();
     	ArrayList<Integer> recipeIds = new ArrayList<Integer>();
@@ -234,11 +253,15 @@ public class RecipeDAO {
      * returns an ArrayList of class recipe by an ingredient name in favorite
      * 
      * @param name
-     * @return
+     * @return ArrayList<Recipe>
+     * @throws IOException 
      */
-    public ArrayList<Recipe> getRecipeListByIngredientNameInFavorite(String name){
+    public ArrayList<Recipe> getRecipeListByIngredientNameInFavorite(String name) throws IOException{
+    	//correct spell
+    	String subWord = new Correct("words.txt").correct(name);
+    	
     	//get resources
-    	String searchName = "%"+name+"%";
+    	String searchName = "%"+subWord+"%";
     	Recipe temp = new Recipe();
     	ArrayList<Recipe> results = new ArrayList<>();
     	ArrayList<Integer> recipeIds = new ArrayList<Integer>();

@@ -1,5 +1,6 @@
 package DAO;
 
+import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,12 +42,13 @@ public class StepDAO {
      * main function, mainly for testing
      * 
      * @param args
+     * @throws IOException 
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
     	
     	StepDAO DAO=new StepDAO();
     	//DAO.getStepById(2);
-    	DAO.getStepListByDescription("pork");
+    	DAO.getStepListByDescription("prok");
     	//DAO.getStepListByRecipyId(1);
   }
     
@@ -80,10 +82,14 @@ public class StepDAO {
      * 
      * @param description
      * @return ArrayList<Step>
+     * @throws IOException 
      */
-    public ArrayList<Step> getStepListByDescription(String description){
+    public ArrayList<Step> getStepListByDescription(String description) throws IOException{
+    	//correct spell
+    	String subWord = new Correct("words.txt").correct(description);
+    	
     	//get resources
-    	String searchDescription = "%"+description+"%";	     
+    	String searchDescription = "%"+subWord+"%";	     
     	ArrayList<Step> results = new ArrayList<Step>();
 	  
     	//execute sql
@@ -94,7 +100,7 @@ public class StepDAO {
 		    for(Step step:steps){
 		    	
 		    	//test code
-		    	//System.out.println(step);
+		    	System.out.println(step);
 		        results.add(step);
 		    }
 		
