@@ -329,6 +329,10 @@ public class FavouriteViewController extends MainPageController implements Initi
 				ArrayList<Recipe> results = recipeDAO.getRecipeListByNameInFavorite("%");
 
 				showRecipeList(results);
+				
+				rightViewPartOne.setOpacity(0);
+				
+				rightViewPartTwo.setOpacity(0);
 
 				showDetailedRecipe(new Recipe());
 				

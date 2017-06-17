@@ -502,6 +502,10 @@ public class MainPageController implements Initializable {
 				
 				blank.setName("Title");
 				
+				rightViewPartOne.setOpacity(0);
+				
+				rightViewPartTwo.setOpacity(0);
+				
 				showDetailedRecipe(new Recipe());
 				
 			} catch (IOException e) {
