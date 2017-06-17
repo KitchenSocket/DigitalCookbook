@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<GridPane alignment="CENTER"
+          xmlns:fx="http://javafx.com/fxml"
+          fx:controller="controller.TemplateController" fx:id="rootBP" minHeight="500" minWidth="800">
+    <columnConstraints>
+        <ColumnConstraints prefWidth="80" fx:id="naviCol"/>
+        <ColumnConstraints prefWidth="1120" hgrow="ALWAYS" fx:id="contentCol"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints percentHeight="100" fx:id="contentRow"/>
+    </rowConstraints>
+        <AnchorPane fx:id="naviAP" GridPane.columnIndex="0" GridPane.rowIndex="0">
+            <TilePane AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" prefColumns="1" prefRows="2" prefTileWidth="80" fx:id="topBtnTP" orientation="VERTICAL">
+                <Button prefWidth="80" prefHeight="80" fx:id="mainPageBtn" />
+                <Button prefWidth="80" prefHeight="80" fx:id="favBtn"/>
+            </TilePane>
+
+            <TilePane AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" prefColumns="1" prefRows="1" prefTileWidth="80"  fx:id="bottomBtnTP">
+                <Button prefWidth="80" prefHeight="80" fx:id="addRecipeBtn"/>
+            </TilePane>
+        </AnchorPane>
+</GridPane>

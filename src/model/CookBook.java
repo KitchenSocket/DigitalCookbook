@@ -4,21 +4,19 @@ import java.sql.*;
 import java.util.LinkedList;
 
 import javafx.application.Application;
-import view.MainApp;
+import view.Template;
 
 /**
  * A class for the program entry point and some test recipes.
  *
- * @author breukerm
+ * @author Shi Wenbin, Gang Shao
  * 
- * @author breukerm254
  */
 public class CookBook {
 
 	private LinkedList<Recipe> myRecipeList = new LinkedList<>();
 	
   
-
     /**
      * Program entry point.
      *
@@ -27,10 +25,7 @@ public class CookBook {
      */
     public static void main(String[] args) throws SQLException {
     	
-    
-
-
-      Application.launch(MainApp.class, args);
+      Application.launch(Template.class, args);
 
     }
 
@@ -45,7 +40,4 @@ public class CookBook {
 //		System.out.println(Recipe.search(recipeName, myRecipeList));
 //		
 //	}
-
-
-	
 }

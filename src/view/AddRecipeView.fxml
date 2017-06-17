@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<GridPane alignment="CENTER" hgap="0" vgap="0"
+          xmlns:fx="http://javafx.com/fxml"
+          fx:controller="controller.AddRecipeViewController" fx:id="frameGrid" minHeight="500" minWidth="800">
+    <columnConstraints>
+        <ColumnConstraints prefWidth="420" fx:id="listCol"/>
+        <ColumnConstraints prefWidth="500" hgrow="ALWAYS" fx:id="detailCol"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints percentHeight="100" fx:id="frameRow"/>
+    </rowConstraints>
+
+    <!--<gridLinesVisible>true</gridLinesVisible>-->
+
+    <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" fx:id="listVB">
+        <Label text="Title" labelFor="$titleFld"/>
+        <TextField promptText="ie. Braised Pork" fx:id="titleFld"/>
+        <TilePane prefColumns="3" prefRows="2" prefTileWidth="140"  fx:id="smallFldTP">
+            <Label text="Servings" labelFor="$servingsFld"/>
+            <Label text="Preparation Time (min)" labelFor="$preparationTimeFld"/>
+            <Label text="Cooking Time (min)" labelFor="$cookingTimeFld"/>
+            <TextField promptText="ie. 4" fx:id="servingsFld"/>
+            <TextField promptText="ie. 70" fx:id="preparationTimeFld"/>
+            <TextField promptText="ie. 40" fx:id="cookingTimeFld"/>
+        </TilePane>
+        <Label text="Ingredients" labelFor="$ingredientsTV"/>
+        <TableView VBox.vgrow="ALWAYS" fx:id="ingredientsTV">
+            <columns>
+                <TableColumn fx:id="ingredientNameCol" text="Name"/>
+                <TableColumn fx:id="ingredientQuantityCol" text="Quantity"/>
+                <TableColumn fx:id="ingredientUnitCol" text="Unit"/>
+            </columns>
+        </TableView>
+    </VBox>
+
+    <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" fx:id="detailVB">
+        <Label text="Steps" labelFor="$stepsTV"/>
+        <TableView VBox.vgrow="ALWAYS" fx:id="stepsTV">
+            <columns>
+                <TableColumn fx:id="stepCountCol" text="#"/>
+                <TableColumn fx:id="stepContentCol" text="Your steps ..."/>
+            </columns>
+        </TableView>
+    </VBox>
+
+</GridPane>

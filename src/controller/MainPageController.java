@@ -38,7 +38,7 @@ import model.Ingredient;
 import model.Recipe;
 import model.Step;
 import test.RecipeTest;
-import view.MainApp;
+import view.Template;
 
 /**
  * Controller of mainPage.
@@ -388,7 +388,7 @@ public class MainPageController implements Initializable {
 			// Load root layout from fxml file.
 			FXMLLoader loader = new FXMLLoader();
 
-			loader.setLocation(MainApp.class.getResource("../view/BriefRecipeInMainPage.fxml"));
+			loader.setLocation(Template.class.getResource("../view/BriefRecipeInMainPage.fxml"));
 
 			AnchorPane eachRecipe = (AnchorPane) loader.load();
 

@@ -16,7 +16,7 @@
 <GridPane hgap="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="921.0" prefWidth="1296.0" style="-fx-background-image: url('resources/back.jpg');" vgap="10.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FavouriteViewController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="484.0" minWidth="10.0" prefWidth="484.0" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="850.0" minWidth="10.0" prefWidth="802.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="750.0" minWidth="10.0" prefWidth="802.0" />
    </columnConstraints>
    <rowConstraints>
       <RowConstraints minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />

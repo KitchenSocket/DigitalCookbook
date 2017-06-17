@@ -26,7 +26,7 @@ import model.CookBook;
 import model.Recipe;
 import model.Step;
 import test.RecipeTest;
-import view.MainApp;
+import view.Template;
 
 /**
  * Controller of Favourite View.
@@ -245,7 +245,7 @@ public class FavouriteViewController extends MainPageController implements Initi
 			// Load root layout from fxml file.
 			FXMLLoader loader = new FXMLLoader();
 
-			loader.setLocation(MainApp.class.getResource("../view/BriefRecipeInFavouriteView.fxml"));
+			loader.setLocation(Template.class.getResource("../view/BriefRecipeInFavouriteView.fxml"));
 
 			AnchorPane eachRecipe = (AnchorPane) loader.load();
 
