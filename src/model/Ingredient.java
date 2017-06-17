@@ -23,6 +23,18 @@ public class Ingredient {
 		
 	}
 	
+	/**
+	 * @param name
+	 * @param quantity
+	 * @param unit
+	 */
+	public Ingredient(String name, double quantity, String unit) {
+		super();
+		this.name = name;
+		this.quantity = quantity;
+		this.unit = unit;
+	}
+
 	public int getRecipeId() {
 		return this.recipeId;
 	}

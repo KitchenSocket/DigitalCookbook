@@ -482,7 +482,7 @@ public class MainPageController implements Initializable {
 	}
 
 	@FXML
-	public void deleteRecipe(ActionEvent event) {
+	public void deleteRecipe(ActionEvent event) throws IOException {
 
 		int delete = JOptionPane.showConfirmDialog(null, "Do you want to delete this recipe?", null,
 				JOptionPane.YES_NO_OPTION);

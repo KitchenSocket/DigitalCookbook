@@ -1,5 +1,6 @@
 package DAO;
 
+import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,13 +43,14 @@ public class IngredientDAO {
      * main function, mainly for testing
      * 
      * @param args
+     * @throws IOException 
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
     	
     	IngredientDAO DAO=new IngredientDAO();
-    	//DAO.getIngredientListByName("pork");
+    	DAO.getIngredientListByName("prok");
 
-    	DAO.getIngredientListByRecipyId(2);
+    	//DAO.getIngredientListByRecipyId(2);
     	//DAO.getIngredientById(2);
   }
     
@@ -82,10 +84,14 @@ public class IngredientDAO {
      * 
      * @param name
      * @return ArrayList<Ingredient>
+     * @throws IOException 
      */
-    public ArrayList<Ingredient> getIngredientListByName(String name){
+    public ArrayList<Ingredient> getIngredientListByName(String name) throws IOException{
+    	//correct spell
+    	String subWord = new Correct("words.txt").correct(name);
+    	
     	//get resources
-    	String searchName = "%"+name+"%";	     
+    	String searchName = "%"+subWord+"%";	     
     	ArrayList<Ingredient> results = new ArrayList<Ingredient>();
 	  
     	//execute sql
@@ -96,13 +102,14 @@ public class IngredientDAO {
 		    for(Ingredient ingredient:ingredients){
 		    	
 		    	//test code
-		    	//System.out.println(ingredient);
+		    	System.out.println(ingredient);
 		        results.add(ingredient);
 		    }
 		
 		} finally {
 		    session.close();
 		}
+		
 		return results;
 	  }
     
