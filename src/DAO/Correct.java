@@ -51,6 +51,11 @@ public class Correct {
 
 		ArrayList<String> result = new ArrayList<String>();
 
+		// if the word has less than 3 letters
+		// then leave the word
+		if (word.length() < 3)
+			return result;
+
 		// delete
 		for (int i = 0; i < word.length(); ++i)
 			result.add(word.substring(0, i) + word.substring(i + 1));

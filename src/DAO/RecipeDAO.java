@@ -58,8 +58,8 @@ public class RecipeDAO {
     	System.out.println("===============================");
     	System.out.println();
     	//DAO.getRecipeListByIngredientNameInFavorite("pork");
-    	
-    	
+
+    	DAO.getRecipeListByName("%");
     	//DAO.getRecipeListByName("yu xiang");
     	//DAO.getRecipeListByNameInFavorite("mapo dofu rou");
     	//DAO.getRecipeListByIngredientName("prok");

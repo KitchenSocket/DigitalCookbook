@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import javafx.application.Application;
 import view.Template;
+import model.Recipe;
 
 /**
  * A class for the program entry point and some test recipes.
