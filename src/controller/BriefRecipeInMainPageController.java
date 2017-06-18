@@ -70,9 +70,9 @@ public class BriefRecipeInMainPageController implements Initializable {
 			
 			outputText+= text[i];
 			
-			if(i%20==0 && i != 0){
+			if(i%25== 0 && i != 0){
 				
-				outputText+= "\n";
+				outputText+= "-\n";
 				
 			}
 			

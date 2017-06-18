@@ -59,6 +59,12 @@ public class MainPageController extends TemplateController implements Initializa
 
 	final ToggleGroup group = new ToggleGroup();
 	
+    @FXML
+    protected ImageView recipeImg;
+
+    @FXML
+    protected Label descriptionLabel;
+	
     @FXML Label cookingTime;
 
     @FXML
@@ -121,6 +127,8 @@ public class MainPageController extends TemplateController implements Initializa
 
 	protected TableColumn<Ingredient, String> unit = new TableColumn<>("Unit");
 	
+	 protected ArrayList<Ingredient> ingredients= new ArrayList<>(); 
+	
 	/*
 	 * A listener method , when enter key clicked, do the search method.
 	 * 
@@ -151,7 +159,7 @@ public class MainPageController extends TemplateController implements Initializa
 	 */
 
     @FXML
-    protected void servingNumMinus(ActionEvent event) {
+    protected void servingNumMinus(ActionEvent event) throws IOException {
 
      	int servingNumber = new Integer(servingNum.getText());
 
@@ -168,6 +176,8 @@ public class MainPageController extends TemplateController implements Initializa
 			cookingTime.setText(new Integer((int) (selectedRecipe.getCookingTime() * multi)).toString());
 
 			prepareTime.setText(new Integer((int) (selectedRecipe.getPreparationTime() * multi)).toString());
+			
+			showIngredientTable(selectedRecipe.getId(), multi);
     		
     	}
     	
@@ -182,7 +192,7 @@ public class MainPageController extends TemplateController implements Initializa
 	 */
 
     @FXML
-    protected void servingNumPlus(ActionEvent event) {
+    protected void servingNumPlus(ActionEvent event) throws IOException {
     	
     	int servingNumber = new Integer(servingNum.getText());
 
@@ -200,6 +210,8 @@ public class MainPageController extends TemplateController implements Initializa
 			cookingTime.setText(new Integer((int) (selectedRecipe.getCookingTime() * multi)).toString());
 
 			prepareTime.setText(new Integer((int) (selectedRecipe.getPreparationTime() * multi)).toString());
+			
+			showIngredientTable(selectedRecipe.getId(), multi);
     		
     	} 
 
@@ -335,6 +347,11 @@ public class MainPageController extends TemplateController implements Initializa
 
 					cookingTime.setText(new Integer(selectedRecipe.getCookingTime()).toString());
 					
+					descriptionLabel.setText(textProcessingBeforeOutput());
+					
+					recipeImg.setImage(new Image(
+							new File("src/resources/pizza_img.png").toURI().toString(), 80, 80, false, false));
+					
 					editRecipeBtn.setDisable(false);// button active
 
 					addFavBtn.setDisable(false);
@@ -469,16 +486,30 @@ public class MainPageController extends TemplateController implements Initializa
 	 * @author Shi Wenbin
 	 */
 
-	public void showIngredientTable(int recipeId) throws IOException {
+	public void showIngredientTable(int recipeId, float multi) throws IOException {
 
 		ingredientTable.getColumns().clear();
+		
+		ingredients = null;
+		
+		ingredients = myIngredientDAO.getIngredientListByRecipyId(recipeId);
+		
+		 int ingredientSize = ingredients.size();
+		 
+		 for(int i = 0; i<ingredientSize;i++){
+			 
+			 ingredients.get(i).setQuantity((int)(ingredients.get(i).getQuantity() * multi));
+			 
+		 }
 
 		ingredientTable
-				.setItems(convertArrayListToOberservableList(myIngredientDAO.getIngredientListByRecipyId(recipeId)));
+				.setItems(convertArrayListToOberservableList(ingredients));
 
 		ingredientTable.getColumns().addAll(name, quantity, unit);
 
 	}
+	
+
 
 	public ObservableList<Ingredient> convertArrayListToOberservableList(ArrayList<Ingredient> ingredients) {
 
@@ -647,11 +678,39 @@ public class MainPageController extends TemplateController implements Initializa
 	
 	public void showDetailedRecipe(Recipe recipe) throws IOException {
 
-		showIngredientTable(recipe.getId()); // recipe
+		showIngredientTable(recipe.getId(),1); // recipe
 
 		showStepList(recipe.getId());
 
 		recipeName.setText(recipe.getName());
 
+	}
+	
+	protected String textProcessingBeforeOutput() {
+		// TODO Auto-generated method stub
+		
+		char[] text = selectedRecipe.getDescription().toCharArray();
+		
+		int textSize = text.length;
+		
+		String outputText = "";
+		
+		for(int i=0; i < textSize; i++){
+			
+			
+			
+			outputText+= text[i];
+			
+			if(i%60 == 0 && i != 0){
+				
+				outputText+= "-\n";
+				
+			}
+			
+
+			
+		}
+		return outputText;
+		
 	}
 }
