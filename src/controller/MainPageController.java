@@ -34,6 +34,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import model.Ingredient;
 import model.Recipe;
 import model.Step;
@@ -59,12 +60,9 @@ public class MainPageController implements Initializable {
 	final ToggleGroup group = new ToggleGroup();
 	
     @FXML Label cookingTime;
-	
+
     @FXML
-    protected AnchorPane rightViewPartOne;
-	
-    @FXML
-    protected AnchorPane rightViewPartTwo;
+    protected VBox rightView;
     
     @FXML Label prepareTime;
 
@@ -123,6 +121,13 @@ public class MainPageController implements Initializable {
 
 	protected TableColumn<Ingredient, String> unit = new TableColumn<>("Unit");
 	
+	/*
+	 * A listener method , when enter key clicked, do the search method.
+	 * 
+	 * @param
+	 * 
+	 * @author Shi Wenbin
+	 */
 
 	
     @FXML
@@ -136,6 +141,14 @@ public class MainPageController implements Initializable {
     	
     	
     }
+    
+	/*
+	 * A listener method when minus serving Number button is clecked, recaculate the preparation time.
+	 * 
+	 * @param
+	 * 
+	 * @author Shi Wenbin
+	 */
 
     @FXML
     protected void servingNumMinus(ActionEvent event) {
@@ -155,6 +168,14 @@ public class MainPageController implements Initializable {
     	}
     	
     }
+    
+	/*
+	 * A listener method when plus serving Number button is clecked, recaculate the preparation time.
+	 * 
+	 * @param
+	 * 
+	 * @author Shi Wenbin
+	 */
 
     @FXML
     protected void servingNumPlus(ActionEvent event) {
@@ -181,24 +202,9 @@ public class MainPageController implements Initializable {
 		searchBtn.setGraphic(new ImageView(new Image(
 				new File("src/resources/recipe_search_button.png").toURI().toString(), 15, 17, false, false)));
 
-		addFavBtn.setGraphic(new ImageView(
-				new Image(new File("src/resources/add_fav_recipe.png").toURI().toString(), 30, 32, false, false)));
 
-		editRecipeBtn.setGraphic(
-				new ImageView(new Image(new File("src/resources/edit.png").toURI().toString(), 30, 32, false, false)));
-
-		deleteRecipeBtn.setGraphic(new ImageView(
-				new Image(new File("src/resources/delete.png").toURI().toString(), 30, 32, false, false)));
 		
-		servingNumPlusBtn.setGraphic(new ImageView(
-				new Image(new File("src/resources/plus.png").toURI().toString(), 10, 10, false, false)));
-		
-		servingNumMinusBtn.setGraphic(new ImageView(
-				new Image(new File("src/resources/minus.png").toURI().toString(), 10, 2, false, false)));
-		
-		rightViewPartTwo.setOpacity(0);
-		
-		rightViewPartOne.setOpacity(0);
+		rightView.setOpacity(0);
 
 		try {
 
@@ -210,7 +216,7 @@ public class MainPageController implements Initializable {
 			e1.printStackTrace();
 		}
 
-		addRecipeListListenner();
+		recipeItemClickListenner();
 
 		initableValueType();
 
@@ -231,6 +237,14 @@ public class MainPageController implements Initializable {
 		deleteRecipeBtn.setDisable(true);
 
 	}
+	
+	/*
+	 * Initialize table column type. which is name, quantity and unit.
+	 * 
+	 * @param
+	 * 
+	 * @author Shi Wenbin
+	 */
 
 	public void initableValueType() {
 		name.setMinWidth(405);
@@ -256,22 +270,47 @@ public class MainPageController implements Initializable {
 	 * 
 	 * @author Shi Wenbin
 	 */
-	public void addRecipeListListenner() {
+	public void recipeItemClickListenner() {
 
 		matchRecipeList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<AnchorPane>() {
 			@Override
 			public void changed(ObservableValue<? extends AnchorPane> observable, AnchorPane oldValue,
 					AnchorPane newValue) {
 				
-				rightViewPartTwo.setOpacity(1);
-				
-				rightViewPartOne.setOpacity(1);
+
 				
 
 				try {
 
 					selectedRecipe = recipeCopies.get(matchRecipeList.getSelectionModel().getSelectedIndex());// get
+					
+					if(selectedRecipe.getIsFavorite() == 1){
+						
+						addFavBtn.setGraphic(new ImageView(
+								new Image(new File("src/resources/redFav.png").toURI().toString(), 30, 32, false, false)));
+						
+					} else {
+						
+						addFavBtn.setGraphic(new ImageView(
+								new Image(new File("src/resources/add_fav_recipe.png").toURI().toString(), 30, 32, false, false)));
+						
+					}
+					
 
+
+					editRecipeBtn.setGraphic(
+							new ImageView(new Image(new File("src/resources/edit.png").toURI().toString(), 30, 32, false, false)));
+
+					deleteRecipeBtn.setGraphic(new ImageView(
+							new Image(new File("src/resources/delete.png").toURI().toString(), 30, 32, false, false)));
+					
+					servingNumPlusBtn.setGraphic(new ImageView(
+							new Image(new File("src/resources/plus.png").toURI().toString(), 10, 10, false, false)));
+					
+					servingNumMinusBtn.setGraphic(new ImageView(
+							new Image(new File("src/resources/minus.png").toURI().toString(), 10, 2, false, false)));
+
+					rightView.setOpacity(1);
 					// user
 					// clicked
 					
@@ -368,6 +407,14 @@ public class MainPageController implements Initializable {
 		
 	}
 
+	/*
+	 * Given recipes to show, and display them in the listView.
+	 * 
+	 * @param ArrayList<Recipe> results, the searching results(matching recipes) after clicking the search button.
+	 * 
+	 * 
+	 * @author Shi Wenbin
+	 */
 
 	public void showRecipeList(ArrayList<Recipe> results) throws IOException {
 
@@ -401,6 +448,15 @@ public class MainPageController implements Initializable {
 		matchRecipeList.setItems(recipeList);
 
 	}
+	
+	/*
+	 * Display recipes' ingredients  in the table.
+	 * 
+	 * @param int recipeId, fetch ingredients by recipeId.
+	 * 
+	 * 
+	 * @author Shi Wenbin
+	 */
 
 	public void showIngredientTable(int recipeId) throws IOException {
 
@@ -449,6 +505,9 @@ public class MainPageController implements Initializable {
 			if (favorite == JOptionPane.YES_OPTION) {
 
 				System.out.print(selectedRecipe.getName() + " remove favorite ");
+				
+				addFavBtn.setGraphic(new ImageView(
+						new Image(new File("src/resources/add_fav_recipe.png").toURI().toString(), 30, 32, false, false)));
 
 				recipeDAO.removeFavorite(selectedRecipe.getId());
 
@@ -462,6 +521,9 @@ public class MainPageController implements Initializable {
 					JOptionPane.YES_NO_OPTION);// Jpane check
 
 			if (favorite == JOptionPane.YES_OPTION) {
+				
+				addFavBtn.setGraphic(new ImageView(
+						new Image(new File("src/resources/redFav.png").toURI().toString(), 30, 32, false, false)));
 
 				System.out.print(selectedRecipe.getName() + " add favorite ");
 
@@ -481,8 +543,18 @@ public class MainPageController implements Initializable {
 
 	}
 
+	
+	/*
+	 * delete recipe method
+	 * 
+	 * @param event search click event
+	 * 
+	 * @author Qiwen Gu
+	 */
 	@FXML
 	public void deleteRecipe(ActionEvent event) throws IOException {
+		
+		rightView.setOpacity(0);
 
 		int delete = JOptionPane.showConfirmDialog(null, "Do you want to delete this recipe?", null,
 				JOptionPane.YES_NO_OPTION);
@@ -502,9 +574,7 @@ public class MainPageController implements Initializable {
 				
 				blank.setName("Title");
 				
-				rightViewPartOne.setOpacity(0);
-				
-				rightViewPartTwo.setOpacity(0);
+
 				
 				showDetailedRecipe(new Recipe());
 				
@@ -512,16 +582,7 @@ public class MainPageController implements Initializable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			rightViewPartTwo.setOpacity(0);
-			
-			rightViewPartOne.setOpacity(0);
-			
-//			editRecipeBtn.setDisable(true);
-//
-//			addFavBtn.setDisable(true);
-//
-//			deleteRecipeBtn.setDisable(true);
+		
 
 
 		} else
@@ -529,6 +590,14 @@ public class MainPageController implements Initializable {
 			System.out.println("not delete");
 
 	}
+	
+	/*
+	 * pop up window to say "No results matched", when user enter keywords which can not be found in database.
+	 * 
+	 * @param ArrayList<Recipe> results
+	 * 
+	 * @author Qiwen Gu
+	 */
 
 	public boolean checkSearchResult(ArrayList<Recipe> results) {
 
@@ -541,6 +610,14 @@ public class MainPageController implements Initializable {
 		}
 	}
 
+	/*
+	 * Display recipes' steps  in the table.
+	 * 
+	 * @param int recipeId, fetch steps by recipeId.
+	 * 
+	 * 
+	 * @author Shi Wenbin
+	 */
 	public void showStepList(int recipeId) {
 
 		ObservableList<String> recipeSteps = FXCollections.observableArrayList();

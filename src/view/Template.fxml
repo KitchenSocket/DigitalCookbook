@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.control.*?>
-<GridPane alignment="CENTER"
-          xmlns:fx="http://javafx.com/fxml"
-          fx:controller="controller.TemplateController" fx:id="rootBP" minHeight="500" minWidth="800">
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.TilePane?>
+
+<GridPane fx:id="rootBP" alignment="CENTER" minHeight="500" minWidth="800" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TemplateController">
     <columnConstraints>
-        <ColumnConstraints prefWidth="80" fx:id="naviCol"/>
-        <ColumnConstraints prefWidth="1120" hgrow="ALWAYS" fx:id="contentCol"/>
+        <ColumnConstraints fx:id="naviCol" prefWidth="80" />
+        <ColumnConstraints fx:id="contentCol" hgrow="ALWAYS" prefWidth="1120" />
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints percentHeight="100" fx:id="contentRow"/>
+        <RowConstraints fx:id="contentRow" percentHeight="100" />
     </rowConstraints>
         <AnchorPane fx:id="naviAP" GridPane.columnIndex="0" GridPane.rowIndex="0">
-            <TilePane AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" prefColumns="1" prefRows="2" prefTileWidth="80" fx:id="topBtnTP" orientation="VERTICAL">
-                <Button prefWidth="80" prefHeight="80" fx:id="mainPageBtn" />
-                <Button prefWidth="80" prefHeight="80" fx:id="favBtn"/>
+            <TilePane fx:id="topBtnTP" orientation="VERTICAL" prefColumns="1" prefRows="2" prefTileWidth="80" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+                <Button fx:id="mainPageBtn" prefHeight="80" prefWidth="80" />
+                <Button fx:id="favBtn" prefHeight="80" prefWidth="80" />
             </TilePane>
 
-            <TilePane AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" prefColumns="1" prefRows="1" prefTileWidth="80"  fx:id="bottomBtnTP">
-                <Button prefWidth="80" prefHeight="80" fx:id="addRecipeBtn"/>
+            <TilePane fx:id="bottomBtnTP" prefColumns="1" prefRows="1" prefTileWidth="80" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+                <Button fx:id="addRecipeBtn" prefHeight="80" prefWidth="80" style="-fx-background-color: ;" />
             </TilePane>
         </AnchorPane>
 </GridPane>

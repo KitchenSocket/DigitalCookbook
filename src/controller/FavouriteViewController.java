@@ -42,6 +42,15 @@ public class FavouriteViewController extends MainPageController implements Initi
 	
 	public  Recipe selectedRecipe;
 	
+	/*
+	 * A listener method , when enter key clicked, do the search method.
+	 * 
+	 * @param
+	 * 
+	 * @author Shi Wenbin
+	 */
+
+	
     @FXML
     void onEnter(KeyEvent event) throws IOException {
     	
@@ -53,6 +62,14 @@ public class FavouriteViewController extends MainPageController implements Initi
     	
     	
     }
+    
+	/*
+	 * A listener method when minus serving Number button is clecked, recaculate the preparation time.
+	 * 
+	 * @param
+	 * 
+	 * @author Shi Wenbin
+	 */
 	
     @FXML
     protected void servingNumMinus(ActionEvent event) {
@@ -72,6 +89,14 @@ public class FavouriteViewController extends MainPageController implements Initi
     	}
     	
     }
+    
+	/*
+	 * A listener method when plus serving Number button is clecked, recaculate the preparation time.
+	 * 
+	 * @param
+	 * 
+	 * @author Shi Wenbin
+	 */
 
     @FXML
     protected void servingNumPlus(ActionEvent event) {
@@ -165,26 +190,12 @@ public class FavouriteViewController extends MainPageController implements Initi
 		searchBtn.setGraphic(new ImageView(new Image(
 				new File("src/resources/recipe_search_button.png").toURI().toString(), 15, 17, false, false)));
 
-		addFavBtn.setGraphic(new ImageView(
-				new Image(new File("src/resources/add_fav_recipe.png").toURI().toString(), 30, 32, false, false)));
 
-		editRecipeBtn.setGraphic(
-				new ImageView(new Image(new File("src/resources/edit.png").toURI().toString(), 30, 32, false, false)));
-
-		deleteRecipeBtn.setGraphic(new ImageView(
-				new Image(new File("src/resources/delete.png").toURI().toString(), 30, 32, false, false)));
 		
-		servingNumPlusBtn.setGraphic(new ImageView(
-				new Image(new File("src/resources/plus.png").toURI().toString(), 10, 10, false, false)));
-		
-		servingNumMinusBtn.setGraphic(new ImageView(
-				new Image(new File("src/resources/minus.png").toURI().toString(), 10, 2, false, false)));
-		
-		rightViewPartTwo.setOpacity(0);
-		
-		rightViewPartOne.setOpacity(0);
 
 		try {
+			
+			rightView.setOpacity(0);
 
 			ArrayList<Recipe> results = recipeDAO.getRecipeListByNameInFavorite("%");
 
@@ -195,7 +206,7 @@ public class FavouriteViewController extends MainPageController implements Initi
 			e1.printStackTrace();
 		}
 
-		addRecipeListListenner();
+		recipeItemClickListenner();
 
 		initableValueType();
 
@@ -206,14 +217,6 @@ public class FavouriteViewController extends MainPageController implements Initi
 
 		recipeNameRadioBtn.setSelected(true);
 
-		// ingredientList.setEditable(false);// user cannot edit textArea at
-		// main
-		// page
-//		editRecipeBtn.setDisable(true);
-//
-//		addFavBtn.setDisable(true);
-//
-//		deleteRecipeBtn.setDisable(true);
 
 	}
 
@@ -269,24 +272,49 @@ public class FavouriteViewController extends MainPageController implements Initi
 	 * @author Shi Wenbin
 	 */
 	@FXML
-	public void addRecipeListListenner() {
+	public void recipeItemClickListenner() {
 
 		matchRecipeList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<AnchorPane>() {
 			@Override
 			public void changed(ObservableValue<? extends AnchorPane> observable, AnchorPane oldValue,
 					AnchorPane newValue) {
-				
-				rightViewPartTwo.setOpacity(1);
-				
-				rightViewPartOne.setOpacity(1);
+
 
 				try {
+					
+
 
 					selectedRecipe = recipeCopies.get(matchRecipeList.getSelectionModel().getSelectedIndex());
+					
+					if(selectedRecipe.getIsFavorite() == 1){
+						
+						addFavBtn.setGraphic(new ImageView(
+								new Image(new File("src/resources/redFav.png").toURI().toString(), 30, 32, false, false)));
+						
+					} else {
+						
+						addFavBtn.setGraphic(new ImageView(
+								new Image(new File("src/resources/add_fav_recipe.png").toURI().toString(), 30, 32, false, false)));
+						
+					}
+					
+					editRecipeBtn.setGraphic(
+							new ImageView(new Image(new File("src/resources/edit.png").toURI().toString(), 30, 32, false, false)));
+
+					deleteRecipeBtn.setGraphic(new ImageView(
+							new Image(new File("src/resources/delete.png").toURI().toString(), 30, 32, false, false)));
+					
+					servingNumPlusBtn.setGraphic(new ImageView(
+							new Image(new File("src/resources/plus.png").toURI().toString(), 10, 10, false, false)));
+					
+					servingNumMinusBtn.setGraphic(new ImageView(
+							new Image(new File("src/resources/minus.png").toURI().toString(), 10, 2, false, false)));
 					
 					prepareTime.setText(new Integer(selectedRecipe.getPreparationTime()).toString());
 
 					cookingTime.setText(new Integer(selectedRecipe.getCookingTime()).toString());
+					
+					
 
 					showDetailedRecipe(selectedRecipe);
 
@@ -295,6 +323,8 @@ public class FavouriteViewController extends MainPageController implements Initi
 					addFavBtn.setDisable(false);
 
 					deleteRecipeBtn.setDisable(false);
+					
+					rightView.setOpacity(1);
 
 					// showStepList(selectedRecipe);
 
@@ -306,6 +336,15 @@ public class FavouriteViewController extends MainPageController implements Initi
 		});
 	}
 
+
+	/*
+	 * add favorite recipe method(button color change need to be done)
+	 * 
+	 * @param event search click event
+	 * 
+	 * @author Qiwen Gu
+	 */
+	
 	@FXML
 	public void addFavRecipe(ActionEvent event) {
 
@@ -313,26 +352,24 @@ public class FavouriteViewController extends MainPageController implements Initi
 				JOptionPane.YES_NO_OPTION);// Jpane check
 
 		if (favorite == JOptionPane.YES_OPTION) {
+			
+			rightView.setOpacity(0);
 
 			System.out.print(selectedRecipe.getName() + " remove favorite ");
+			
 
 			recipeDAO.removeFavorite(selectedRecipe.getId());
 
 			selectedRecipe.setIsFavorite(0);
-			
-			rightViewPartTwo.setOpacity(0);
-			
-			rightViewPartOne.setOpacity(0);
+
 
 			try {
+				
+			
 
 				ArrayList<Recipe> results = recipeDAO.getRecipeListByNameInFavorite("%");
 
 				showRecipeList(results);
-				
-				rightViewPartOne.setOpacity(0);
-				
-				rightViewPartTwo.setOpacity(0);
 
 				showDetailedRecipe(new Recipe());
 				

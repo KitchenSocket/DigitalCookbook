@@ -40,20 +40,7 @@ public class TemplateController implements Initializable {
     @FXML
     private Button addRecipeBtn;
 
-    @FXML
-    void addViewClick(ActionEvent event) throws IOException {
-        loadContent("../view/MainPage.fxml");
-    }
 
-    @FXML
-    void favViewClick(ActionEvent event) throws IOException {
-        loadContent("../view/FavouriteView.fxml");
-    }
-
-    @FXML
-    void mainPageClick(ActionEvent event) throws IOException {
-        loadContent("../view/AddRecipeView.fxml");
-    }
     
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
@@ -63,8 +50,12 @@ public class TemplateController implements Initializable {
         
         addRecipeBtn.setGraphic(new ImageView(new Image( new File("src/resources/add_recipe_btn.png").toURI().toString(),  31, 31, false, false)));
 
+        threeBtnColorClear();
+        
         mainPageBtn.setOnAction(event -> {
             try {
+            	threeBtnColorClear();
+            	mainPageBtn.setStyle("-fx-background-color: #FFFFFF;"); 
                 loadContent("../view/MainPage.fxml");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -73,6 +64,8 @@ public class TemplateController implements Initializable {
 
         favBtn.setOnAction(event -> {
             try {
+            	threeBtnColorClear();
+            	favBtn.setStyle("-fx-background-color: #FFFFFF;"); 
                 loadContent("../view/FavouriteView.fxml");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -81,11 +74,19 @@ public class TemplateController implements Initializable {
 
         addRecipeBtn.setOnAction(event -> {
             try {
+            	threeBtnColorClear();
+            	addRecipeBtn.setStyle("-fx-background-color: #FFFFFF;"); 
                 loadContent("../view/AddRecipeView.fxml");
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
+    }
+    
+    public void threeBtnColorClear() {
+    	mainPageBtn.setStyle("-fx-background-color: Transparent;"); 
+    	favBtn.setStyle("-fx-background-color: Transparent;"); 
+    	addRecipeBtn.setStyle("-fx-background-color: Transparent;"); 
     }
 
     public void loadContent(Node node) throws IOException {
