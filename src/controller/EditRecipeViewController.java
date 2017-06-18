@@ -13,6 +13,8 @@ import model.Ingredient;
 import model.Recipe;
 import model.Step;
 
+import javax.swing.*;
+
 /**
  * Created by fexac on 18-Jun-17.
  */
@@ -26,6 +28,7 @@ public class EditRecipeViewController extends AddRecipeViewController {
 	// private ObservableList<Step> steps =
 	// FXCollections.observableArrayList(new Step(1,"Do What?"), new
 	// Step(2,"Just do what?"), new Step(3, "Please dooo what??"));
+
 	private int selectedRecipeId;
 
 	private ObservableList<Step> steps = FXCollections.observableArrayList();
@@ -34,66 +37,109 @@ public class EditRecipeViewController extends AddRecipeViewController {
 
 	@FXML
 	private void initialize() {
-		Recipe selectedRecipe = MainPageController.selectedRecipe;
+		initFlds(MainPageController.selectedRecipe);
+
+		initBtns();
+	}
+
+	/**
+	 * initialize all fields with givien Recipe
+	 */
+	private void initFlds(Recipe recipe) {
+		Recipe selectedRecipe = recipe;
+
 		selectedRecipeId = selectedRecipe.getId();
 		String servingNumber = String.valueOf(selectedRecipe.getServingNum());
 		String preparationTime = String.valueOf(selectedRecipe.getPreparationTime());
 		String cookingTime = String.valueOf(selectedRecipe.getCookingTime());
 		ArrayList<Step> stepList = myStepDAO.getStepListByRecipyId(selectedRecipeId);
 		ArrayList<Ingredient> ingredientList = myIngredientDAO.getIngredientListByRecipyId(selectedRecipeId);
+
 		titleFld.setText(selectedRecipe.getName());
 		servingsFld.setText(servingNumber);
 		preparationTimeFld.setText(preparationTime);
 		cookingTimeFld.setText(cookingTime);
-		System.out.println("Init...");
-	
+
 		ingredients.addAll(ingredientList);
-		initIngredientsTV(ingredients);
-	 
-		 
-		initBtns();
 		steps.addAll(stepList);
+
 		initStepsTV(steps);
-		initFlds();
+		initIngredientsTV(ingredients);
 	}
 
-	/**
-	 * initialize all fields with givien Recipe
-	 */
-	protected void initFlds() {
-		// TODO add method to read from the original function
+	@Override
+	protected void saveRecipe() {
+		if (!isValid()) {
+			return;
+		}
+
+		// TODO implement save recipe
+		int save = JOptionPane.showConfirmDialog(null, "Do you want to save this recipe?", null,
+				JOptionPane.YES_NO_OPTION);
+
+		if (JOptionPane.YES_OPTION == save) {
+
+			Recipe newRecipe = new Recipe();
+
+			newRecipe.setName(titleFld.getText());
+
+			int servingNum = Integer.parseInt(servingsFld.getText());
+
+			newRecipe.setServingNum(servingNum);
+
+			int preparationTime = Integer.parseInt(preparationTimeFld.getText());
+
+			newRecipe.setPreparationTime(preparationTime);
+
+			int cookingTime = Integer.parseInt(cookingTimeFld.getText());
+
+			newRecipe.setCookingTime(cookingTime);
+
+			recipeDAO.updateRecipe(newRecipe);
+
+			for(Step step: steps) {
+				step.setRecipeId(newRecipe.getId());
+				System.out.println(newRecipe.getId());
+				myStepDAO.updateStep(step);
+			}
+			for(Ingredient ingredient: ingredients) {
+				ingredient.setRecipeId(newRecipe.getId());
+				System.out.println(newRecipe.getId());
+				myIngredientDAO.updateIngredient(ingredient);
+			}
+		}
 	}
 
 	public EditRecipeViewController() {
-		// super();
-	}
-
-	public void showIngredientTable(int recipeId) throws IOException {
-
-		ingredientsTV.getColumns().clear();
-
-		ingredientsTV
-				.setItems(convertArrayListToOberservableList(myIngredientDAO.getIngredientListByRecipyId(recipeId)));
-
-		ingredientsTV.getColumns().addAll(ingredientNameCol, ingredientQuantityCol, ingredientUnitCol);
 
 	}
 
-	public ObservableList<Ingredient> convertArrayListToOberservableList(ArrayList<Ingredient> ingredients) {
+//	public void showIngredientTable(int recipeId) throws IOException {
+//
+//		ingredientsTV.getColumns().clear();
+//
+//		ingredientsTV
+//				.setItems(convertArrayListToOberservableList(myIngredientDAO.getIngredientListByRecipyId(recipeId)));
+//
+//		ingredientsTV.getColumns().addAll(ingredientNameCol, ingredientQuantityCol, ingredientUnitCol);
+//
+//	}
 
-		int size = ingredients.size();
-
-		ObservableList<Ingredient> reIngredients = FXCollections.observableArrayList();
-
-		for (int i = 0; i < size; i++) {
-
-			reIngredients.add(ingredients.get(i));
-
-		}
-
-		return reIngredients;
-
-	}
+//	public ObservableList<Ingredient> convertArrayListToOberservableList(ArrayList<Ingredient> ingredients) {
+//
+//		int size = ingredients.size();
+//
+//		ObservableList<Ingredient> reIngredients = FXCollections.observableArrayList();
+//
+//		for (int i = 0; i < size; i++) {
+//
+//			reIngredients.add(ingredients.get(i));
+//
+//		}
+//
+//		return reIngredients;
+//
+//	}
 	
 
 }
