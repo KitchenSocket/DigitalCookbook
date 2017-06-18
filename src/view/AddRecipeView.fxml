@@ -33,9 +33,14 @@
                 <TextField promptText="ie. 40" fx:id="cookingTimeFld"/>
             </VBox>
         </TilePane>
+        <Label text="Brief Description" labelFor="$briefDescriptionFld"/>
+        <TextField promptText="ie. A traditional style of Chinese pork cuisine." fx:id="briefDescriptionFld"/>
+        <Label text="More Description" labelFor="$descriptionFld"/>
+        <TextArea promptText="ie. Say more about this recipe :D" fx:id="descriptionFld"/>
         <Label text="Ingredients" labelFor="$ingredientsTV"/>
         <TableView VBox.vgrow="ALWAYS" fx:id="ingredientsTV">
             <columns>
+                <TableColumn fx:id="ingredientNoCol" text="#"/>
                 <TableColumn fx:id="ingredientNameCol" text="Name"/>
                 <TableColumn fx:id="ingredientQuantityCol" text="Quantity"/>
                 <TableColumn fx:id="ingredientUnitCol" text="Unit"/>
@@ -64,5 +69,4 @@
             <Button text="Cancel" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" fx:id="cancelEditBtn"/>
         </AnchorPane>
     </VBox>
-
 </GridPane>
