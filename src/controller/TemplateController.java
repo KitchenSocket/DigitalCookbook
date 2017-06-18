@@ -94,12 +94,12 @@ public class TemplateController implements Initializable {
         Template.getRoot().getChildren().add(node);
     }
 
-    public void loadContent(String location) throws IOException {
+    public static void loadContent(String location) throws IOException {
         if(Template.getRoot().getChildren().size() == 2) {
             Template.getRoot().getChildren().remove(1);
         }
 
-        Node node = FXMLLoader.load(getClass().getResource(location));
+        Node node = FXMLLoader.load(TemplateController.class.getResource(location));
         GridPane.setColumnIndex(node, 1);
         GridPane.setRowIndex(node, 0);
         Template.getRoot().getChildren().add(node);
