@@ -7,9 +7,11 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import model.Recipe;
+import sun.java2d.pipe.TextPipe;
 
 /*
  * One Anchor in a listview, this class put each recipes' info to this anchor. And all the anchorView makes up the brief info list in the Favourite View.
@@ -30,6 +32,8 @@ public class BriefRecipeInFavouriteViewController implements Initializable {
 
     @FXML
     private Label recipeDescription;
+
+
     
     private Recipe eachBriefRecipe;
 
@@ -51,9 +55,47 @@ public class BriefRecipeInFavouriteViewController implements Initializable {
 
 		recipeName.setText(eachBriefRecipe.getName());
 		
-		recipeDescription.setText(eachBriefRecipe.getBriefDescription());
 		
 		
+		
+		
+		recipeDescription.setText(textProcessingBeforeOutput());
+		
+		
+		
+	}
+
+	private String textProcessingBeforeOutput() {
+		// TODO Auto-generated method stub
+		
+		char[] text = eachBriefRecipe.getBriefDescription().toCharArray();
+		
+		int textSize = text.length;
+		
+		String outputText = "";
+		
+		for(int i=0; i < textSize; i++){
+			
+			
+			
+			outputText+= text[i];
+			
+			if(i%20==0 && i != 0){
+				
+				outputText+= "\n";
+				
+			}
+			
+			if(i > 50){
+				
+				outputText+= "...";
+				
+				break;
+				
+			}
+			
+		}
+		return outputText;
 		
 	}
 

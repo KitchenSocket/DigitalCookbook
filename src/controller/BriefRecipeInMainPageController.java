@@ -47,11 +47,45 @@ public class BriefRecipeInMainPageController implements Initializable {
 		
 		recipeName.setText(eachBriefRecipe.getName());
 		
-		recipeDescription.setText(eachBriefRecipe.getDescription());
+		recipeDescription.setText(textProcessingBeforeOutput());
 		
 		
 		
 
+		
+	}
+	
+	private String textProcessingBeforeOutput() {
+		// TODO Auto-generated method stub
+		
+		char[] text = eachBriefRecipe.getBriefDescription().toCharArray();
+		
+		int textSize = text.length;
+		
+		String outputText = "";
+		
+		for(int i=0; i < textSize; i++){
+			
+			
+			
+			outputText+= text[i];
+			
+			if(i%20==0 && i != 0){
+				
+				outputText+= "\n";
+				
+			}
+			
+			if(i > 50){
+				
+				outputText+= "...";
+				
+				break;
+				
+			}
+			
+		}
+		return outputText;
 		
 	}
 
