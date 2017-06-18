@@ -49,7 +49,7 @@ import view.Template;
  * @version 1.0
  */
 
-public class MainPageController implements Initializable {
+public class MainPageController extends TemplateController implements Initializable {
 
 	public static Stack<Recipe> matchRecipes = new Stack<Recipe>();
 
@@ -499,10 +499,9 @@ public class MainPageController implements Initializable {
 
 		if (isFav == 1) {
 
-			int favorite = JOptionPane.showConfirmDialog(null, "Remove this recipe from Favorite?", null,
-					JOptionPane.YES_NO_OPTION);// Jpane check
+			int favorite = JOptionPane.showConfirmDialog(null, "Remove this recipe from Favorite?", null, JOptionPane.YES_NO_OPTION);// Jpane check
 
-			if (favorite == JOptionPane.YES_OPTION) {
+		if (favorite == JOptionPane.YES_OPTION) {
 
 				System.out.print(selectedRecipe.getName() + " remove favorite ");
 				
@@ -513,14 +512,14 @@ public class MainPageController implements Initializable {
 
 				selectedRecipe.setIsFavorite(0);
 
-			}
+		}
 
 		} else {
 
-			int favorite = JOptionPane.showConfirmDialog(null, "Add this recipe into Favorite?", null,
-					JOptionPane.YES_NO_OPTION);// Jpane check
-
-			if (favorite == JOptionPane.YES_OPTION) {
+//			int favorite = JOptionPane.showConfirmDialog(null, "Add this recipe into Favorite?", null,
+//					JOptionPane.YES_NO_OPTION);// Jpane check
+//
+//			if (favorite == JOptionPane.YES_OPTION) {
 				
 				addFavBtn.setGraphic(new ImageView(
 						new Image(new File("src/resources/redFav.png").toURI().toString(), 30, 32, false, false)));
@@ -531,7 +530,7 @@ public class MainPageController implements Initializable {
 
 				selectedRecipe.setIsFavorite(1);
 
-			}
+//			}
 		}
 	}
 
@@ -539,8 +538,9 @@ public class MainPageController implements Initializable {
 	 * edit recipe method(need a new view to be done)
 	 */
 	@FXML
-	public void editRecipe(ActionEvent event) {
-
+	public void editRecipe(ActionEvent event) throws IOException {
+		
+		 loadContent("../view/AddRecipeView.fxml");
 	}
 
 	
