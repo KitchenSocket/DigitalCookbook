@@ -70,21 +70,27 @@ public class FavouriteViewController extends MainPageController implements Initi
 	 * 
 	 * @author Shi Wenbin
 	 */
-	
-    @FXML
-    protected void servingNumMinus(ActionEvent event) {
 
-    	int servingNumber = new Integer(servingNum.getText());
+    @FXML
+    protected void servingNumMinus(ActionEvent event) throws IOException {
+
+     	int servingNumber = new Integer(servingNum.getText());
+
     	
     	if(servingNumber>0){
     		
         	servingNumber--;
         	
+        	int iniServing = selectedRecipe.getServingNum();
+        	float multi =(float)( servingNumber)/iniServing;
+        	
         	servingNum.setText(new Integer(servingNumber).toString());
         	
-			cookingTime.setText(new Integer(selectedRecipe.getCookingTime() * servingNumber).toString());
+			cookingTime.setText(new Integer((int) (selectedRecipe.getCookingTime() * multi)).toString());
 
-			prepareTime.setText(new Integer(selectedRecipe.getPreparationTime() * servingNumber).toString());
+			prepareTime.setText(new Integer((int) (selectedRecipe.getPreparationTime() * multi)).toString());
+			
+			showIngredientTable(selectedRecipe.getId(), multi);
     		
     	}
     	
@@ -99,19 +105,26 @@ public class FavouriteViewController extends MainPageController implements Initi
 	 */
 
     @FXML
-    protected void servingNumPlus(ActionEvent event) {
+    protected void servingNumPlus(ActionEvent event) throws IOException {
     	
     	int servingNumber = new Integer(servingNum.getText());
+
     	
     	if(servingNumber < 9){
     		
         	servingNumber++;
         	
+        	int iniServing = selectedRecipe.getServingNum();
+        	float multi =(float)( servingNumber)/iniServing;
+        	
+        	
         	servingNum.setText(new Integer(servingNumber).toString());
         	
-			cookingTime.setText(new Integer(selectedRecipe.getCookingTime() * servingNumber).toString());
+			cookingTime.setText(new Integer((int) (selectedRecipe.getCookingTime() * multi)).toString());
 
-			prepareTime.setText(new Integer(selectedRecipe.getPreparationTime() * servingNumber).toString());
+			prepareTime.setText(new Integer((int) (selectedRecipe.getPreparationTime() * multi)).toString());
+			
+			showIngredientTable(selectedRecipe.getId(), multi);
     		
     	} 
 
@@ -314,7 +327,10 @@ public class FavouriteViewController extends MainPageController implements Initi
 
 					cookingTime.setText(new Integer(selectedRecipe.getCookingTime()).toString());
 					
+					descriptionLabel.setText(textProcessingBeforeOutput());
 					
+					recipeImg.setImage(new Image(
+							new File("src/resources/pizza_img.png").toURI().toString(), 80, 80, false, false));
 
 					showDetailedRecipe(selectedRecipe);
 
