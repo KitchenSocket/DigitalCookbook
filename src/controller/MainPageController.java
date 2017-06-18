@@ -153,17 +153,21 @@ public class MainPageController extends TemplateController implements Initializa
     @FXML
     protected void servingNumMinus(ActionEvent event) {
 
-    	int servingNumber = new Integer(servingNum.getText());
+     	int servingNumber = new Integer(servingNum.getText());
+
     	
     	if(servingNumber>0){
     		
         	servingNumber--;
         	
+        	int iniServing = selectedRecipe.getServingNum();
+        	float multi =(float)( servingNumber)/iniServing;
+        	
         	servingNum.setText(new Integer(servingNumber).toString());
         	
-			cookingTime.setText(new Integer(selectedRecipe.getCookingTime() * servingNumber).toString());
+			cookingTime.setText(new Integer((int) (selectedRecipe.getCookingTime() * multi)).toString());
 
-			prepareTime.setText(new Integer(selectedRecipe.getPreparationTime() * servingNumber).toString());
+			prepareTime.setText(new Integer((int) (selectedRecipe.getPreparationTime() * multi)).toString());
     		
     	}
     	
@@ -181,16 +185,21 @@ public class MainPageController extends TemplateController implements Initializa
     protected void servingNumPlus(ActionEvent event) {
     	
     	int servingNumber = new Integer(servingNum.getText());
+
     	
     	if(servingNumber < 9){
     		
         	servingNumber++;
         	
+        	int iniServing = selectedRecipe.getServingNum();
+        	float multi =(float)( servingNumber)/iniServing;
+        	
+        	
         	servingNum.setText(new Integer(servingNumber).toString());
         	
-			cookingTime.setText(new Integer(selectedRecipe.getCookingTime() * servingNumber).toString());
+			cookingTime.setText(new Integer((int) (selectedRecipe.getCookingTime() * multi)).toString());
 
-			prepareTime.setText(new Integer(selectedRecipe.getPreparationTime() * servingNumber).toString());
+			prepareTime.setText(new Integer((int) (selectedRecipe.getPreparationTime() * multi)).toString());
     		
     	} 
 
@@ -316,7 +325,9 @@ public class MainPageController extends TemplateController implements Initializa
 					
 					showDetailedRecipe(selectedRecipe);
 					
-					servingNum.setText("1");
+					String surving = String.valueOf(selectedRecipe.getServingNum());
+					
+					servingNum.setText(surving);
 
 					recipeName.setText(selectedRecipe.getName());
 
