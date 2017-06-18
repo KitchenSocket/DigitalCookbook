@@ -40,7 +40,7 @@ public class FavouriteViewController extends MainPageController implements Initi
 
 	public static Stack<Recipe> favouriteRecipes = new Stack<Recipe>();
 	
-	public  Recipe selectedRecipe;
+	//public  Recipe selectedRecipe;
 	
 	/*
 	 * A listener method , when enter key clicked, do the search method.
