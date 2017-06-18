@@ -112,7 +112,7 @@ public class AddRecipeViewController {
 
 			@Override
 			public String toString(String object) {
-				return object.toString();
+				return object;
 			}
 		}));
 

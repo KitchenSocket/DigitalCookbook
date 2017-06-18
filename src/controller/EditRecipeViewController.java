@@ -40,18 +40,16 @@ public class EditRecipeViewController extends AddRecipeViewController {
 		String preparationTime = String.valueOf(selectedRecipe.getPreparationTime());
 		String cookingTime = String.valueOf(selectedRecipe.getCookingTime());
 		ArrayList<Step> stepList = myStepDAO.getStepListByRecipyId(selectedRecipeId);
-		ArrayList<Ingredient> ingredientList = myIngredientDAO
-				.getIngredientListByRecipyId(MainPageController.selectedRecipe.getId());
+		ArrayList<Ingredient> ingredientList = myIngredientDAO.getIngredientListByRecipyId(selectedRecipeId);
 		titleFld.setText(selectedRecipe.getName());
 		servingsFld.setText(servingNumber);
 		preparationTimeFld.setText(preparationTime);
 		cookingTimeFld.setText(cookingTime);
 		System.out.println("Init...");
-//		
-//		
-//		ingredients.addAll(ingredientList);
-//		 initIngredientsTV(ingredients);
-//		 
+	
+		ingredients.addAll(ingredientList);
+		initIngredientsTV(ingredients);
+	 
 		 
 		initBtns();
 		steps.addAll(stepList);
