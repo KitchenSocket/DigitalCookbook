@@ -1,5 +1,8 @@
 package controller;
 
+import DAO.IngredientDAO;
+import DAO.RecipeDAO;
+import DAO.StepDAO;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -25,7 +28,13 @@ public class AddRecipeViewController {
     private ObservableList<Ingredient> ingredients = FXCollections.observableArrayList(new Ingredient("good", 0.2, "g"), new Ingredient("good1", 0.1, "g"), new Ingredient("good2", 0.3, "g"));
 
     private ObservableList<Step> steps = FXCollections.observableArrayList(new Step(1,"Do it."), new Step(2,"Just do it."), new Step(3, "Please dooo it."));
+	
+    protected RecipeDAO recipeDAO = new RecipeDAO();
 
+	protected IngredientDAO myIngredientDAO = new IngredientDAO();
+
+	protected StepDAO myStepDAO = new StepDAO();
+	
     @FXML
     protected TableView<Ingredient> ingredientsTV;
     @FXML
@@ -314,10 +323,13 @@ public class AddRecipeViewController {
 
     protected void saveRecipe() {
         //TODO implement save recipe
+    	
     }
 
     protected void cancelEdit() {
         //TODO implement cancelEdit
+    	
+    	
     }
 
     protected void cellEditCommitForIngredient(TableColumn.CellEditEvent event) {
