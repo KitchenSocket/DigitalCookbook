@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <GridPane alignment="CENTER" hgap="0" vgap="0"
           xmlns:fx="http://javafx.com/fxml"
-          fx:controller="controller.AddRecipeViewController" fx:id="frameGrid" minHeight="500" minWidth="800">
+          fx:controller="controller.EditRecipeViewController" fx:id="frameGrid" minHeight="500" minWidth="800">
     <columnConstraints>
         <ColumnConstraints prefWidth="420" hgrow="ALWAYS" fx:id="listCol"/>
         <ColumnConstraints prefWidth="500" hgrow="ALWAYS" fx:id="detailCol"/>
@@ -60,9 +60,10 @@
             <Button text="Remove Row" fx:id="stepsRemoveRowBtn"/>
         </HBox>
         <AnchorPane>
-            <Button text="Save" AnchorPane.leftAnchor="0" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" fx:id="saveRecipeBtn"/>
+            <Button text="Save Changes" AnchorPane.leftAnchor="0" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" fx:id="saveRecipeBtn"/>
             <Button text="Cancel" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" fx:id="cancelEditBtn"/>
         </AnchorPane>
+
     </VBox>
 
 </GridPane>
