@@ -47,7 +47,12 @@ public class EditRecipeViewController extends AddRecipeViewController {
 		preparationTimeFld.setText(preparationTime);
 		cookingTimeFld.setText(cookingTime);
 		System.out.println("Init...");
-		// initIngredientsTV(ingredients);
+//		
+//		
+//		ingredients.addAll(ingredientList);
+//		 initIngredientsTV(ingredients);
+//		 
+		 
 		initBtns();
 		steps.addAll(stepList);
 		initStepsTV(steps);
@@ -91,4 +96,6 @@ public class EditRecipeViewController extends AddRecipeViewController {
 		return reIngredients;
 
 	}
+	
+
 }
