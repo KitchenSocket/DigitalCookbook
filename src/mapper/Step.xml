@@ -35,7 +35,7 @@
     
     <!-- update step -->
     <update id="updateStep" parameterType="Step" >
-        update ingredient set recipeId=#{recipeId},stepOrder=#{stepOrder},
+        update step set recipeId=#{recipeId},stepOrder=#{stepOrder},
         	description=#{description},pic=#{pic} where id=#{id}
     </update>
     
