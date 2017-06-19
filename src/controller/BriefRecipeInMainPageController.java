@@ -4,6 +4,8 @@ import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import org.apache.ibatis.javassist.bytecode.stackmap.BasicBlock.Catch;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -55,38 +57,53 @@ public class BriefRecipeInMainPageController implements Initializable {
 		
 	}
 	
-	private String textProcessingBeforeOutput() {
+	private String textProcessingBeforeOutput()  {
 		// TODO Auto-generated method stub
 		
-		char[] text = eachBriefRecipe.getBriefDescription().toCharArray();
-		
-		int textSize = text.length;
-		
 		String outputText = "";
-		
-		for(int i=0; i < textSize; i++){
+		try{
+			
+			char[] text = eachBriefRecipe.getBriefDescription().toCharArray();
+			
+			int textSize = text.length;
 			
 			
 			
-			outputText+= text[i];
-			
-			if(i%25== 0 && i != 0){
+			for(int i=0; i < textSize; i++){
 				
-				outputText+= "-\n";
+				
+				
+				outputText+= text[i];
+				
+				if(i%25== 0 && i != 0){
+					
+					outputText+= "-\n";
+					
+				}
+				
+				if(i > 50){
+					
+					outputText+= "...";
+					
+					break;
+					
+				}
 				
 			}
 			
-			if(i > 50){
-				
-				outputText+= "...";
-				
-				break;
-				
-			}
+			
+		} catch(NullPointerException exception){
+			
+		} finally{
+			
+			return outputText;
 			
 		}
-		return outputText;
+
+		
+	
 		
 	}
+	
 
 }
