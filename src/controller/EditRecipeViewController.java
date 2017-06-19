@@ -80,6 +80,8 @@ public class EditRecipeViewController extends AddRecipeViewController {
 		if (JOptionPane.YES_OPTION == save) {
 
 			Recipe newRecipe = new Recipe();
+			
+			newRecipe.setId(MainPageController.selectedRecipe.getId()); 
 
 			newRecipe.setName(titleFld.getText());
 

@@ -251,11 +251,11 @@ public class MainPageController extends TemplateController implements Initializa
 		// ingredientList.setEditable(false);// user cannot edit textArea at
 		// main
 		// page
-		editRecipeBtn.setDisable(true);
-
-		addFavBtn.setDisable(true);
-
-		deleteRecipeBtn.setDisable(true);
+//		editRecipeBtn.setDisable(true);
+//
+//		addFavBtn.setDisable(true);
+//
+//		deleteRecipeBtn.setDisable(true);
 
 	}
 	
@@ -595,8 +595,7 @@ public class MainPageController extends TemplateController implements Initializa
 	 */
 	@FXML
 	public void deleteRecipe(ActionEvent event) throws IOException {
-		
-		rightView.setOpacity(0);
+
 
 		int delete = JOptionPane.showConfirmDialog(null, "Do you want to delete this recipe?", null,
 				JOptionPane.YES_NO_OPTION);
@@ -612,14 +611,17 @@ public class MainPageController extends TemplateController implements Initializa
 			try {
 				showRecipeList(results);
 				
-				Recipe blank =new Recipe();//still need improvments
 				
-				blank.setName("Title");
-				
-
-				
-				showDetailedRecipe(new Recipe());
-				
+				rightView.setOpacity(0);
+//				
+//				Recipe blank =new Recipe();//still need improvments
+//				
+//				blank.setName("Title");
+//				
+//
+//				
+//				showDetailedRecipe(new Recipe());
+//				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
