@@ -11,7 +11,6 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 import inter.IngredientOperation;
-import inter.StepOperation;
 import model.Ingredient;
 
 /**
