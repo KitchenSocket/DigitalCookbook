@@ -3,7 +3,9 @@ package DAO;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -48,7 +50,13 @@ public class StepDAO {
     	
     	StepDAO DAO=new StepDAO();
     	//DAO.getStepById(2);
-    	DAO.getStepListByDescription("prok");
+    	//DAO.getStepListByDescription("prok");
+    	//DAO.getStepByRecipeIdAndOrder(3, 1);
+    	DAO.deleteStepListByRecipeId(7);
+    	//DAO.getStepListByDescription("prok");
+    	//DAO.getStepListByDescription("prok");
+    	//DAO.getStepByRecipeIdAndOrder(3, 1);
+    	//DAO.getStepListByDescription("prok");
     	//DAO.getStepListByRecipyId(1);
   }
     
@@ -76,7 +84,36 @@ public class StepDAO {
 		}
 		return result;
     }
+    
+    
+    /**
+     * returns the required Step class by recipe id and step order
+     * @param recipeId
+     * @param stepOrder
+     * @return Step class
+     */
+    public Step getStepByRecipeIdAndOrder(Integer recipeId,Integer stepOrder){
+    	
+    	//get resources
+    	Step result = new Step();
+        SqlSession session = sqlSessionFactory.openSession();
+        try {
+        	StepOperation stepOperation=session.getMapper(StepOperation.class);
+            Map<String, Integer> map = new HashMap<String, Integer>();
+            map.put("recipeId", (Integer)recipeId);
+            map.put("stepOrder", (Integer) stepOrder);
+            result = stepOperation.selectStepByRecipeIdAndOrder(map);
+            
+            //test code
+            //System.out.println(result);
+		} finally {
+		    session.close();
+		}
+		return result;
+    }
+    
   
+    
     /**
      * returns an ArrayList of class Step by description
      * 
@@ -173,6 +210,22 @@ public class StepDAO {
             session.close();
         }
     }
+
+    
+//    public void updateSteps(ArrayList<Step> steps){
+//        SqlSession session = sqlSessionFactory.openSession();
+//        try {
+//        	StepOperation stepOperation=session.getMapper(StepOperation.class);
+//        	for(Step step : steps) {
+//        	stepOperation.deleteStep(id);
+//        	stepOperation.addStep(step);
+//        	}
+//            session.commit();
+//        } finally {
+//            session.close();
+//        }
+//    }
+    
     
     /**
      * delete a step in database by id
@@ -190,4 +243,24 @@ public class StepDAO {
             session.close();
         }
     }
+    
+    
+    /**
+     * delete all the steps from a recipe by recipe id
+     * 
+     * @param recipeId
+     */
+    //TODO
+    public void deleteStepListByRecipeId(int recipeId){
+        SqlSession session = sqlSessionFactory.openSession();
+        try {
+        	StepOperation stepOperation=session.getMapper(StepOperation.class);
+        	stepOperation.deleteStepListByRecipeId(recipeId);
+            session.commit();
+        } finally {
+            session.close();
+        }
+    }
+    
+
 }

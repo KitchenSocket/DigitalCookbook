@@ -7,7 +7,7 @@
 
 	<!-- select ingredient by id -->
     <select id="selectIngredientByID" parameterType="int" resultType="Ingredient">
-        select * from `ingredient` where id = #{id}
+        select * from ingredient where id = #{id}
     </select>
     
     <!-- define a map to formalize the return value -->
@@ -45,4 +45,8 @@
         delete from ingredient where id=#{id}
     </delete>
     
+    <!-- delete all the ingredients from a recipe by recipe id -->
+    <delete id="deleteIngredientListByRecipeId" parameterType="int">
+        delete from ingredient where recipeId=#{recipeId}
+    </delete>
 </mapper>

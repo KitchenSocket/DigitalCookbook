@@ -11,6 +11,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 import inter.IngredientOperation;
+import inter.StepOperation;
 import model.Ingredient;
 
 /**
@@ -48,7 +49,11 @@ public class IngredientDAO {
     public static void main(String[] args) throws IOException {
     	
     	IngredientDAO DAO=new IngredientDAO();
-    	DAO.getIngredientListByName("prok");
+    	DAO.getIngredientListByName("%");
+    	
+    	//DAO.deleteIngredientListByRecipeId(3);
+    	
+    	//DAO.getIngredientListByName("%");
 
     	//DAO.getIngredientListByRecipyId(2);
     	//DAO.getIngredientById(2);
@@ -192,4 +197,22 @@ public class IngredientDAO {
             session.close();
         }
     }
+    
+    /**
+     * delete all the ingredients from a recipe by recipe id
+     * 
+     * @param recipeId
+     */
+    //TODO
+    public void deleteIngredientListByRecipeId(int recipeId){
+        SqlSession session = sqlSessionFactory.openSession();
+        try {
+        	IngredientOperation ingredientOperation=session.getMapper(IngredientOperation.class);
+        	ingredientOperation.deleteIngredientListByRecipeId(recipeId);
+            session.commit();
+        } finally {
+            session.close();
+        }
+    }
+    
 }

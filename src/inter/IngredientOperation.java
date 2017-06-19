@@ -17,5 +17,7 @@ public interface IngredientOperation {
 	public void updateIngredient(Ingredient ingredient);
 	
 	public void deleteIngredient(int id);
+	
+	public void deleteIngredientListByRecipeId(int recipeId);
 
 }

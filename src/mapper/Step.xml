@@ -6,8 +6,12 @@
 
 	<!-- select step by id -->
     <select id="selectStepByID" parameterType="int" resultType="Step">
-        select * from `step` where id = #{id}
+        select * from step where id = #{id}
     </select>
+    
+    <select id="selectStepByRecipeIdAndOrder" parameterType="map" resultType="Step">
+		select * from step where recipeId = #{recipeId} AND stepOrder = #{stepOrder}
+	</select>
     
     <!-- define a map to formalize the return value -->
     <resultMap type="Step" id="resultStepList">
@@ -16,7 +20,7 @@
         <result column="description" property="description" />
         <result column="pic" property="pic" />
     </resultMap>
-    
+
     <!-- select a result map by step description, using map defined before -->
     <select id="selectStepsByDescription" parameterType="string" resultMap="resultStepList">
         select * from step where description like #{description}
@@ -44,4 +48,9 @@
         delete from step where id=#{id}
     </delete>
     
+    <!-- delete all the steps from a recipe by recipe id -->
+    <delete id="deleteStepListByRecipeId" parameterType="int">
+        delete from step where recipeId=#{recipeId}
+    </delete>
+        
 </mapper>
