@@ -223,7 +223,7 @@ public class MainPageController extends TemplateController implements Initializa
 		searchBtn.setGraphic(new ImageView(new Image(
 				new File("src/resources/recipe_search_button.png").toURI().toString(), 15, 17, false, false)));
 
-
+		
 		
 		rightView.setOpacity(0);
 
@@ -316,8 +316,11 @@ public class MainPageController extends TemplateController implements Initializa
 								new Image(new File("src/resources/add_fav_recipe.png").toURI().toString(), 30, 32, false, false)));
 						
 					}
-					
 
+					
+					
+					recipeImg.setImage(new Image(
+							new File("src/resources/pizza_img.png").toURI().toString(), 80, 80, false, false));
 
 					editRecipeBtn.setGraphic(
 							new ImageView(new Image(new File("src/resources/edit.png").toURI().toString(), 30, 32, false, false)));
@@ -347,16 +350,25 @@ public class MainPageController extends TemplateController implements Initializa
 
 					cookingTime.setText(new Integer(selectedRecipe.getCookingTime()).toString());
 					
-					descriptionLabel.setText(textProcessingBeforeOutput());
+
 					
-					recipeImg.setImage(new Image(
-							new File("src/resources/pizza_img.png").toURI().toString(), 80, 80, false, false));
+
 					
 					editRecipeBtn.setDisable(false);// button active
 
 					addFavBtn.setDisable(false);
 
 					deleteRecipeBtn.setDisable(false);
+					
+					if(selectedRecipe.getDescription() == null){
+						
+						descriptionLabel.setText("");
+						
+					} else {
+						
+						descriptionLabel.setText(textProcessingBeforeOutput(selectedRecipe));
+					}
+					
 
 				} catch (Exception e) {
 					// System.out.println("ignored error:
@@ -684,7 +696,7 @@ public class MainPageController extends TemplateController implements Initializa
 
 	}
 	
-	protected String textProcessingBeforeOutput() {
+	protected String textProcessingBeforeOutput(Recipe selectedRecipe) {
 		// TODO Auto-generated method stub
 		
 		char[] text = selectedRecipe.getDescription().toCharArray();

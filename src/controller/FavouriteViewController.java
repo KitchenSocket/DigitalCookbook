@@ -311,6 +311,9 @@ public class FavouriteViewController extends MainPageController implements Initi
 						
 					}
 					
+					recipeImg.setImage(new Image(
+							new File("src/resources/pizza_img.png").toURI().toString(), 80, 80, false, false));
+					
 					editRecipeBtn.setGraphic(
 							new ImageView(new Image(new File("src/resources/edit.png").toURI().toString(), 30, 32, false, false)));
 
@@ -327,10 +330,9 @@ public class FavouriteViewController extends MainPageController implements Initi
 
 					cookingTime.setText(new Integer(selectedRecipe.getCookingTime()).toString());
 					
-					descriptionLabel.setText(textProcessingBeforeOutput());
 					
-					recipeImg.setImage(new Image(
-							new File("src/resources/pizza_img.png").toURI().toString(), 80, 80, false, false));
+					
+
 
 					showDetailedRecipe(selectedRecipe);
 
@@ -341,6 +343,15 @@ public class FavouriteViewController extends MainPageController implements Initi
 					deleteRecipeBtn.setDisable(false);
 					
 					rightView.setOpacity(1);
+					
+					if(selectedRecipe.getDescription() == null){
+						
+						descriptionLabel.setText("");
+						
+					} else {
+						
+						descriptionLabel.setText(textProcessingBeforeOutput(selectedRecipe));
+					}
 
 					// showStepList(selectedRecipe);
 
