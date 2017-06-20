@@ -605,6 +605,8 @@ public class MainPageController extends TemplateController implements Initializa
 			System.out.println("delete recipe");
 
 			recipeDAO.deleteRecipe(selectedRecipe.getId());
+			myStepDAO.deleteStepListByRecipeId(selectedRecipe.getId());
+			myIngredientDAO.deleteIngredientListByRecipeId(selectedRecipe.getId());
 			
 			ArrayList<Recipe> results = recipeDAO.getRecipeListByName("%");
 
@@ -613,15 +615,9 @@ public class MainPageController extends TemplateController implements Initializa
 				
 				
 				rightView.setOpacity(0);
-//				
-//				Recipe blank =new Recipe();//still need improvments
-//				
-//				blank.setName("Title");
-//				
-//
-//				
-//				showDetailedRecipe(new Recipe());
-//				
+				JOptionPane.showMessageDialog(null, "Delete suceeded!");  
+				
+
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
