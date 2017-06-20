@@ -1,15 +1,11 @@
 package controller;
 
-import javax.swing.JOptionPane;
-
 import DAO.IngredientDAO;
 import DAO.RecipeDAO;
 import DAO.StepDAO;
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -23,25 +19,27 @@ import javafx.util.StringConverter;
 import model.Ingredient;
 import model.Recipe;
 import model.Step;
-import view.Template;
 
+import javax.swing.*;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
- * Created by fexac on 13-Jun-17.
+ * a class for controlling and initializing add & edit view and further save.
+ *
+ * @author Gang Shao
  */
-public class AddRecipeViewController {
-    private ObservableList<Ingredient> ingredients = FXCollections.observableArrayList(new Ingredient("Edit me ...", 0, "please"),
-            new Ingredient("some ingredient", 0, "g"), new Ingredient("another ingredient", 5, "g"));
+public class AddAndEditViewController {
 
-    private ObservableList<Step> steps = FXCollections.observableArrayList(new Step(1, "Do it."),
-            new Step(2, "Just do it."), new Step(3, "Please dooo it."));
+    private int selectedRecipeId;
 
-    protected RecipeDAO recipeDAO = new RecipeDAO();
+    private Recipe recipe;
+    private ObservableList<Step> steps = FXCollections.observableArrayList();
+    private ObservableList<Ingredient> ingredients = FXCollections.observableArrayList();
 
-    protected IngredientDAO myIngredientDAO = new IngredientDAO();
-
-    protected StepDAO myStepDAO = new StepDAO();
+    private RecipeDAO recipeDAO = new RecipeDAO();
+    private IngredientDAO myIngredientDAO = new IngredientDAO();
+    private StepDAO myStepDAO = new StepDAO();
 
     @FXML
     protected TableView<Ingredient> ingredientsTV;
@@ -90,19 +88,25 @@ public class AddRecipeViewController {
 
     @FXML
     private void initialize() {
-        initIngredientsTV(ingredients);
         initBtns();
-        initStepsTV(steps);
+        System.out.println("initializing ...");
+        if(recipe !=null){
+            initData();
+        } else {
+            initFakeData();
+        }
     }
 
+
     protected void initIngredientsTV(ObservableList<Ingredient> ingredientsObservableList) {
+
         ingredientNameCol.setCellValueFactory(cellValue -> new SimpleStringProperty(cellValue.getValue().getName()));
         ingredientQuantityCol
                 .setCellValueFactory(cellValue -> new SimpleDoubleProperty(cellValue.getValue().getQuantity()));
         ingredientUnitCol.setCellValueFactory(cellValue -> new SimpleStringProperty(cellValue.getValue().getUnit()));
         //ingredientNoCol.setCellValueFactory(cellValue -> new ReadOnlyObjectWrapper<Integer>(cellValue.getValue()));
 
-        // ingredientNameCol.setCellFactory(createStringCellFactory());
+
         ingredientNameCol.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<String>() {
             @Override
             public String fromString(String string) {
@@ -128,28 +132,28 @@ public class AddRecipeViewController {
         }));
 
         ingredientNoCol.setCellFactory(cell -> {
-            return new TableCell<Ingredient, Integer> () {
+            return new TableCell<Ingredient, Integer>() {
                 @Override
                 protected void updateItem(Integer item, boolean empty) {
                     super.updateItem(item, empty);
 
                     if (this.getTableRow() != null) {
                         int index = this.getTableRow().getIndex();
-                        if(index < this.getTableView().getItems().size()) {
+                        if (index < this.getTableView().getItems().size()) {
                             setText(index + 1 + "");
                         }
                     } else {
                         setText("");
                     }
                 }
-        };
+            };
         });
 
 
         ingredientsTV.setItems(ingredientsObservableList);
         ingredientsTV.setEditable(true);
         ingredientsTV.getSelectionModel().setCellSelectionEnabled(true);
-        // ingredientsTV.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
 
         ingredientNameCol.setOnEditCommit(event -> {
             cellEditCommitForIngredient(event);
@@ -168,69 +172,9 @@ public class AddRecipeViewController {
         // switch to edit mode on keypress
         // this must be KeyEvent.KEY_PRESSED so that the key gets forwarded to
         // the editing cell; it wouldn't be forwarded on KEY_RELEASED
-        ingredientsTV.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
+        ingredientsTV.addEventFilter(KeyEvent.KEY_PRESSED, new easyInput(ingredientsTV));
 
-                if (event.getCode() == KeyCode.ENTER) {
-                    // event.consume(); // don't consume the event or else the
-                    // values won't be updated;
-                    return;
-                }
-
-                // switch to edit mode on keypress, but only if we aren't
-                // already in edit mode
-                if (ingredientsTV.getEditingCell() == null) {
-                    if (event.getCode().isLetterKey() || event.getCode().isDigitKey()) {
-
-                        TablePosition focusedCellPosition = ingredientsTV.getFocusModel().getFocusedCell();
-                        ingredientsTV.edit(focusedCellPosition.getRow(), focusedCellPosition.getTableColumn());
-
-                    }
-                }
-
-            }
-        });
-
-        ingredientsTV.addEventFilter(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.TAB) {
-
-                    return;
-                }
-
-                if (event.getCode() == KeyCode.ENTER) {
-                    // move focus & selection
-                    // we need to clear the current selection first or else the
-                    // selection would be added to the current selection since
-                    // we are in multi selection mode
-                    TablePosition pos = ingredientsTV.getFocusModel().getFocusedCell();
-
-                    if (pos.getRow() == -1) {
-                        ingredientsTV.getSelectionModel().select(0);
-                    }
-                    // select next cell in same row
-                    else if (pos.getColumn() < ingredientsTV.getColumns().size() - 1) {
-                        // ingredientsTV.getSelectionModel().clearAndSelect(
-                        // pos.getRow(),
-                        // ingredientsTV.getColumns().get(pos.getColumn() + 1));
-                        ingredientsTV.getSelectionModel().selectNext();
-                    }
-                    // select first cell in next row, when reaching one row's
-                    // end
-                    else if (pos.getColumn() == ingredientsTV.getColumns().size() - 1
-                            && pos.getRow() != ingredientsTV.getItems().size() - 1) {
-                        ingredientsTV.getSelectionModel().clearAndSelect(pos.getRow() + 1,
-                                ingredientsTV.getColumns().get(0));
-                    }
-                    // add new row when we are at the last row
-                    else if (pos.getRow() == ingredientsTV.getItems().size() - 1) {
-                        addRow(ingredientsTV);
-                    }
-                }
-            }
-        });
+        ingredientsTV.addEventFilter(KeyEvent.KEY_RELEASED, new easySelection<Ingredient>(ingredientsTV));
     }
 
     protected void initStepsTV(ObservableList<Step> stepObservableList) {
@@ -287,41 +231,7 @@ public class AddRecipeViewController {
             }
         });
 
-        stepsTV.addEventFilter(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.TAB) {
-
-                    return;
-                }
-
-                if (event.getCode() == KeyCode.ENTER) {
-                    // move focus & selection
-                    TablePosition pos = stepsTV.getFocusModel().getFocusedCell();
-
-                    if (pos.getRow() == -1) {
-                        stepsTV.getSelectionModel().select(0);
-                    }
-                    // select next cell in same row
-                    else if (pos.getColumn() < stepsTV.getColumns().size() - 1) {
-                        // ingredientsTV.getSelectionModel().clearAndSelect(
-                        // pos.getRow(),
-                        // ingredientsTV.getColumns().get(pos.getColumn() + 1));
-                        stepsTV.getSelectionModel().selectNext();
-                    }
-                    // select first cell in next row, when reaching one row's
-                    // end
-                    else if (pos.getColumn() == stepsTV.getColumns().size() - 1
-                            && pos.getRow() != stepsTV.getItems().size() - 1) {
-                        stepsTV.getSelectionModel().clearAndSelect(pos.getRow() + 1, stepsTV.getColumns().get(1));
-                    }
-                    // add new row when we are at the last row
-                    else if (pos.getRow() == stepsTV.getItems().size() - 1) {
-                        addRow(stepsTV);
-                    }
-                }
-            }
-        });
+        stepsTV.addEventFilter(KeyEvent.KEY_RELEASED, new easySelection<Step>(stepsTV));
     }
 
     protected void initBtns() {
@@ -344,6 +254,7 @@ public class AddRecipeViewController {
         stepsAddRowBtn.setFocusTraversable(false);
         stepsRemoveRowBtn.setFocusTraversable(false);
     }
+
 
     protected void addRow(TableView tableView) {
         TablePosition pos = tableView.getFocusModel().getFocusedCell();
@@ -390,6 +301,8 @@ public class AddRecipeViewController {
 
             Recipe newRecipe = new Recipe();
 
+            //newRecipe.setId(MainPageController.selectedRecipe.getId());
+
             newRecipe.setName(titleFld.getText());
 
             int servingNum = Integer.parseInt(servingsFld.getText());
@@ -406,40 +319,34 @@ public class AddRecipeViewController {
 
             recipeDAO.addRecipe(newRecipe);
 
-            for(Step step: steps) {
+            for (Step step : steps) {
                 step.setRecipeId(newRecipe.getId());
                 System.out.println(newRecipe.getId());
                 myStepDAO.addStep(step);
             }
-            for(Ingredient ingredient: ingredients) {
+            for (Ingredient ingredient : ingredients) {
                 ingredient.setRecipeId(newRecipe.getId());
                 System.out.println(newRecipe.getId());
                 myIngredientDAO.addIngredient(ingredient);
             }
-            JOptionPane.showMessageDialog(null, "Save suceeded!"); 
-			try {
-				TemplateController.loadContent("/view/MainPage.fxml");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    }
+        }
 
-}
+    }
 
 
     protected void cancelEdit() throws IOException {
         // TODO implement cancelEdit
-        TemplateController.loadContent("/view/MainPage.fxml");
+        TemplateController.loadContent("/view/MainPage.fxml","Main");
     }
 
     protected boolean isValid() {
         if (titleFld.getText().isEmpty() || servingsFld.getText().isEmpty() || preparationTimeFld.getText().isEmpty()
-                || cookingTimeFld.getText().isEmpty()||descriptionFld.getText().isEmpty() ||briefDescriptionFld.getText().isEmpty()) {
+                || cookingTimeFld.getText().isEmpty()) {
 
-            // Jpane alert
-            JOptionPane.showMessageDialog(null, "Please fill all the blanks!",
-                    null, JOptionPane.ERROR_MESSAGE);
+            Alert aLert = new Alert(Alert.AlertType.ERROR);
+            aLert.setTitle("Something is missing ...");
+            aLert.setHeaderText(null);
+            aLert.showAndWait();
 
             return false;
         } else {
@@ -468,6 +375,51 @@ public class AddRecipeViewController {
         }
     }
 
+    public boolean compare(Recipe newRecipe) {
+
+        boolean partOne = true;
+        boolean partStep = true;
+        boolean partIngredient = true;
+        ArrayList<Ingredient> origionIngredients = myIngredientDAO
+                .getIngredientListByRecipyId(MainPageController.selectedRecipe.getId());
+        ArrayList<Step> origionSteps = myStepDAO.getStepListByRecipyId(MainPageController.selectedRecipe.getId());
+        if (newRecipe.getName() != MainPageController.selectedRecipe.getName()
+                || newRecipe.getBriefDescription() != MainPageController.selectedRecipe.getBriefDescription()
+                || newRecipe.getDescription() != MainPageController.selectedRecipe.getDescription()
+                || newRecipe.getServingNum() != MainPageController.selectedRecipe.getServingNum()
+                || newRecipe.getCookingTime() != MainPageController.selectedRecipe.getCookingTime()
+                || newRecipe.getPreparationTime() != MainPageController.selectedRecipe.getPreparationTime()) {
+            partOne = false;
+        }
+
+        if (steps.size() == origionSteps.size()) {
+            int order = 0;
+            for (Step step : steps) {
+                if (step.getStepDescription() != origionSteps.get(order).getStepDescription()) {
+                    partStep = false;
+                    order++;
+                }
+            }
+        }
+
+        if (ingredients.size() == origionIngredients.size()) {
+            int order = 0;
+            for (Ingredient ingredient : ingredients) {
+                if (ingredient.getName() != origionIngredients.get(order).getName()
+                        || ingredient.getQuantity() != origionIngredients.get(order).getQuantity()
+                        || ingredient.getUnit() != origionIngredients.get(order).getUnit()) {
+                    partIngredient = false;
+                    order++;
+                }
+            }
+        }
+        if (!partOne && !partStep && !partIngredient) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     protected void cellEditCommitForStep(TableColumn.CellEditEvent event) {
         Object newValue = event.getNewValue();
         TablePosition pos = event.getTablePosition();
@@ -480,23 +432,6 @@ public class AddRecipeViewController {
         }
     }
 
-//    protected Callback<TableColumn<Ingredient, String>, TableCell<Ingredient, String>> createStringCellFactory() {
-//        Callback<TableColumn<Ingredient, String>, TableCell<Ingredient, String>> factory = TextFieldTableCell
-//                .forTableColumn(new StringConverter<String>() {
-//
-//                    @Override
-//                    public String fromString(String string) {
-//                        return string;
-//                    }
-//
-//                    @Override
-//                    public String toString(String object) {
-//                        return object.toString();
-//                    }
-//                });
-//
-//        return factory;
-//    }
 
     protected Callback<TableColumn<Ingredient, Number>, TableCell<Ingredient, Number>> createDoubleCellFactory() {
         Callback<TableColumn<Ingredient, Number>, TableCell<Ingredient, Number>> factory = TextFieldTableCell
@@ -504,10 +439,9 @@ public class AddRecipeViewController {
 
                     @Override
                     public Number fromString(String string) {
-                        try{
+                        try {
                             return Double.parseDouble(string);
-                        }
-                        catch (NumberFormatException e){
+                        } catch (NumberFormatException e) {
                             Alert alert = new Alert(Alert.AlertType.WARNING);
                             alert.setTitle("Only number allowed in \"Quantity\"");
                             alert.setHeaderText(null);
@@ -525,8 +459,130 @@ public class AddRecipeViewController {
 
         return factory;
     }
+    public void passData(Recipe recipe) {
+        this.recipe = recipe;
+    }
 
-    public AddRecipeViewController() {
+    public void initData() {
+
+        Recipe selectedRecipe = recipe;
+
+        selectedRecipeId = selectedRecipe.getId();
+        String servingNumber = String.valueOf(selectedRecipe.getServingNum());
+        String preparationTime = String.valueOf(selectedRecipe.getPreparationTime());
+        String cookingTime = String.valueOf(selectedRecipe.getCookingTime());
+        ArrayList<Step> stepList = myStepDAO.getStepListByRecipyId(selectedRecipeId);
+        ArrayList<Ingredient> ingredientList = myIngredientDAO.getIngredientListByRecipyId(selectedRecipeId);
+
+        titleFld.setText(selectedRecipe.getName());
+        servingsFld.setText(servingNumber);
+        preparationTimeFld.setText(preparationTime);
+        cookingTimeFld.setText(cookingTime);
+
+        ingredients.addAll(ingredientList);
+        steps.addAll(stepList);
+
+        initIngredientsTV(ingredients);
+        initStepsTV(steps);
+    }
+
+    public void initFakeData() {
+        ingredients.addAll(new Ingredient("Please edit here", 0, "... and here"), new Ingredient("name", 0, "unit"), new Ingredient("name", 0, "unit"));
+
+        steps.addAll(new Step(1, "Please edit step here"), new Step(2, "... more steps"), new Step(3, "... and more"));
+
+        initIngredientsTV(ingredients);
+        initStepsTV(steps);
+    }
+
+
+    /**
+     * class implements EventHandler<KeyEvent> to start edit when user type any letter or digit key.
+     * @param <T> generic type of table view
+     */
+
+    private class easyInput<T> implements EventHandler<KeyEvent> {
+        private TableView<T> tableView;
+
+        private easyInput(TableView<T> tableView) {
+            this.tableView = tableView;
+        }
+
+        @Override
+        public void handle(KeyEvent event) {
+            if (event.getCode() == KeyCode.ENTER) {
+                // event.consume(); // don't consume the event or else the values won't be updated;
+                return;
+            }
+
+            // switch to edit mode on keypress, but only if we aren't already in edit mode
+            if (tableView.getEditingCell() == null) {
+                if (event.getCode().isLetterKey() || event.getCode().isDigitKey()) {
+                    TablePosition focusedCellPosition = tableView.getFocusModel().getFocusedCell();
+                    tableView.edit(focusedCellPosition.getRow(), focusedCellPosition.getTableColumn());
+                }
+            }
+
+        }
+    }
+
+    /**
+     * class implements EventHandler<KeyEvent> to move to next cell when user release "Enter".
+     * @param <T> generic type of table view
+     */
+    private class easySelection<T> implements EventHandler<KeyEvent> {
+        private TableView<T> tableView;
+
+        private easySelection(TableView<T> tableView) {
+
+            this.tableView = tableView;
+        }
+
+
+        @Override
+        public void handle(KeyEvent event) {
+            if (event.getCode() == KeyCode.TAB) {
+                return;
+            }
+
+            if (event.getCode() == KeyCode.ENTER) {
+                // move focus & selection
+                // we need to clear the current selection first or else the
+                // selection would be added to the current selection since
+                // we are in multi selection mode
+                TablePosition pos = tableView.getFocusModel().getFocusedCell();
+
+                //if the selection at this position is disabled, then select first cell
+                if (pos.getRow() == -1) {
+                    tableView.getSelectionModel().select(0);
+                }
+                // select next cell in same row
+                else if (pos.getColumn() < tableView.getColumns().size() - 1) {
+                    // pos.getRow(),
+                    // ingredientsTV.getColumns().get(pos.getColumn() + 1));
+                    tableView.getSelectionModel().selectNext();
+                }
+                // select first cell in next row, when reaching one row's
+                // end
+                else if (pos.getColumn() == tableView.getColumns().size() - 1
+                        && pos.getRow() != tableView.getItems().size() - 1) {
+                    tableView.getSelectionModel().clearAndSelect(pos.getRow() + 1,
+                            tableView.getColumns().get(1));
+                }
+                // add new row when we are at the last row
+                else if (pos.getRow() == tableView.getItems().size() - 1) {
+                    addRow(tableView);
+                }
+            }
+        }
+    }
+
+    public AddAndEditViewController() {
 
     }
+
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
+    }
 }
+
