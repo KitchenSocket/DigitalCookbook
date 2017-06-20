@@ -594,7 +594,7 @@ public class MainPageController extends TemplateController implements Initializa
 	@FXML
 	public void editRecipe(ActionEvent event) throws IOException {
 		
-		 loadContent("../view/EditRecipeView.fxml");
+		 TemplateController.loadContent("../view/AddAndEditRecipeView.fxml", "Edit");
 	}
 
 	
