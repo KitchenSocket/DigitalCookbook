@@ -416,6 +416,13 @@ public class AddRecipeViewController {
                 System.out.println(newRecipe.getId());
                 myIngredientDAO.addIngredient(ingredient);
             }
+            JOptionPane.showMessageDialog(null, "Save suceeded!"); 
+			try {
+				TemplateController.loadContent("/view/MainPage.fxml");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     }
 
 }
@@ -428,10 +435,10 @@ public class AddRecipeViewController {
 
     protected boolean isValid() {
         if (titleFld.getText().isEmpty() || servingsFld.getText().isEmpty() || preparationTimeFld.getText().isEmpty()
-                || cookingTimeFld.getText().isEmpty()) {
+                || cookingTimeFld.getText().isEmpty()||descriptionFld.getText().isEmpty() ||briefDescriptionFld.getText().isEmpty()) {
 
             // Jpane alert
-            JOptionPane.showMessageDialog(null, "Please fill the Title, Servings, Preparation Time and Cook Time!",
+            JOptionPane.showMessageDialog(null, "Please fill all the blanks!",
                     null, JOptionPane.ERROR_MESSAGE);
 
             return false;
@@ -439,6 +446,7 @@ public class AddRecipeViewController {
             return true;
         }
     }
+
 
     protected void cellEditCommitForIngredient(TableColumn.CellEditEvent event) {
         Object newValue = event.getNewValue();

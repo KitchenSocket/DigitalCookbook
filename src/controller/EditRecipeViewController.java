@@ -59,7 +59,8 @@ public class EditRecipeViewController extends AddRecipeViewController {
 		servingsFld.setText(servingNumber);
 		preparationTimeFld.setText(preparationTime);
 		cookingTimeFld.setText(cookingTime);
-
+		briefDescriptionFld.setText(selectedRecipe.getBriefDescription());
+		descriptionFld.setText(selectedRecipe.getDescription());
 		ingredients.addAll(ingredientList);
 		steps.addAll(stepList);
 
@@ -96,6 +97,10 @@ public class EditRecipeViewController extends AddRecipeViewController {
 			int cookingTime = Integer.parseInt(cookingTimeFld.getText());
 
 			newRecipe.setCookingTime(cookingTime);
+			
+			newRecipe.setBriefDescription(briefDescriptionFld.getText());
+			
+			newRecipe.setDescription(descriptionFld.getText());
 
 			recipeDAO.updateRecipe(newRecipe);
 
@@ -109,7 +114,16 @@ public class EditRecipeViewController extends AddRecipeViewController {
 				System.out.println(newRecipe.getId());
 				myIngredientDAO.updateIngredient(ingredient);
 			}
+			JOptionPane.showMessageDialog(null, "Save suceeded!"); 
+			try {
+				TemplateController.loadContent("/view/MainPage.fxml");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+		
+		
 	}
 
 	public EditRecipeViewController() {
@@ -143,50 +157,5 @@ public class EditRecipeViewController extends AddRecipeViewController {
 //
 //	}
 	
-	public boolean compare(Recipe newRecipe) {
-
-		boolean partOne = true;
-		boolean partStep = true;
-		boolean partIngredient = true;
-		ArrayList<Ingredient> origionIngredients = myIngredientDAO
-				.getIngredientListByRecipyId(MainPageController.selectedRecipe.getId());
-		ArrayList<Step> origionSteps = myStepDAO.getStepListByRecipyId(MainPageController.selectedRecipe.getId());
-		if (newRecipe.getName() != MainPageController.selectedRecipe.getName()
-				|| newRecipe.getBriefDescription() != MainPageController.selectedRecipe.getBriefDescription()
-				|| newRecipe.getDescription() != MainPageController.selectedRecipe.getDescription()
-				|| newRecipe.getServingNum() != MainPageController.selectedRecipe.getServingNum()
-				|| newRecipe.getCookingTime() != MainPageController.selectedRecipe.getCookingTime()
-				|| newRecipe.getPreparationTime() != MainPageController.selectedRecipe.getPreparationTime()) {
-			partOne = false;
-		}
-
-		if (steps.size() == origionSteps.size()) {
-			int order = 0;
-			for (Step step : steps) {
-				if (step.getStepDescription() != origionSteps.get(order).getStepDescription()) {
-					partStep = false;
-					order++;
-				}
-			}
-		}
-
-		if (ingredients.size() == origionIngredients.size()) {
-			int order = 0;
-			for (Ingredient ingredient : ingredients) {
-				if (ingredient.getName() != origionIngredients.get(order).getName()
-						|| ingredient.getQuantity() != origionIngredients.get(order).getQuantity()
-						|| ingredient.getUnit() != origionIngredients.get(order).getUnit()) {
-					partIngredient = false;
-					order++;
-				}
-			}
-		}
-		if (!partOne && !partStep && !partIngredient) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 
 }
