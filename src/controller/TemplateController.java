@@ -18,6 +18,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import model.Recipe;
 import view.Template;
 
 /*
@@ -56,7 +57,7 @@ public class TemplateController implements Initializable {
             try {
             	threeBtnColorClear();
             	mainPageBtn.setStyle("-fx-background-color: #FFFFFF;"); 
-                loadContent("../view/MainPage.fxml");
+                loadContent("../view/MainPage.fxml", "Main");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -66,7 +67,7 @@ public class TemplateController implements Initializable {
             try {
             	threeBtnColorClear();
             	favBtn.setStyle("-fx-background-color: #FFFFFF;"); 
-                loadContent("../view/FavouriteView.fxml");
+                loadContent("../view/FavouriteView.fxml", "Fav");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -76,7 +77,7 @@ public class TemplateController implements Initializable {
             try {
             	threeBtnColorClear();
             	addRecipeBtn.setStyle("-fx-background-color: #FFFFFF;"); 
-                loadContent("../view/AddRecipeView.fxml");
+                loadContent("../view/AddAndEditRecipeView.fxml", "Add");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -94,18 +95,43 @@ public class TemplateController implements Initializable {
         Template.getRoot().getChildren().add(node);
     }
 
-    public static void loadContent(String location) throws IOException {
+    public static void loadContent(String location, String type) throws IOException {
         if(Template.getRoot().getChildren().size() == 2) {
             Template.getRoot().getChildren().remove(1);
         }
 
-        Node node = FXMLLoader.load(TemplateController.class.getResource(location));
+        FXMLLoader loader = new FXMLLoader(TemplateController.class.getResource(location));
+
+        switch (type) {
+            case "Main": {
+
+                break;
+            }
+
+            case "Add": {
+                AddAndEditViewController controller = new AddAndEditViewController();
+                loader.setController(controller);
+                break;
+            }
+
+            case "Edit": {
+                AddAndEditViewController controller = new AddAndEditViewController();
+                loader.setController(controller);
+                controller.setRecipe(MainPageController.selectedRecipe);
+                break;
+            }
+
+            case "Fav": {
+
+                break;
+            }
+        }
+
+        Node node = loader.load();
         GridPane.setColumnIndex(node, 1);
         GridPane.setRowIndex(node, 0);
         Template.getRoot().getChildren().add(node);
     }
-    
-
 }
 
 
