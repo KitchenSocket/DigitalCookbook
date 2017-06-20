@@ -181,6 +181,20 @@ public class IngredientDAO {
     }
     
     /**
+     * update all the ingredients of a recipe
+     * 
+     * @param ingredients
+     */  
+    public void updateIngredients(ArrayList<Ingredient> ingredients){
+        int recipeId = ingredients.get(0).getRecipeId();
+        deleteIngredientListByRecipeId(recipeId);
+        for(Ingredient ingredient : ingredients) {
+        	addIngredient(ingredient);
+        }
+    }
+    
+    
+    /**
      * delete an Ingredient in database by id
      * 
      * @param id

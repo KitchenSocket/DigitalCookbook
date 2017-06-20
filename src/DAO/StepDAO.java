@@ -13,6 +13,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 import inter.StepOperation;
+import model.Ingredient;
 import model.Step;
 
 /**
@@ -211,21 +212,19 @@ public class StepDAO {
         }
     }
 
-    
-//    public void updateSteps(ArrayList<Step> steps){
-//        SqlSession session = sqlSessionFactory.openSession();
-//        try {
-//        	StepOperation stepOperation=session.getMapper(StepOperation.class);
-//        	for(Step step : steps) {
-//        	stepOperation.deleteStep(id);
-//        	stepOperation.addStep(step);
-//        	}
-//            session.commit();
-//        } finally {
-//            session.close();
-//        }
-//    }
-    
+    /**
+     * update all the steps of a recipe
+     * 
+     * @param steps
+     */    
+    //TODO
+    public void updateSteps(ArrayList<Step> steps){
+        int recipeId = steps.get(0).getRecipeId();
+        deleteStepListByRecipeId(recipeId);
+        for(Step step : steps) {
+        	addStep(step);
+        }
+    } 
     
     /**
      * delete a step in database by id
@@ -243,7 +242,6 @@ public class StepDAO {
             session.close();
         }
     }
-    
     
     /**
      * delete all the steps from a recipe by recipe id
