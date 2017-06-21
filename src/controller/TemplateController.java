@@ -26,7 +26,7 @@ import view.Template;
  * 
  * @version 1.0
  * 
- * @author Shi Wenbin
+ * @author Shi Wenbin, Gang Shao
  */
 
 
@@ -95,7 +95,7 @@ public class TemplateController implements Initializable {
         Template.getRoot().getChildren().add(node);
     }
 
-    public static void loadContent(String location, String type) throws IOException {
+    static void loadContent(String location, String type) throws IOException {
         if(Template.getRoot().getChildren().size() == 2) {
             Template.getRoot().getChildren().remove(1);
         }
@@ -110,14 +110,16 @@ public class TemplateController implements Initializable {
 
             case "Add": {
                 AddAndEditViewController controller = new AddAndEditViewController();
+                controller.setIsNew(true);
                 loader.setController(controller);
                 break;
             }
 
             case "Edit": {
                 AddAndEditViewController controller = new AddAndEditViewController();
-                loader.setController(controller);
+                controller.setIsNew(false);
                 controller.setRecipe(MainPageController.selectedRecipe);
+                loader.setController(controller);
                 break;
             }
 
