@@ -9,6 +9,10 @@ import java.util.LinkedList;
 import java.util.ResourceBundle;
 import java.util.Stack;
 import javax.swing.JOptionPane;
+
+import com.itextpdf.text.DocumentException;
+
+import DAO.BookDAO;
 import DAO.IngredientDAO;
 import DAO.RecipeDAO;
 import DAO.StepDAO;
@@ -115,6 +119,21 @@ public class MainPageController extends TemplateController implements Initializa
 
 	@FXML
 	protected Button deleteRecipeBtn;
+	
+    @FXML
+    private Button exportPdfBtn;
+	
+
+    @FXML
+    void exportPdf(ActionEvent event) throws DocumentException, IOException {
+
+		BookDAO onePage = new BookDAO();
+
+		onePage.creatFile();
+		
+		System.out.println("Export PDF Successfully");
+    	
+    }
 
 	@FXML
 	protected TableView<Ingredient> ingredientTable;
@@ -398,7 +417,7 @@ public class MainPageController extends TemplateController implements Initializa
 					cookingTime.setText(new Integer(selectedRecipe.getCookingTime()).toString());
 					
 
-					
+
 
 					
 					editRecipeBtn.setDisable(false);// button active
@@ -414,6 +433,20 @@ public class MainPageController extends TemplateController implements Initializa
 					} else {
 						
 						descriptionLabel.setText(textProcessingBeforeOutput(selectedRecipe));
+					}
+					
+					if(mainOrFavView == 1){
+						
+						exportPdfBtn.setOpacity(0);
+						
+						exportPdfBtn.setDisable(true);
+						
+					}else if(mainOrFavView == 2){
+						
+						exportPdfBtn.setOpacity(1);
+						
+						exportPdfBtn.setDisable(false);
+						
 					}
 					
 
