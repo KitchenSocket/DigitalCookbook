@@ -50,12 +50,16 @@ import view.Template;
  */
 
 public class MainPageController extends TemplateController implements Initializable {
+	
+	public static int mainOrFavView = 0;
 
-	public static Stack<Recipe> matchRecipes = new Stack<Recipe>();
+	public static Stack<Recipe> recipeListTVatLeft = new Stack<Recipe>();
 
-	public static ArrayList<Recipe> recipeCopies = new ArrayList<>();
+	public static ArrayList<Recipe> recipeListTVatLeftBackUp = new ArrayList<>();
 
 	public static Recipe selectedRecipe;
+
+
 
 	final ToggleGroup group = new ToggleGroup();
 	
@@ -219,6 +223,58 @@ public class MainPageController extends TemplateController implements Initializa
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
+		if(mainOrFavView == 1){
+			
+			initialMainPage();
+			
+		} else if(mainOrFavView == 2){
+			
+			initialFavView();
+			
+		}
+
+
+
+
+
+	}
+	
+	private void initialFavView() {
+
+		searchBtn.setGraphic(new ImageView(new Image(
+				new File("src/resources/recipe_search_button.png").toURI().toString(), 15, 17, false, false)));
+
+
+		
+
+		try {
+			
+			rightView.setOpacity(0);
+
+			ArrayList<Recipe> results = recipeDAO.getRecipeListByNameInFavorite("%");
+
+			showRecipeList(results);
+
+		} catch (IOException e1) {
+
+			e1.printStackTrace();
+		}
+
+		recipeItemsAtLeftClickListenner();
+
+		initableValueType();
+
+		recipeNameRadioBtn.setToggleGroup(group);// set the radio button into
+		// group
+
+		ingredientNameRadioBtn.setToggleGroup(group);
+
+		recipeNameRadioBtn.setSelected(true);
+		
+	}
+
+	private void initialMainPage() {
 
 		searchBtn.setGraphic(new ImageView(new Image(
 				new File("src/resources/recipe_search_button.png").toURI().toString(), 15, 17, false, false)));
@@ -237,7 +293,7 @@ public class MainPageController extends TemplateController implements Initializa
 			e1.printStackTrace();
 		}
 
-		recipeItemClickListenner();
+		recipeItemsAtLeftClickListenner();
 
 		initableValueType();
 
@@ -247,18 +303,9 @@ public class MainPageController extends TemplateController implements Initializa
 		ingredientNameRadioBtn.setToggleGroup(group);
 
 		recipeNameRadioBtn.setSelected(true);
-
-		// ingredientList.setEditable(false);// user cannot edit textArea at
-		// main
-		// page
-//		editRecipeBtn.setDisable(true);
-//
-//		addFavBtn.setDisable(true);
-//
-//		deleteRecipeBtn.setDisable(true);
-
+		
 	}
-	
+
 	/*
 	 * Initialize table column type. which is name, quantity and unit.
 	 * 
@@ -291,7 +338,7 @@ public class MainPageController extends TemplateController implements Initializa
 	 * 
 	 * @author Shi Wenbin
 	 */
-	public void recipeItemClickListenner() {
+	public void recipeItemsAtLeftClickListenner() {
 
 		matchRecipeList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<AnchorPane>() {
 			@Override
@@ -303,7 +350,7 @@ public class MainPageController extends TemplateController implements Initializa
 
 				try {
 
-					selectedRecipe = recipeCopies.get(matchRecipeList.getSelectionModel().getSelectedIndex());// get
+					selectedRecipe = recipeListTVatLeftBackUp.get(matchRecipeList.getSelectionModel().getSelectedIndex());// get
 					
 					if(selectedRecipe.getIsFavorite() == 1){
 						
@@ -404,45 +451,91 @@ public class MainPageController extends TemplateController implements Initializa
 	}
 
 	protected void searchBehaviour() throws IOException {
-		String searchWord = new String(searchbar.getText());
+		if(mainOrFavView == 1){
+			
+			String searchWord = new String(searchbar.getText());
 
-		if (searchWord.equals("")) {
-			JOptionPane.showMessageDialog(null, "Please enter key words.", null, JOptionPane.ERROR_MESSAGE);// Jpane
-																											// alert
+			if (searchWord.equals("")) {
+				JOptionPane.showMessageDialog(null, "Please enter key words.", null, JOptionPane.ERROR_MESSAGE);// Jpane
+																												// alert
 
-		} else {
+			} else {
 
-			if (recipeNameRadioBtn.isSelected()) {
+				if (recipeNameRadioBtn.isSelected()) {
 
-				System.out.println("searchByRecipeName");
+					System.out.println("searchByRecipeName");
 
-				RecipeDAO recipeDAO = new RecipeDAO();
+					RecipeDAO recipeDAO = new RecipeDAO();
 
-				ArrayList<Recipe> results = recipeDAO.getRecipeListByName(searchbar.getText());
+					ArrayList<Recipe> results = recipeDAO.getRecipeListByName(searchbar.getText());
 
-				if (checkSearchResult(results)) {
+					if (checkSearchResult(results)) {
 
-					showRecipeList(results);
+						showRecipeList(results);
+
+					}
+
+
+				} else if (ingredientNameRadioBtn.isSelected()) {
+
+					System.out.println("searchByIngredientName");
+
+					RecipeDAO recipeDAO = new RecipeDAO();
+
+					ArrayList<Recipe> results = recipeDAO.getRecipeListByIngredientName(searchbar.getText());
+
+					if (checkSearchResult(results)) {
+
+						showRecipeList(results);
+
+					}
+
 
 				}
+			} 
+			
+		} else if(mainOrFavView == 2){
+			
+			String searchWord = new String(searchbar.getText());
+
+			ArrayList<Recipe> recipes = null;
+
+			if (searchWord.equals("")) {
+				JOptionPane.showMessageDialog(null, "No entry word", null, JOptionPane.ERROR_MESSAGE);// Jpane
+																										// alert
+
+			} else {
+
+				if (recipeNameRadioBtn.isSelected()) {
+
+					System.out.println("searchByRecipeName");
+
+					RecipeDAO recipeDAO = new RecipeDAO();
+
+					ArrayList<Recipe> results = recipeDAO.getRecipeListByNameInFavorite(searchbar.getText());
+
+					if (checkSearchResult(results)) {
+
+						showRecipeList(results);
+
+					}
 
 
-			} else if (ingredientNameRadioBtn.isSelected()) {
+				} else if (ingredientNameRadioBtn.isSelected()) {
 
-				System.out.println("searchByIngredientName");
+					System.out.println("searchByIngredientName");
+					RecipeDAO recipeDAO = new RecipeDAO();
 
-				RecipeDAO recipeDAO = new RecipeDAO();
+					ArrayList<Recipe> results = recipeDAO.getRecipeListByIngredientNameInFavorite(searchbar.getText());
 
-				ArrayList<Recipe> results = recipeDAO.getRecipeListByIngredientName(searchbar.getText());
+					if (checkSearchResult(results)) {
 
-				if (checkSearchResult(results)) {
+						showRecipeList(results);
 
-					showRecipeList(results);
-
+					}
 				}
-
-
 			}
+			
 		}
 		
 	}
@@ -460,17 +553,16 @@ public class MainPageController extends TemplateController implements Initializa
 
 		for (int i = 0; i < results.size(); i++) {
 
-			matchRecipes.push(results.get(i));
+			recipeListTVatLeft.push(results.get(i));
 
 		}
 
-		ObservableList<AnchorPane> recipeList = FXCollections.observableArrayList();
+		ObservableList<AnchorPane> anchorPaneList = FXCollections.observableArrayList();
 
-		recipeCopies.clear();
+		recipeListTVatLeftBackUp.clear();
 
-		LinkedList<AnchorPane> recipes = new LinkedList<>();
 
-		while (!matchRecipes.isEmpty()) {
+		while (!recipeListTVatLeft.isEmpty()) {
 
 			// Load root layout from fxml file.
 			FXMLLoader loader = new FXMLLoader();
@@ -479,13 +571,11 @@ public class MainPageController extends TemplateController implements Initializa
 
 			AnchorPane eachRecipe = (AnchorPane) loader.load();
 
-			recipes.add(eachRecipe);
+			anchorPaneList.add(eachRecipe);
 
 		}
 
-		recipeList.setAll(recipes);
-
-		matchRecipeList.setItems(recipeList);
+		matchRecipeList.setItems(anchorPaneList);
 
 	}
 	

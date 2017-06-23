@@ -56,8 +56,9 @@ public class TemplateController implements Initializable {
         mainPageBtn.setOnAction(event -> {
             try {
             	threeBtnColorClear();
-            	mainPageBtn.setStyle("-fx-background-color: #FFFFFF;"); 
-                loadContent("../view/MainPage.fxml", "Main");
+            	mainPageBtn.setStyle("-fx-background-color: #FFFFFF;");
+            	MainPageController.mainOrFavView = 1;
+                loadContent("../view/MainOrFavView.fxml", "Main");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -67,7 +68,8 @@ public class TemplateController implements Initializable {
             try {
             	threeBtnColorClear();
             	favBtn.setStyle("-fx-background-color: #FFFFFF;"); 
-                loadContent("../view/FavouriteView.fxml", "Fav");
+            	MainPageController.mainOrFavView = 2;
+                loadContent("../view/MainOrFavView.fxml", "Main");
             } catch (IOException e) {
                 e.printStackTrace();
             }

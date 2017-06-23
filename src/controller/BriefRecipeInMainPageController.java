@@ -43,9 +43,9 @@ public class BriefRecipeInMainPageController implements Initializable {
 		
 		//recipeImg.setImage(new Image( new File(eachBriefRecipe.getThumbnail()).toURI().toString(),  80, 80, false, false));
 		
-		eachBriefRecipe = MainPageController.matchRecipes.pop();
+		eachBriefRecipe = MainPageController.recipeListTVatLeft.pop();
 
-		MainPageController.recipeCopies.add(eachBriefRecipe);
+		MainPageController.recipeListTVatLeftBackUp.add(eachBriefRecipe);
 		
 		recipeName.setText(eachBriefRecipe.getName());
 		
