@@ -45,8 +45,8 @@ public class Template extends Application {
         scene = new Scene(rootGP, 1200, 750);
 
         primaryStage.setScene(scene);
-        primaryStage.setMinWidth(800);
-        primaryStage.setMinHeight(500);
+        primaryStage.setMinWidth(1218);
+        primaryStage.setMinHeight(797);
         primaryStage.show();
 
 //        Template.primaryStage.setMinHeight(1000);
