@@ -55,11 +55,11 @@ import view.Template;
 
 public class MainPageController extends TemplateController implements Initializable {
 	
-	public static int mainOrFavView = 0;
+	private int mainOrFavView = 0;
 
 
 
-	public static ArrayList<Recipe> recipeSearchResultsTVatLeft = new ArrayList<>();
+	public ArrayList<Recipe> recipeSearchResultsTVatLeft = new ArrayList<>();
 
 	public static Recipe selectedRecipe;
 
@@ -840,6 +840,12 @@ public class MainPageController extends TemplateController implements Initializa
 			
 		}
 		return outputText;
+		
+	}
+
+	public void setMainOrFav(int mainOrFavNum) {
+
+		mainOrFavView = mainOrFavNum;
 		
 	}
 }

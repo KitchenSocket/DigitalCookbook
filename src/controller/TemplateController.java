@@ -57,7 +57,7 @@ public class TemplateController implements Initializable {
             try {
             	threeBtnColorClear();
             	mainPageBtn.setStyle("-fx-background-color: #FFFFFF;");
-            	MainPageController.mainOrFavView = 1;
+
                 loadContent("../view/MainOrFavView.fxml", "Main");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -68,8 +68,8 @@ public class TemplateController implements Initializable {
             try {
             	threeBtnColorClear();
             	favBtn.setStyle("-fx-background-color: #FFFFFF;"); 
-            	MainPageController.mainOrFavView = 2;
-                loadContent("../view/MainOrFavView.fxml", "Main");
+
+                loadContent("../view/MainOrFavView.fxml", "Fav");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -106,7 +106,9 @@ public class TemplateController implements Initializable {
 
         switch (type) {
             case "Main": {
-
+            	MainPageController myMainPageController = new MainPageController();
+            	myMainPageController.setMainOrFav(1);
+                loader.setController(myMainPageController);
                 break;
             }
 
@@ -126,7 +128,9 @@ public class TemplateController implements Initializable {
             }
 
             case "Fav": {
-
+            	MainPageController myMainPageController = new MainPageController();
+            	myMainPageController.setMainOrFav(2);
+                loader.setController(myMainPageController);
                 break;
             }
         }

@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane hgap="0" vgap="0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainPageController">
+<GridPane hgap="0" vgap="0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" >
    <columnConstraints>
       <ColumnConstraints hgrow="NEVER" prefWidth="420.0" />
       <ColumnConstraints hgrow="ALWAYS" prefWidth="500.0" />
