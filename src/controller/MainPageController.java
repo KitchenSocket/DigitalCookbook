@@ -57,9 +57,9 @@ public class MainPageController extends TemplateController implements Initializa
 	
 	public static int mainOrFavView = 0;
 
-	public static Stack<Recipe> recipeListTVatLeft = new Stack<Recipe>();
 
-	public static ArrayList<Recipe> recipeListTVatLeftBackUp = new ArrayList<>();
+
+	public static ArrayList<Recipe> recipeSearchResultsTVatLeft = new ArrayList<>();
 
 	public static Recipe selectedRecipe;
 
@@ -271,9 +271,9 @@ public class MainPageController extends TemplateController implements Initializa
 			
 			rightView.setOpacity(0);
 
-			ArrayList<Recipe> results = recipeDAO.getRecipeListByNameInFavorite("%");
+			recipeSearchResultsTVatLeft = recipeDAO.getRecipeListByNameInFavorite("%");
 
-			showRecipeList(results);
+			showRecipeList(recipeSearchResultsTVatLeft);
 
 		} catch (IOException e1) {
 
@@ -304,9 +304,9 @@ public class MainPageController extends TemplateController implements Initializa
 
 		try {
 
-			ArrayList<Recipe> results = recipeDAO.getRecipeListByName("%");
+			recipeSearchResultsTVatLeft = recipeDAO.getRecipeListByName("%");
 
-			showRecipeList(results);
+			showRecipeList(recipeSearchResultsTVatLeft);
 		} catch (IOException e1) {
 
 			e1.printStackTrace();
@@ -369,7 +369,7 @@ public class MainPageController extends TemplateController implements Initializa
 
 				try {
 
-					selectedRecipe = recipeListTVatLeftBackUp.get(matchRecipeList.getSelectionModel().getSelectedIndex());// get
+					selectedRecipe = recipeSearchResultsTVatLeft.get(matchRecipeList.getSelectionModel().getSelectedIndex());// get
 					
 					if(selectedRecipe.getIsFavorite() == 1){
 						
@@ -583,30 +583,26 @@ public class MainPageController extends TemplateController implements Initializa
 	 */
 
 	public void showRecipeList(ArrayList<Recipe> results) throws IOException {
-
-		for (int i = 0; i < results.size(); i++) {
-
-			recipeListTVatLeft.push(results.get(i));
-
-		}
-
+		
 		ObservableList<AnchorPane> anchorPaneList = FXCollections.observableArrayList();
 
-		recipeListTVatLeftBackUp.clear();
-
-
-		while (!recipeListTVatLeft.isEmpty()) {
+		for (int i = 0; i < results.size(); i++) {
 
 			// Load root layout from fxml file.
 			FXMLLoader loader = new FXMLLoader();
 
 			loader.setLocation(Template.class.getResource("../view/BriefRecipeInMainPage.fxml"));
 
-			AnchorPane eachRecipe = (AnchorPane) loader.load();
+			loader.load();
+			
+			BriefRecipeInMainPageController mBriefRecipeInMainPageController = loader.getController();
+			
+			mBriefRecipeInMainPageController.setSelectedRecipe(results.get(i));
 
-			anchorPaneList.add(eachRecipe);
+			anchorPaneList.add(loader.getRoot());
 
 		}
+
 
 		matchRecipeList.setItems(anchorPaneList);
 

@@ -33,7 +33,7 @@ public class BriefRecipeInMainPageController implements Initializable {
     @FXML
     private Label recipeDescription;
     
-    private Recipe eachBriefRecipe;
+    private Recipe selectedRecipe;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -43,17 +43,23 @@ public class BriefRecipeInMainPageController implements Initializable {
 		
 		//recipeImg.setImage(new Image( new File(eachBriefRecipe.getThumbnail()).toURI().toString(),  80, 80, false, false));
 		
-		eachBriefRecipe = MainPageController.recipeListTVatLeft.pop();
-
-		MainPageController.recipeListTVatLeftBackUp.add(eachBriefRecipe);
+		//eachBriefRecipe = MainPageController.recipeListTVatLeft.pop();
 		
-		recipeName.setText(eachBriefRecipe.getName());
+
+		
+		
+		
+
+		
+	}
+	
+	public void setSelectedRecipe(Recipe selectedRecipe){
+		
+		this.selectedRecipe = selectedRecipe;
+		
+		recipeName.setText(selectedRecipe.getName());
 		
 		recipeDescription.setText(textProcessingBeforeOutput());
-		
-		
-		
-
 		
 	}
 	
@@ -63,7 +69,7 @@ public class BriefRecipeInMainPageController implements Initializable {
 		String outputText = "";
 		try{
 			
-			char[] text = eachBriefRecipe.getBriefDescription().toCharArray();
+			char[] text = selectedRecipe.getBriefDescription().toCharArray();
 			
 			int textSize = text.length;
 			
