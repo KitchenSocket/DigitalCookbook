@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane hgap="0" vgap="0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" >
+<GridPane hgap="0" vgap="0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <columnConstraints>
       <ColumnConstraints hgrow="NEVER" prefWidth="420.0" />
       <ColumnConstraints hgrow="ALWAYS" prefWidth="500.0" />
@@ -145,7 +145,7 @@
                      </font>
                   </Label>
                   <VBox HBox.hgrow="ALWAYS" />
-                  <Button fx:id="exportPdfBtn" mnemonicParsing="false" onAction="#exportPdf" prefHeight="43.0" prefWidth="38.0" style="-fx-background-color: Transparent;" text="P" />
+                  <Button fx:id="exportPdfBtn" mnemonicParsing="false" onAction="#exportPdf" prefHeight="43.0" prefWidth="38.0" style="-fx-background-color: Transparent;" />
                   <Button fx:id="addFavBtn" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#addFavRecipe" prefHeight="43.0" prefWidth="38.0" style="-fx-background-color: Transparent;">
                      <HBox.margin>
                         <Insets />

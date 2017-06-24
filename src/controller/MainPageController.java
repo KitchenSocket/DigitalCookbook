@@ -443,6 +443,9 @@ public class MainPageController extends TemplateController implements Initializa
 						
 					}else if(mainOrFavView == 2){
 						
+						exportPdfBtn.setGraphic(new ImageView(
+								new Image(new File("src/resources/pdf.png").toURI().toString(), 30, 30, false, false)));
+						
 						exportPdfBtn.setOpacity(1);
 						
 						exportPdfBtn.setDisable(false);
