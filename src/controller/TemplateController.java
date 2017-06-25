@@ -4,15 +4,21 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.TimerTask;
 
 import com.sun.xml.internal.bind.v2.runtime.unmarshaller.Loader;
 
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.chart.BarChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -40,11 +46,19 @@ public class TemplateController implements Initializable {
 
     @FXML
     private Button addRecipeBtn;
+    
+    @FXML
+    private ProgressIndicator bar;
+    
+
 
 
     
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
+    	bar.setOpacity(0);
+
+		
         mainPageBtn.setGraphic(new ImageView(new Image( new File("src/resources/unclick_home.png").toURI().toString(),  31, 31, false, false)));
         
         favBtn.setGraphic(new ImageView(new Image( new File("src/resources/add_fav_recipe.png").toURI().toString(),  31, 31, false, false)));
@@ -55,6 +69,7 @@ public class TemplateController implements Initializable {
         
         mainPageBtn.setOnAction(event -> {
             try {
+            	createTimeDaemon(1.3).start();
             	threeBtnColorClear();
             	mainPageBtn.setStyle("-fx-background-color: #FFFFFF;");
 
@@ -66,10 +81,17 @@ public class TemplateController implements Initializable {
 
         favBtn.setOnAction(event -> {
             try {
+            	createTimeDaemon(1).start();
             	threeBtnColorClear();
             	favBtn.setStyle("-fx-background-color: #FFFFFF;"); 
+            	
+
 
                 loadContent("../view/MainOrFavView.fxml", "Fav");
+                
+
+            	
+            	
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -77,6 +99,7 @@ public class TemplateController implements Initializable {
 
         addRecipeBtn.setOnAction(event -> {
             try {
+            	createTimeDaemon(0.5).start();
             	threeBtnColorClear();
             	addRecipeBtn.setStyle("-fx-background-color: #FFFFFF;"); 
                 loadContent("../view/AddAndEditRecipeView.fxml", "Add");
@@ -84,6 +107,33 @@ public class TemplateController implements Initializable {
                 e.printStackTrace();
             }
         });
+    }
+
+    private Thread createTimeDaemon(double time){
+    	
+    	return new Thread(){
+            public void run() {
+                double size =time;
+                bar.setOpacity(1);
+                bar.setProgress(0);
+                for (double i = 0.0; i <= size; i=i+0.01){
+                    final double step = i;
+                    Platform.runLater(() -> bar.setProgress( step / size ));
+                    
+                    //System.out.printf("Complete: %02.2f%n", i * 10);
+
+                    try {
+                        Thread.sleep(10); 
+                    } catch(InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+                bar.setOpacity(0);
+            }
+            
+           
+        };
+    	
     }
     
     public void threeBtnColorClear() {
@@ -106,6 +156,7 @@ public class TemplateController implements Initializable {
 
         switch (type) {
             case "Main": {
+ 
             	MainPageController myMainPageController = new MainPageController();
             	myMainPageController.setMainOrFav(1);
                 loader.setController(myMainPageController);
