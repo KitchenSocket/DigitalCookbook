@@ -11,14 +11,21 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.GridPane;
+import javafx.stage.FileChooser;
 import javafx.util.StringConverter;
 import model.Ingredient;
 import model.Recipe;
 import model.Step;
+import view.Template;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Optional;
@@ -41,6 +48,9 @@ public class AddAndEditViewController {
     private IngredientDAO myIngredientDAO = new IngredientDAO();
     private StepDAO myStepDAO = new StepDAO();
 
+    private FileChooser fileChooser = new FileChooser();
+    private String thumbnailURL;
+
     @FXML
     private TableView<Ingredient> ingredientsTV;
     @FXML
@@ -60,6 +70,11 @@ public class AddAndEditViewController {
     private TableColumn<Step, String> stepDescriptionCol;
 
     @FXML
+    private ImageView thumbnailIV;
+    @FXML
+    private GridPane thumbnailGP;
+
+    @FXML
     private Button ingredientsAddRowBtn;
     @FXML
     private Button ingredientsRemoveRowBtn;
@@ -71,6 +86,10 @@ public class AddAndEditViewController {
     private Button saveRecipeBtn;
     @FXML
     private Button cancelEditBtn;
+    @FXML
+    private Button newThumbnail;
+    @FXML
+    private Button removeThumbnail;
 
     @FXML
     private TextField titleFld;
@@ -81,14 +100,15 @@ public class AddAndEditViewController {
     @FXML
     private TextField cookingTimeFld;
     @FXML
-    protected TextField briefDescriptionFld;
+    private TextField briefDescriptionFld;
     @FXML
-    protected TextArea descriptionFld;
+    private TextArea descriptionFld;
 
 
     @FXML
     private void initialize() {
         initBtns();
+        initThumbnail();
         System.out.println("initializing ...");
         if(recipe !=null){
             initData();
@@ -105,6 +125,10 @@ public class AddAndEditViewController {
                 .setCellValueFactory(cellValue -> new SimpleDoubleProperty(cellValue.getValue().getQuantity()));
         ingredientUnitCol.setCellValueFactory(cellValue -> new SimpleStringProperty(cellValue.getValue().getUnit()));
 
+        ingredientNoCol.prefWidthProperty().bind(ingredientsTV.widthProperty().multiply(0.05));
+        ingredientNameCol.prefWidthProperty().bind(ingredientsTV.widthProperty().multiply(0.446));
+        ingredientQuantityCol.prefWidthProperty().bind(ingredientsTV.widthProperty().multiply(0.2));
+        ingredientUnitCol.prefWidthProperty().bind(ingredientsTV.widthProperty().multiply(0.3));
 
         ingredientNameCol.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<String>() {
             @Override
@@ -188,6 +212,9 @@ public class AddAndEditViewController {
         stepDescriptionCol
                 .setCellValueFactory(cellValue -> new SimpleStringProperty(cellValue.getValue().getStepDescription()));
 
+        stepOrderCol.prefWidthProperty().bind(stepsTV.widthProperty().multiply(0.05));
+        stepDescriptionCol.prefWidthProperty().bind(stepsTV.widthProperty().multiply(0.946));
+
         stepDescriptionCol.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<String>() {
             @Override
             public String fromString(String string) {
@@ -241,10 +268,29 @@ public class AddAndEditViewController {
             }
         });
 
+
+        newThumbnail.setOnAction(event -> {
+            configurePictureFileChooser(fileChooser);
+            File file = fileChooser.showOpenDialog(Template.primaryStage);
+            if(file != null) {
+                displayPicture(file);
+            }
+        });
+
+        removeThumbnail.setOnAction(event -> {
+            thumbnailIV.setImage(null);
+            thumbnailURL = "";
+        });
+
         ingredientsAddRowBtn.setFocusTraversable(false);
         ingredientsRemoveRowBtn.setFocusTraversable(false);
         stepsAddRowBtn.setFocusTraversable(false);
         stepsRemoveRowBtn.setFocusTraversable(false);
+    }
+
+    private void initThumbnail() {
+        thumbnailIV.fitWidthProperty().bind(thumbnailGP.widthProperty().multiply(0.8));
+        thumbnailIV.fitHeightProperty().bind(thumbnailGP.heightProperty());
     }
 
 
@@ -295,12 +341,25 @@ public class AddAndEditViewController {
         if(saveOrNot.isPresent()) {
             if (saveOrNot.get() == ButtonType.OK) {
                 Recipe newRecipe = new Recipe();
-                int servingNum = Integer.parseInt(servingsFld.getText());
-                int preparationTime = Integer.parseInt(preparationTimeFld.getText());
-                int cookingTime = Integer.parseInt(cookingTimeFld.getText());
+                int servingNum = 0;
+                int preparationTime = 0;
+                int cookingTime = 0;
+                int isFavorite = 0;
+                try {
+                    servingNum = Integer.parseInt(servingsFld.getText());
+                    preparationTime = Integer.parseInt(preparationTimeFld.getText());
+                    cookingTime = Integer.parseInt(cookingTimeFld.getText());
+
+                } catch (NumberFormatException nfe) {
+                    Alert aLert = new Alert(Alert.AlertType.ERROR);
+                    aLert.setTitle("Something is wrong ...");
+                    aLert.setHeaderText(null);
+                    aLert.setContentText("Please make sure serving, preparation & cooking time is numeric :D");
+                    aLert.showAndWait();
+                    return;
+                }
                 String briefDescription = briefDescriptionFld.getText();
                 String description = descriptionFld.getText();
-                int isFavorite = MainPageController.selectedRecipe.getIsFavorite();
 
                 newRecipe.setName(titleFld.getText());
                 newRecipe.setServingNum(servingNum);
@@ -327,6 +386,8 @@ public class AddAndEditViewController {
                         myIngredientDAO.addIngredient(ingredient);
                     }
                 } else {
+                    isFavorite = MainPageController.selectedRecipe.getIsFavorite();
+                    newRecipe.setIsFavorite(isFavorite);
                     newRecipe.setId(recipe.getId());
                     myRecipeDAO.updateRecipe(newRecipe);
                     myStepDAO.updateSteps(new ArrayList<>(steps));
@@ -668,6 +729,31 @@ public class AddAndEditViewController {
     }
 
     public AddAndEditViewController() {
+
+    }
+
+    private void configurePictureFileChooser(FileChooser fileChooser) {
+        fileChooser.setTitle("Choose your recipe pictures");
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image", "*.jpeg", "*.jpg", "*.png", "*.bmp")
+        );
+    }
+
+    private void displayPicture(File file) {
+        try {
+            thumbnailURL = file.toURI().toURL().toString();
+            if(thumbnailIV.getImage() != null) {
+                thumbnailIV.setImage(null);
+            }
+            thumbnailIV.setImage(new Image(thumbnailURL));
+            thumbnailIV.setPreserveRatio(true);
+            thumbnailIV.setSmooth(true);
+            thumbnailIV.setCache(true);
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
 
     }
 

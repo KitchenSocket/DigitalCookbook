@@ -3,9 +3,11 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
 <GridPane alignment="CENTER" hgap="0" vgap="0"
           xmlns:fx="http://javafx.com/fxml"
-           fx:id="frameGrid" minHeight="500" minWidth="800">
+          fx:id="frameGrid" minHeight="500" minWidth="800"
+          stylesheets="/stylesheet/AddAndEdit.css">
     <columnConstraints>
         <ColumnConstraints prefWidth="420" hgrow="ALWAYS" fx:id="listCol"/>
         <ColumnConstraints prefWidth="500" hgrow="ALWAYS" fx:id="detailCol"/>
@@ -54,7 +56,7 @@
 
     <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" fx:id="detailVB">
         <Label text="Steps" labelFor="$stepsTV"/>
-        <TableView VBox.vgrow="ALWAYS" fx:id="stepsTV">
+        <TableView VBox.vgrow="ALWAYS" fx:id="stepsTV" prefHeight="350">
             <columns>
                 <TableColumn fx:id="stepOrderCol" text="#"/>
                 <TableColumn fx:id="stepDescriptionCol" text="Your steps ..."/>
@@ -64,6 +66,20 @@
             <Button text="Add Row" fx:id="stepsAddRowBtn"/>
             <Button text="Remove Row" fx:id="stepsRemoveRowBtn"/>
         </HBox>
+        <GridPane alignment="CENTER" fx:id="thumbnailGP">
+            <columnConstraints>
+                <ColumnConstraints percentWidth="80" hgrow="ALWAYS" />
+                <ColumnConstraints percentWidth="20"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints percentHeight="100" prefHeight="200"/>
+            </rowConstraints>
+            <ImageView GridPane.rowIndex="0" GridPane.columnIndex="0" fx:id="thumbnailIV"/>
+            <VBox GridPane.rowIndex="0" GridPane.columnIndex="1" spacing="10">
+                <Button text="New Picture" fx:id="newThumbnail"/>
+                <Button text="Delete Picture" fx:id="removeThumbnail"/>
+            </VBox>
+        </GridPane>
         <AnchorPane>
             <Button text="Save" AnchorPane.leftAnchor="0" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" fx:id="saveRecipeBtn"/>
             <Button text="Cancel" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" fx:id="cancelEditBtn"/>
