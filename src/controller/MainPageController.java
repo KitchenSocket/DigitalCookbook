@@ -24,7 +24,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
@@ -38,7 +40,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import model.Ingredient;
 import model.Recipe;
 import model.Step;
@@ -57,15 +62,22 @@ public class MainPageController extends TemplateController implements Initializa
 	
 	private int mainOrFavView = 0;
 
-
+	private VBox rightGrid; 
+	
+    private VBox tutor = new VBox();
 
 	public ArrayList<Recipe> recipeSearchResultsTVatLeft = new ArrayList<>();
 
 	public static Recipe selectedRecipe;
 
-
+	Label label = new Label("last");
 
 	final ToggleGroup group = new ToggleGroup();
+	
+	private int enterTime = 0;
+	
+    @FXML
+    private GridPane grid;
 	
     @FXML
     protected ImageView recipeImg;
@@ -132,8 +144,6 @@ public class MainPageController extends TemplateController implements Initializa
 		onePage.creatFile();
 		
 		System.out.println("Export PDF Successfully");
-		
-		JOptionPane.showMessageDialog(null, "Export suceeded!");  
     	
     }
 
@@ -245,6 +255,12 @@ public class MainPageController extends TemplateController implements Initializa
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
+
+	    
+	    showTutorView();
+	    
+
+		
 		if(mainOrFavView == 1){
 			
 			initialMainPage();
@@ -254,6 +270,8 @@ public class MainPageController extends TemplateController implements Initializa
 			initialFavView();
 			
 		}
+		
+
 
 
 
@@ -261,6 +279,64 @@ public class MainPageController extends TemplateController implements Initializa
 
 	}
 	
+	private void showTutorView()  {
+
+
+		
+	    grid.getChildren().remove(rightView);
+
+	    HBox upup = new HBox();
+	    
+	    upup.setMinHeight(0);
+	    
+	    HBox up = new HBox();
+	    
+	    VBox mittel = new VBox();
+	    
+	    mittel.setMinHeight(230);
+	    
+	    mittel.setVisible(true);
+	    
+	    HBox down = new HBox();
+	    
+	    ImageView clickImgView1 = new ImageView();
+	    
+	    ImageView clickImgView2 = new ImageView();
+	    
+	    clickImgView1.setImage(new Image(
+				new File("src/resources/click.png").toURI().toString(), 50, 50, false, false));
+	    
+	    clickImgView2.setImage(new Image(
+				new File("src/resources/click.png").toURI().toString(), 50, 50, false, false));
+	    
+	    up.getChildren().add(clickImgView1);
+	    
+	    Label tutorLabel1 = new Label("Type \"Hong\" and Click search button.");
+	    
+	    tutorLabel1.setFont(new Font("Arial", 18));
+	    
+	    tutorLabel1.setAlignment(Pos.BOTTOM_LEFT);
+	    
+	    up.getChildren().add(tutorLabel1);
+	    
+	    down.getChildren().add(clickImgView2);
+	    
+	    Label tutorLabel2 = new Label("Click one Recipe.");
+	    
+	    tutorLabel2.setFont(new Font("Arial", 18));
+	    
+	    tutorLabel2.setAlignment(Pos.BOTTOM_LEFT);
+	    
+	    down.getChildren().add(tutorLabel2);
+	    
+	    tutor.getChildren().addAll(upup,up,mittel,down);
+		
+	    grid.add(tutor, 1, 0);
+	    
+
+		
+	}
+
 	private void initialFavView() {
 
 		searchBtn.setGraphic(new ImageView(new Image(
@@ -271,7 +347,7 @@ public class MainPageController extends TemplateController implements Initializa
 
 		try {
 			
-			rightView.setOpacity(0);
+			
 
 			recipeSearchResultsTVatLeft = recipeDAO.getRecipeListByNameInFavorite("%");
 
@@ -302,7 +378,7 @@ public class MainPageController extends TemplateController implements Initializa
 
 		
 		
-		rightView.setOpacity(0);
+		
 
 		try {
 
@@ -366,7 +442,15 @@ public class MainPageController extends TemplateController implements Initializa
 			public void changed(ObservableValue<? extends AnchorPane> observable, AnchorPane oldValue,
 					AnchorPane newValue) {
 				
-
+				if(enterTime == 0){
+					
+				    grid.getChildren().remove(tutor);
+				    
+				    grid.add(rightView, 1, 0);
+				    
+				    enterTime++;
+					
+				}
 				
 
 				try {
@@ -402,7 +486,7 @@ public class MainPageController extends TemplateController implements Initializa
 					servingNumMinusBtn.setGraphic(new ImageView(
 							new Image(new File("src/resources/minus.png").toURI().toString(), 10, 2, false, false)));
 
-					rightView.setOpacity(1);
+					
 					// user
 					// clicked
 					
