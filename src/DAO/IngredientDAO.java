@@ -163,22 +163,22 @@ public class IngredientDAO {
         }
     }
     
-    /**
-     * update an Ingredient in database 
-     * 
-     * @param ingredient
-     */    
-    //TODO
-    public void updateIngredient(Ingredient ingredient){
-        SqlSession session = sqlSessionFactory.openSession();
-        try {
-        	IngredientOperation ingredientOperation=session.getMapper(IngredientOperation.class);
-        	ingredientOperation.updateIngredient(ingredient);
-            session.commit();
-        } finally {
-            session.close();
-        }
-    }
+//    /**
+//     * update an Ingredient in database 
+//     * 
+//     * @param ingredient
+//     */    
+//    //TODO
+//    public void updateIngredient(Ingredient ingredient){
+//        SqlSession session = sqlSessionFactory.openSession();
+//        try {
+//        	IngredientOperation ingredientOperation=session.getMapper(IngredientOperation.class);
+//        	ingredientOperation.updateIngredient(ingredient);
+//            session.commit();
+//        } finally {
+//            session.close();
+//        }
+//    }
     
     /**
      * update all the ingredients of a recipe

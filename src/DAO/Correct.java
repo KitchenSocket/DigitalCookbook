@@ -135,12 +135,12 @@ public class Correct {
 
 	}
 
-//	public static void main(String args[]) throws IOException {
-//		Scanner scan = new Scanner(System.in);
-//		// while(scan.hasNextLine()){
-//		String in = scan.nextLine().trim();
-//		System.out.println((new Correct("words.txt")).correct(in));
-//		// }
-//	}
+	public static void main(String args[]) throws IOException {
+		Scanner scan = new Scanner(System.in);
+		// while(scan.hasNextLine()){
+		String in = scan.nextLine().trim();
+		System.out.println((new Correct("words.txt")).correct(in));
+		// }
+	}
 
 }

@@ -51,15 +51,15 @@ public class RecipeDAO {
     	//Recipe r = new Recipe();
     	
     	RecipeDAO DAO=new RecipeDAO();
-    	//r = DAO.getRecipeById(1);
+    	Recipe r = DAO.getRecipeById(4);
     	//r.setCookingTime(90);
     	//DAO.getRecipeListByIngredientName("pork");
-    	System.out.println();
+    	System.out.println(r);
     	System.out.println("===============================");
     	System.out.println();
     	//DAO.getRecipeListByIngredientNameInFavorite("pork");
 
-    	DAO.getRecipeListByName("%");
+    	//DAO.getRecipeListByName("%");
     	//DAO.getRecipeListByName("yu xiang");
     	//DAO.getRecipeListByNameInFavorite("mapo dofu rou");
     	//DAO.getRecipeListByIngredientName("prok");

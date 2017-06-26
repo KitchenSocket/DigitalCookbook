@@ -16,6 +16,7 @@ public class Book {
 	final StepDAO stepDAO = new StepDAO();
 	
 	private String recipeName;
+	private String recipeThumbnail;
 	private int recipePreTime;
 	private int recipeCookTime;
 	private String recipeDescrip;
@@ -41,6 +42,10 @@ public class Book {
 
 	public String getRecipeName() {
 		return recipeName;
+	}
+
+	public String getRecipeThumbnail() {
+		return recipeThumbnail;
 	}
 
 	public int getRecipePreTime() {
@@ -71,6 +76,10 @@ public class Book {
 		this.recipeName = recipeName;
 	}
 
+	public void setRecipeThumbnail(String recipeThumbnail) {
+		this.recipeThumbnail = recipeThumbnail;
+	}
+	
 	public void setRecipePreTime(int recipePreTime) {
 		this.recipePreTime = recipePreTime;
 	}

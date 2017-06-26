@@ -9,12 +9,15 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.draw.DottedLineSeparator;
+import com.itextpdf.text.pdf.draw.LineSeparator;
 
 import model.Book;
 import model.Ingredient;
@@ -28,6 +31,8 @@ public class BookDAO {
 	private static Font bodyFont;
 
 	private static Font titleFont;
+	
+	private static Font subTitleFont;
 
 	// private static Font catFont;
 	// private static Font redFont;
@@ -44,6 +49,8 @@ public class BookDAO {
 		BaseFont base = BaseFont.createFont("resources/Ormont_Light.ttf", BaseFont.WINANSI, BaseFont.EMBEDDED);
 
 		titleFont = new Font(base, 40, Font.NORMAL);
+		
+		subTitleFont = new Font(Font.FontFamily.HELVETICA, 15, Font.BOLD);
 
 		// TODO set font
 		// catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
@@ -184,44 +191,74 @@ public class BookDAO {
 			Book page = new Book(recipe);
 
 			// set the title of this page(recipe name)
+			Paragraph placeHolder = new Paragraph(Chunk.NEWLINE);
 			Paragraph rName = new Paragraph(page.getRecipeName(), bodyFont);
 
-			rName.setAlignment(Element.ALIGN_CENTER);
+			// rName.setSpacingBefore(1000);
 
-			Chapter details = new Chapter(rName, 0);
+			// rName.setAlignment(Element.ALIGN_CENTER);
 
+			Chapter details = new Chapter(placeHolder, 0);
+
+			details.add(Chunk.NEWLINE);
+			details.add(rName);
 			details.setNumberDepth(0);
 
-			// preparation time, cooking time and description
+			// add image TODO 
+			// ------------------------------------------
+			// Image image = Image.getInstance(page.getRecipeThumbnail());
+			Image image = Image.getInstance("src/resources/pizza_img.png");
+			
+			image.setAbsolutePosition(400, 680);
+			
+			image.scaleToFit(150, 150);
+			
+			details.add(image);
+			// -------------------------------------------
+
+			// preparation time and cooking time
 			details.add(Chunk.NEWLINE);
 
-			details.add(new Paragraph(page.getRecipePreTime()));
+			details.add(new Paragraph(String.valueOf("Preparation time: " + page.getRecipePreTime())));
 
-			details.add(new Paragraph(page.getRecipeCookTime()));
+			details.add(new Paragraph(String.valueOf("Cooking time: " + page.getRecipeCookTime())));
+
+			details.add(new Chunk(new LineSeparator()));
+
+			// description
+			details.add(Chunk.NEWLINE);
 
 			details.add(new Paragraph(page.getRecipeDescrip()));
+
+			details.add(Chunk.NEWLINE);
 
 			// ingredients
 			details.add(Chunk.NEWLINE);
 
-			details.add(new Paragraph("Ingredient"));
+			details.add(new Paragraph("Ingredient",subTitleFont));
 
-			for (Ingredient ingredient : page.getIngredients()) {
+			details.add(new Chunk(new DottedLineSeparator()));
 
-				details.add(new Paragraph("-> " + ingredient.getName() + " " + ingredient.getQuantity() + " "
+			for (int i = 0; i < page.getIngredients().size(); i++) {
 
-						+ ingredient.getUnit() + "\n"));
+				details.add(new Paragraph(String.valueOf(i+1) + ". " + page.getIngredients().get(i).getName() + " "
+
+						+ page.getIngredients().get(i).getQuantity() + " "
+
+						+ page.getIngredients().get(i).getUnit() + "\n"));
 
 			}
 
 			// steps
 			details.add(Chunk.NEWLINE);
 
-			details.add(new Paragraph("Step"));
+			details.add(new Paragraph("Step",subTitleFont));
 
-			for (Step step : page.getSteps()) {
+			details.add(new Chunk(new DottedLineSeparator()));
 
-				details.add(new Paragraph(step.getStepOrder() + " " + step.getStepDescription()));
+			for (int i = 0; i < page.getSteps().size(); i++) {
+
+				details.add(new Paragraph(String.valueOf(i+1) + ". " + page.getSteps().get(i).getStepDescription()));
 
 			}
 

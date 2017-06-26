@@ -52,13 +52,14 @@ public class StepDAO {
     	StepDAO DAO=new StepDAO();
     	//DAO.getStepById(2);
     	//DAO.getStepListByDescription("prok");
+    	//DAO.deleteStepListByRecipeId(7);
+    	//DAO.updateStep(stepUpdate);
+    	//DAO.getStepListByDescription("prok");
     	//DAO.getStepByRecipeIdAndOrder(3, 1);
-    	DAO.deleteStepListByRecipeId(7);
     	//DAO.getStepListByDescription("prok");
-    	//DAO.getStepListByDescription("prok");
-    	//DAO.getStepByRecipeIdAndOrder(3, 1);
-    	//DAO.getStepListByDescription("prok");
-    	//DAO.getStepListByRecipyId(1);
+    	DAO.getStepListByRecipyId(1);
+
+    	
   }
     
     /**
@@ -195,22 +196,22 @@ public class StepDAO {
         }
     }
     
-    /**
-     * update a step in database 
-     * 
-     * @param step
-     */    
-    //TODO
-    public void updateStep(Step step){
-        SqlSession session = sqlSessionFactory.openSession();
-        try {
-        	StepOperation stepOperation=session.getMapper(StepOperation.class);
-        	stepOperation.updateStep(step);
-            session.commit();
-        } finally {
-            session.close();
-        }
-    }
+//    /**
+//     * update a step in database 
+//     * 
+//     * @param step
+//     */    
+//    //TODO
+//    public void updateStep(Step step){
+//        SqlSession session = sqlSessionFactory.openSession();
+//        try {
+//        	StepOperation stepOperation=session.getMapper(StepOperation.class);
+//        	stepOperation.updateStep(step);
+//            session.commit();
+//        } finally {
+//            session.close();
+//        }
+//    }
 
     /**
      * update all the steps of a recipe
