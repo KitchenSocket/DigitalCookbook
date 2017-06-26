@@ -132,6 +132,8 @@ public class MainPageController extends TemplateController implements Initializa
 		onePage.creatFile();
 		
 		System.out.println("Export PDF Successfully");
+		
+		JOptionPane.showMessageDialog(null, "Export suceeded!");  
     	
     }
 
