@@ -38,8 +38,7 @@ public class BriefRecipeInMainPageController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
-		recipeImg.setImage(new Image(
-				new File("src/resources/pizza_img.png").toURI().toString(), 80, 80, false, false));
+		
 		
 		//recipeImg.setImage(new Image( new File(eachBriefRecipe.getThumbnail()).toURI().toString(),  80, 80, false, false));
 		
@@ -60,6 +59,11 @@ public class BriefRecipeInMainPageController implements Initializable {
 		recipeName.setText(selectedRecipe.getName());
 		
 		recipeDescription.setText(textProcessingBeforeOutput());
+		
+				String uri ="src/resources/" +  selectedRecipe.getId() + ".png";
+		
+		recipeImg.setImage(new Image( new File(uri).toURI().toString(),  80, 80, false, false));
+		
 		
 	}
 	
