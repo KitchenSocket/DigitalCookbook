@@ -62,7 +62,6 @@ public class MainPageController extends TemplateController implements Initializa
 	
 	private int mainOrFavView = 0;
 
-	private VBox rightGrid; 
 	
     private VBox tutor = new VBox();
 
@@ -285,51 +284,51 @@ public class MainPageController extends TemplateController implements Initializa
 		
 	    grid.getChildren().remove(rightView);
 
-	    HBox upup = new HBox();
-	    
-	    upup.setMinHeight(0);
-	    
-	    HBox up = new HBox();
-	    
-	    VBox mittel = new VBox();
-	    
-	    mittel.setMinHeight(230);
-	    
-	    mittel.setVisible(true);
-	    
-	    HBox down = new HBox();
-	    
-	    ImageView clickImgView1 = new ImageView();
-	    
-	    ImageView clickImgView2 = new ImageView();
-	    
-	    clickImgView1.setImage(new Image(
-				new File("src/resources/click.png").toURI().toString(), 50, 50, false, false));
-	    
-	    clickImgView2.setImage(new Image(
-				new File("src/resources/click.png").toURI().toString(), 50, 50, false, false));
-	    
-	    up.getChildren().add(clickImgView1);
-	    
-	    Label tutorLabel1 = new Label("Type \"Hong\" and Click search button.");
-	    
-	    tutorLabel1.setFont(new Font("Arial", 18));
-	    
-	    tutorLabel1.setAlignment(Pos.BOTTOM_LEFT);
-	    
-	    up.getChildren().add(tutorLabel1);
-	    
-	    down.getChildren().add(clickImgView2);
-	    
-	    Label tutorLabel2 = new Label("Click one Recipe.");
-	    
-	    tutorLabel2.setFont(new Font("Arial", 18));
-	    
-	    tutorLabel2.setAlignment(Pos.BOTTOM_LEFT);
-	    
-	    down.getChildren().add(tutorLabel2);
-	    
-	    tutor.getChildren().addAll(upup,up,mittel,down);
+//	    HBox upup = new HBox();
+//	    
+//	    upup.setMinHeight(0);
+//	    
+//	    HBox up = new HBox();
+//	    
+//	    VBox mittel = new VBox();
+//	    
+//	    mittel.setMinHeight(230);
+//	    
+//	    mittel.setVisible(true);
+//	    
+//	    HBox down = new HBox();
+//	    
+//	    ImageView clickImgView1 = new ImageView();
+//	    
+//	    ImageView clickImgView2 = new ImageView();
+//	    
+//	    clickImgView1.setImage(new Image(
+//				new File("src/resources/click.png").toURI().toString(), 50, 50, false, false));
+//	    
+//	    clickImgView2.setImage(new Image(
+//				new File("src/resources/click.png").toURI().toString(), 50, 50, false, false));
+//	    
+//	    up.getChildren().add(clickImgView1);
+//	    
+//	    Label tutorLabel1 = new Label("Type \"Hong\" and Click search button.");
+//	    
+//	    tutorLabel1.setFont(new Font("Arial", 18));
+//	    
+//	    tutorLabel1.setAlignment(Pos.BOTTOM_LEFT);
+//	    
+//	    up.getChildren().add(tutorLabel1);
+//	    
+//	    down.getChildren().add(clickImgView2);
+//	    
+//	    Label tutorLabel2 = new Label("Click one Recipe.");
+//	    
+//	    tutorLabel2.setFont(new Font("Arial", 18));
+//	    
+//	    tutorLabel2.setAlignment(Pos.BOTTOM_LEFT);
+//	    
+//	    down.getChildren().add(tutorLabel2);
+//	    
+//	    tutor.getChildren().addAll(upup,up,mittel,down);
 		
 	    grid.add(tutor, 1, 0);
 	    
@@ -756,7 +755,7 @@ public class MainPageController extends TemplateController implements Initializa
 	 * @author Qiwen Gu
 	 */
 	@FXML
-	public void addFavRecipe(ActionEvent event) {
+	public void addFavRecipe(ActionEvent event) throws IOException {
 
 		int isFav = selectedRecipe.getIsFavorite();
 
@@ -764,6 +763,8 @@ public class MainPageController extends TemplateController implements Initializa
 
 			int favorite = JOptionPane.showConfirmDialog(null, "Remove this recipe from Favorite?", null, JOptionPane.YES_NO_OPTION);// Jpane check
 
+			//TemplateController.loadContent("/view/MainOrFavView.fxml", "Fav");
+			
 		if (favorite == JOptionPane.YES_OPTION) {
 
 				System.out.print(selectedRecipe.getName() + " remove favorite ");
@@ -774,6 +775,8 @@ public class MainPageController extends TemplateController implements Initializa
 				recipeDAO.removeFavorite(selectedRecipe.getId());
 
 				selectedRecipe.setIsFavorite(0);
+				
+				TemplateController.loadContent("/view/MainOrFavView.fxml", "Fav");
 
 		}
 
@@ -829,10 +832,17 @@ public class MainPageController extends TemplateController implements Initializa
 			myStepDAO.deleteStepListByRecipeId(selectedRecipe.getId());
 			myIngredientDAO.deleteIngredientListByRecipeId(selectedRecipe.getId());
 			
-			ArrayList<Recipe> results = recipeDAO.getRecipeListByName("%");
+
 
 			try {
-				showRecipeList(results);
+				if(mainOrFavView ==1 ){
+					
+					TemplateController.loadContent("/view/MainOrFavView.fxml", "Main");
+				} else if(mainOrFavView ==2){
+					
+					TemplateController.loadContent("/view/MainOrFavView.fxml", "Fav");
+					
+				}
 				
 				
 				rightView.setOpacity(0);
