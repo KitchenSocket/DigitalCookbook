@@ -68,7 +68,7 @@ public class BriefRecipeInMainPageController implements Initializable {
 			
 			
 		} else {
-			recipeImg.setImage(new Image( new File(selectedRecipe.getThumbnail()).toURI().toString(),  80, 80, false, false));
+			recipeImg.setImage(new Image( new File("src/resources/" + selectedRecipe.getThumbnail()).toURI().toString(),  80, 80, false, false));
 			
 			
 		}

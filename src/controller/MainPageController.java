@@ -479,7 +479,7 @@ public class MainPageController extends TemplateController implements Initializa
 						
 						
 					} else {
-						recipeImg.setImage(new Image( new File(selectedRecipe.getThumbnail()).toURI().toString(),  80, 80, false, false));
+						recipeImg.setImage(new Image( new File("src/resources/" + selectedRecipe.getThumbnail()).toURI().toString(),  80, 80, false, false));
 						
 						
 					}
