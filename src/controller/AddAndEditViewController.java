@@ -55,7 +55,8 @@ public class AddAndEditViewController {
 	private StepDAO myStepDAO = new StepDAO();
 
 	private FileChooser fileChooser = new FileChooser();
-	private String thumbnailURL;
+	private Path thumbnailPath;
+	private String thumbnailName;
 
 	@FXML
 	private TableView<Ingredient> ingredientsTV;
@@ -273,13 +274,13 @@ public class AddAndEditViewController {
 			File file = fileChooser.showOpenDialog(Template.primaryStage);
 
 			if (file != null) {
-				displayPicture(file);
+				showThumbnail(file);
 			}
 		});
 
 		removeThumbnail.setOnAction(event -> {
 			thumbnailIV.setImage(null);
-			thumbnailURL = "";
+			thumbnailPath = null;
 		});
 
 		ingredientsAddRowBtn.setFocusTraversable(false);
@@ -369,8 +370,6 @@ public class AddAndEditViewController {
 
 				optimize();
 
-
-
 				if (isNew) {
 					myRecipeDAO.addRecipe(newRecipe);
 
@@ -394,28 +393,22 @@ public class AddAndEditViewController {
 					myIngredientDAO.updateIngredients(new ArrayList<>(ingredients));
 				}
 				
-//				if(thumbnailURL != null && !thumbnailURL.equals("")) {
-//					File projectFile = new File("");
-//					String destination = projectFile.getCanonicalPath() + "\\src\\resources\\" + newRecipe.getId()+ ".png";
-//					Path destinationPath = Paths.get(destination);
-//					Path originalPath = Paths.get(thumbnailURL.substring(6));
-//					Files.copy(originalPath, destinationPath, REPLACE_EXISTING);
-//				}
 				
-				if (thumbnailURL != null && !thumbnailURL.equals("")) {
-					String source = thumbnailURL.substring(6);
-					File srcFile = new File(source);
+				if (thumbnailPath != null && !thumbnailPath.equals("")) {
+					File srcFile = new File(thumbnailPath.toString());
 					File projectFile = new File("");
-					String destination = projectFile.getCanonicalPath() + "\\src\\resources\\" + newRecipe.getId()+ ".png";
-					//System.out.println(destination);
-					newRecipe.setThumbnail(destination);
+					String extension = new String(thumbnailPath.toString().substring(thumbnailPath.toString().lastIndexOf('.')));
+					thumbnailName = newRecipe.getId() + extension;
+					String destination = projectFile.getCanonicalPath() + "\\src\\resources\\" + newRecipe.getId() + extension;
+					
+					
+					newRecipe.setThumbnail(thumbnailName);
 					File desFile = new File(destination);
 					try {
 						copyThumbnail(srcFile, desFile);
 					} catch (Exception e) {
 						e.printStackTrace();
-					} 
-
+					}
 				}
 				
 			}
@@ -775,20 +768,22 @@ public class AddAndEditViewController {
 				.addAll(new FileChooser.ExtensionFilter("Image", "*.jpeg", "*.jpg", "*.png", "*.bmp"));
 	}
 
-	private void displayPicture(File file) {
+	private void showThumbnail(File file) {
+		thumbnailPath = Paths.get(file.toURI());
+		if (thumbnailIV.getImage() != null) {
+			thumbnailIV.setImage(null);
+		}
+		System.out.println(thumbnailPath);
 		try {
-			thumbnailURL = file.toURI().toURL().toString();
-			if (thumbnailIV.getImage() != null) {
-				thumbnailIV.setImage(null);
-			}
-			thumbnailIV.setImage(new Image(thumbnailURL));
-			thumbnailIV.setPreserveRatio(true);
-			thumbnailIV.setSmooth(true);
-			thumbnailIV.setCache(true);
-
+			thumbnailIV.setImage(new Image(thumbnailPath.toUri().toURL().toString()));
 		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			//System.out.println(thumbnailPath.toUri().toURL().toString());
 			e.printStackTrace();
 		}
+		thumbnailIV.setPreserveRatio(true);
+		thumbnailIV.setSmooth(true);
+		thumbnailIV.setCache(true);
 
 	}
 

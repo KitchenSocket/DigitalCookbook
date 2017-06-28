@@ -7,7 +7,7 @@
 <GridPane alignment="CENTER" hgap="0" vgap="0"
           xmlns:fx="http://javafx.com/fxml"
           fx:id="frameGrid" minHeight="500" minWidth="800"
-          stylesheets="/stylesheet/AddAndEdit.css">
+          >
     <columnConstraints>
         <ColumnConstraints prefWidth="420" hgrow="ALWAYS" fx:id="listCol"/>
         <ColumnConstraints prefWidth="500" hgrow="ALWAYS" fx:id="detailCol"/>
