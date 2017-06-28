@@ -1,5 +1,6 @@
 package DAO;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,6 +20,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.DottedLineSeparator;
 import com.itextpdf.text.pdf.draw.LineSeparator;
 
+import javafx.application.HostServices;
 import model.Book;
 import model.Ingredient;
 import model.Recipe;
@@ -31,7 +33,7 @@ public class BookDAO {
 	private static Font bodyFont;
 
 	private static Font titleFont;
-	
+
 	private static Font subTitleFont;
 
 	// private static Font catFont;
@@ -60,6 +62,28 @@ public class BookDAO {
 		// smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
 		// courier = new Font(Font.FontFamily.COURIER, 18, Font.ITALIC |
 		// Font.UNDERLINE);
+	}
+	
+	/**
+	 * create a file and add content
+	 * 
+	 * @author CHANDIM
+	 */
+	public void showFile() {
+		try {
+			
+			 File pdfFile = new File("C:\\Users\\asus\\git\\DigitalCookbook\\myCookBook.pdf");
+
+
+			Desktop.getDesktop().open(pdfFile);
+
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+
 	}
 
 	/**
@@ -207,7 +231,7 @@ public class BookDAO {
 			// add image TODO 
 			// ------------------------------------------
 			// Image image = Image.getInstance(page.getRecipeThumbnail());
-			Image image = Image.getInstance("src/resources/pizza_img.png");
+			Image image = Image.getInstance(recipe.getThumbnail());
 			
 			image.setAbsolutePosition(400, 680);
 			
