@@ -930,7 +930,7 @@ public class MainPageController extends TemplateController implements Initializa
 			
 			outputText+= text[i];
 			
-			if(i%60 == 0 && i != 0){
+			if(i%80 == 0 && i != 0){
 				
 				outputText+= "-\n";
 				

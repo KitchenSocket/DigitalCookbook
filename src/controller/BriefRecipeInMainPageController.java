@@ -91,7 +91,7 @@ public class BriefRecipeInMainPageController implements Initializable {
 					
 				}
 				
-				if(i > 50){
+				if(i > 65){
 					
 					outputText+= "...";
 					
