@@ -55,7 +55,7 @@ public class AddAndEditViewController {
 	private StepDAO myStepDAO = new StepDAO();
 
 	private FileChooser fileChooser = new FileChooser();
-	private Path thumbnailPath;
+	private Path thumbnailSourcePath;
 	private String thumbnailName;
 
 	@FXML
@@ -262,7 +262,7 @@ public class AddAndEditViewController {
 		saveRecipeBtn.setOnAction(event -> {
 			try {
 				saveRecipe();
-			} catch (IOException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		});
@@ -285,7 +285,7 @@ public class AddAndEditViewController {
 
 		removeThumbnail.setOnAction(event -> {
 			thumbnailIV.setImage(null);
-			thumbnailPath = null;
+			thumbnailSourcePath = null;
 		});
 
 		ingredientsAddRowBtn.setFocusTraversable(false);
@@ -331,7 +331,7 @@ public class AddAndEditViewController {
 		}
 	}
 
-	private void saveRecipe() throws IOException {
+	private void saveRecipe() throws Exception {
 		if (!isValid()) {
 			return;
 		}
@@ -372,11 +372,33 @@ public class AddAndEditViewController {
 				newRecipe.setDescription(description);
 				newRecipe.setIsFavorite(isFavorite);
 
+//				if (thumbnailSourcePath != null && !thumbnailSourcePath.equals("")) {
+//					File srcFile = new File(thumbnailSourcePath.toString());
+//					File projectFile = new File("");
+//					String extension = new String(thumbnailSourcePath.toString().substring(thumbnailSourcePath.toString().lastIndexOf('.')));
+//					thumbnailName = newRecipe.getId() + extension;
+//					String destination = projectFile.getCanonicalPath() + "\\src\\resources\\" + newRecipe.getId() + extension;
+//					
+//					newRecipe.setThumbnail(thumbnailName);
+//					
+//					File desFile = new File(destination);
+//					try {
+//						copyThumbnail(srcFile, desFile);
+//					} catch (Exception e) {
+//						e.printStackTrace();
+//					}
+//				} else {
+//					newRecipe.setThumbnail("");
+//				}
+				
 				optimize();
-
+				
 				if (isNew) {
 					myRecipeDAO.addRecipe(newRecipe);
-
+					copyThumbnail(thumbnailSourcePath, newRecipe.getId());
+					newRecipe.setThumbnail(thumbnailName);
+					myRecipeDAO.updateRecipe(newRecipe);
+					
 					for (Step step : steps) {
 						step.setRecipeId(newRecipe.getId());
 						System.out.println(newRecipe.getId());
@@ -388,34 +410,18 @@ public class AddAndEditViewController {
 						System.out.println(newRecipe.getId());
 						myIngredientDAO.addIngredient(ingredient);
 					}
+					
 				} else {
 					isFavorite = MainPageController.selectedRecipe.getIsFavorite();
 					newRecipe.setIsFavorite(isFavorite);
 					newRecipe.setId(recipe.getId());
+					copyThumbnail(thumbnailSourcePath, newRecipe.getId());
+					newRecipe.setThumbnail(thumbnailName);
 					myRecipeDAO.updateRecipe(newRecipe);
 					myStepDAO.updateSteps(new ArrayList<>(steps));
 					myIngredientDAO.updateIngredients(new ArrayList<>(ingredients));
 				}
 				
-				
-				if (thumbnailPath != null && !thumbnailPath.equals("")) {
-					File srcFile = new File(thumbnailPath.toString());
-					File projectFile = new File("");
-					String extension = new String(thumbnailPath.toString().substring(thumbnailPath.toString().lastIndexOf('.')));
-					thumbnailName = newRecipe.getId() + extension;
-					String destination = projectFile.getCanonicalPath() + "\\src\\resources\\" + newRecipe.getId() + extension;
-					
-					
-					newRecipe.setThumbnail(thumbnailName);
-					File desFile = new File(destination);
-					try {
-						copyThumbnail(srcFile, desFile);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				} else {
-					newRecipe.setThumbnail("");
-				}
 				TemplateController.loadContent("/view/MainOrFavView.fxml", "Main");
 			}
 
@@ -638,8 +644,10 @@ public class AddAndEditViewController {
 		descriptionFld.setText(description);
 		
 		if(selectedRecipe.getThumbnail() != null && !selectedRecipe.getThumbnail().equals("")) {
-			thumbnailPath = Paths.get("/src/resources/" + selectedRecipe.getThumbnail());
+			
+			Path thumbnailPath = Paths.get("src/resources/" + selectedRecipe.getThumbnail());
 			thumbnailIV.setImage(new Image(thumbnailPath.toUri().toURL().toString()));
+			thumbnailIV.setPreserveRatio(true);
 		}
 
 		initIngredientsTV(ingredients);
@@ -779,16 +787,16 @@ public class AddAndEditViewController {
 	}
 
 	private void showThumbnail(File file) {
-		thumbnailPath = Paths.get(file.toURI());
+		thumbnailSourcePath = Paths.get(file.toURI());
 		if (thumbnailIV.getImage() != null) {
 			thumbnailIV.setImage(null);
 		}
-		System.out.println(thumbnailPath);
+		System.out.println(thumbnailSourcePath);
 		try {
-			thumbnailIV.setImage(new Image(thumbnailPath.toUri().toURL().toString()));
+			thumbnailIV.setImage(new Image(thumbnailSourcePath.toUri().toURL().toString()));
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
-			//System.out.println(thumbnailPath.toUri().toURL().toString());
+			//System.out.println(thumbnailSourcePath.toUri().toURL().toString());
 			e.printStackTrace();
 		}
 		thumbnailIV.setPreserveRatio(true);
@@ -848,4 +856,59 @@ public class AddAndEditViewController {
 		}
 	}
 
+	public void copyThumbnail(Path sourcePath, int newRecipeId) throws Exception {
+		if (sourcePath != null && !sourcePath.equals("")) {
+			File srcFile = new File(sourcePath.toString());
+			File projectFile = new File("");
+			String extension = new String(sourcePath.toString().substring(sourcePath.toString().lastIndexOf('.')));
+			
+			thumbnailName = newRecipeId + extension;
+			
+			String destination = projectFile.getCanonicalPath() + "\\src\\resources\\" + thumbnailName;
+			
+			File desFile = new File(destination);
+			
+			byte[] buffer = new byte[1024];
+			int dataNum;
+			FileInputStream fis;
+			FileOutputStream fos;
+			if (srcFile.isDirectory()) {
+				String filepath = srcFile.getAbsolutePath();
+				filepath = filepath.replaceAll("\\\\", "/");
+				String toFilepath = desFile.getAbsolutePath();
+				toFilepath = toFilepath.replaceAll("\\\\", "/");
+				int lastIndex = filepath.lastIndexOf("/");
+				toFilepath = toFilepath + filepath.substring(lastIndex, filepath.length());
+				File copy = new File(toFilepath);
+				if (!copy.exists()) {
+					copy.mkdir();
+				}
+				for (File f : srcFile.listFiles()) {
+					copyThumbnail(f, copy);
+				}
+			} else {
+				if (desFile.isDirectory()) {
+					String filepath = srcFile.getAbsolutePath();
+					filepath = filepath.replaceAll("\\\\", "/");
+					String toFilepath = desFile.getAbsolutePath();
+					toFilepath = toFilepath.replaceAll("\\\\", "/");
+					int lastIndex = filepath.lastIndexOf("/");
+					toFilepath = toFilepath + filepath.substring(lastIndex, filepath.length());
+					File newFile = new File(toFilepath);
+					fis = new FileInputStream(srcFile);
+					fos = new FileOutputStream(newFile);
+					while ((dataNum = fis.read(buffer)) != -1) {
+						fos.write(buffer, 0, dataNum);
+					}
+				} else {
+					fis = new FileInputStream(srcFile);
+					fos = new FileOutputStream(desFile);
+					while ((dataNum = fis.read(buffer)) != -1) {
+						fos.write(buffer, 0, dataNum);
+					}
+				}
+			}
+		}
+			
+	}
 }
