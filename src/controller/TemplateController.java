@@ -69,7 +69,7 @@ public class TemplateController implements Initializable {
         
         mainPageBtn.setOnAction(event -> {
             try {
-            	createTimeDaemon(1.3).start();
+            	createTimeDaemon(0.7).start();
             	threeBtnColorClear();
             	mainPageBtn.setStyle("-fx-background-color: #FFFFFF;");
 
@@ -81,7 +81,7 @@ public class TemplateController implements Initializable {
 
         favBtn.setOnAction(event -> {
             try {
-            	createTimeDaemon(1).start();
+            	createTimeDaemon(0.3).start();
             	threeBtnColorClear();
             	favBtn.setStyle("-fx-background-color: #FFFFFF;"); 
             	

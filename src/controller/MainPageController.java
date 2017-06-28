@@ -472,7 +472,7 @@ public class MainPageController extends TemplateController implements Initializa
 					
 					String uri ="src/resources/" +  selectedRecipe.getId() + ".png";
 					
-					recipeImg.setImage(new Image( new File(uri).toURI().toString(),  80, 80, false, false));
+					recipeImg.setImage(new Image( new File(selectedRecipe.getThumbnail()).toURI().toString(),  80, 80, false, false));
 					
 					editRecipeBtn.setGraphic(
 							new ImageView(new Image(new File("src/resources/edit.png").toURI().toString(), 30, 32, false, false)));

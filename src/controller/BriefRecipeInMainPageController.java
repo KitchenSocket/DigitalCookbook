@@ -52,7 +52,7 @@ public class BriefRecipeInMainPageController implements Initializable {
 		
 	}
 	
-	public void setSelectedRecipe(Recipe selectedRecipe){
+	public void setSelectedRecipe(Recipe selectedRecipe) throws NullPointerException{
 		
 		this.selectedRecipe = selectedRecipe;
 		
@@ -62,7 +62,7 @@ public class BriefRecipeInMainPageController implements Initializable {
 		
 				String uri ="src/resources/" +  selectedRecipe.getId() + ".png";
 		
-		recipeImg.setImage(new Image( new File(uri).toURI().toString(),  80, 80, false, false));
+		recipeImg.setImage(new Image( new File(selectedRecipe.getThumbnail()).toURI().toString(),  80, 80, false, false));
 		
 		
 	}
