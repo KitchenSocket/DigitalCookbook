@@ -52,6 +52,8 @@ public class TemplateController implements Initializable {
     
 
 
+    @FXML
+    private Button startBtn;
 
     
     @Override
@@ -66,6 +68,18 @@ public class TemplateController implements Initializable {
         addRecipeBtn.setGraphic(new ImageView(new Image( new File("src/resources/add_recipe_btn.png").toURI().toString(),  31, 31, false, false)));
 
         threeBtnColorClear();
+        
+        startBtn.setOnAction(event -> {
+            try {
+            	createTimeDaemon(0.7).start();
+            	threeBtnColorClear();
+            	mainPageBtn.setStyle("-fx-background-color: #FFFFFF;");
+
+                loadContent("../view/MainOrFavView.fxml", "Main");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
         
         mainPageBtn.setOnAction(event -> {
             try {
