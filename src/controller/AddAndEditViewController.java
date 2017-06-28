@@ -117,7 +117,12 @@ public class AddAndEditViewController {
 		initThumbnail();
 		System.out.println("initializing ...");
 		if (recipe != null) {
-			initData();
+			try {
+				initData();
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+				System.out.println("error loading thumbnail.");
+			}
 		} else {
 			initFakeData();
 		}
@@ -331,7 +336,6 @@ public class AddAndEditViewController {
 			return;
 		}
 
-		// TODO implement save recipe
 		Alert saveConfirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
 		saveConfirmAlert.setTitle("Confirmation");
 		saveConfirmAlert.setHeaderText("Do you want to save?");
@@ -409,11 +413,13 @@ public class AddAndEditViewController {
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
+				} else {
+					newRecipe.setThumbnail("");
 				}
-				
+				TemplateController.loadContent("/view/MainOrFavView.fxml", "Main");
 			}
 
-			TemplateController.loadContent("/view/MainOrFavView.fxml", "Main");
+			
 		}
 	}
 
@@ -605,7 +611,7 @@ public class AddAndEditViewController {
 		return -1;
 	}
 
-	private void initData() {
+	private void initData() throws MalformedURLException {
 		if (isNew) {
 			initFakeData();
 			return;
@@ -621,7 +627,6 @@ public class AddAndEditViewController {
 		ArrayList<Ingredient> ingredientList = myIngredientDAO.getIngredientListByRecipyId(selectedRecipeId);
 		String briefDescription = String.valueOf(selectedRecipe.getBriefDescription());
 		String description = String.valueOf(selectedRecipe.getDescription());
-		// String isFavorite = String.valueOf(selectedRecipe.getIsFavorite());
 
 		titleFld.setText(selectedRecipe.getName());
 		servingsFld.setText(servingNumber);
@@ -631,6 +636,11 @@ public class AddAndEditViewController {
 		steps.addAll(stepList);
 		briefDescriptionFld.setText(briefDescription);
 		descriptionFld.setText(description);
+		
+		if(selectedRecipe.getThumbnail() != null && !selectedRecipe.getThumbnail().equals("")) {
+			thumbnailPath = Paths.get("/src/resources/" + selectedRecipe.getThumbnail());
+			thumbnailIV.setImage(new Image(thumbnailPath.toUri().toURL().toString()));
+		}
 
 		initIngredientsTV(ingredients);
 		initStepsTV(steps);
