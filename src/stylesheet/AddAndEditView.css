@@ -16,7 +16,8 @@
 }
 
 #frameGrid {
-    -fx-padding: 8px;
+    -fx-padding: 8px 0px 0px 0px;
+    -fx-hgap: 8px;
 }
 
 .text-area {

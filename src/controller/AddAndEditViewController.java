@@ -295,6 +295,7 @@ public class AddAndEditViewController {
         removeThumbnailBtn.setOnAction(event -> {
             thumbnailIV.setImage(null);
 			thumbnailSourcePath = null;
+            thumbnailName = "";
             newThumbnailBtn.setText("New Picture");
         });
 
@@ -657,9 +658,9 @@ public class AddAndEditViewController {
 		steps.addAll(stepList);
 		briefDescriptionFld.setText(briefDescription);
 		descriptionFld.setText(description);
+        thumbnailName = selectedRecipe.getThumbnail();
 
-        showThumbnail(selectedRecipe.getThumbnail());
-
+        showThumbnail(thumbnailName);
 
 		initIngredientsTV(ingredients);
 		initStepsTV(steps);
@@ -806,12 +807,10 @@ public class AddAndEditViewController {
         try {
             thumbnailIV.setImage(new Image(thumbnailSourcePath.toUri().toURL().toString()));
         } catch (MalformedURLException e) {
-
             e.printStackTrace();
         }
         thumbnailIV.setPreserveRatio(true);
         thumbnailIV.setSmooth(true);
-        thumbnailIV.setCache(true);
     }
 
     private void showThumbnail(String thumbnailName) {
