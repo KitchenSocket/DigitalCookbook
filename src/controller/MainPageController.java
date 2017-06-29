@@ -598,11 +598,11 @@ public class MainPageController extends TemplateController implements Initializa
 
 					RecipeDAO recipeDAO = new RecipeDAO();
 
-					ArrayList<Recipe> results = recipeDAO.getRecipeListByName(searchbar.getText());
+					recipeSearchResultsTVatLeft = recipeDAO.getRecipeListByName(searchbar.getText());
 
-					if (checkSearchResult(results)) {
+					if (checkSearchResult(recipeSearchResultsTVatLeft)) {
 
-						showRecipeList(results);
+						showRecipeList(recipeSearchResultsTVatLeft);
 
 					}
 
