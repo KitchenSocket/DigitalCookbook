@@ -1,0 +1,49 @@
+#thumbnailIV {
+    -fx-opacity: 1;
+}
+
+#thumbnailRec {
+    -fx-stroke: wheat;
+    -fx-stroke-width: 2px;
+    -fx-stroke-dash-array: 12 4 6 4;
+    -fx-stroke-dash-offset: 2;
+
+    -fx-fill: transparent;
+}
+
+#thumbnailBtnVB {
+    -fx-spacing: 40px;
+}
+
+#frameGrid {
+    -fx-padding: 8px;
+}
+
+.text-area {
+    -fx-wrap-text: true;
+}
+
+.label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.button {
+    -fx-font-size: 12px;
+    -fx-pref-width: 100px;
+    -fx-pref-height: 20px;
+    -fx-text-fill: white;
+    -fx-background-color: #f5d677;
+    -fx-background-radius: 0;
+}
+
+.button:hover {
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.button:pressed {
+    -fx-stroke: black;
+    -fx-stroke-type: inside;
+    -fx-stroke-width: 3px;
+}

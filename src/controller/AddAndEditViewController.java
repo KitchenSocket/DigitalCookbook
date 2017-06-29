@@ -16,6 +16,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
 import javafx.util.StringConverter;
 import model.Ingredient;
@@ -28,8 +30,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
-import static java.nio.file.StandardCopyOption.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -58,6 +58,11 @@ public class AddAndEditViewController {
 	private Path thumbnailSourcePath;
 	private String thumbnailName;
 
+    @FXML
+    private GridPane frameGrid;
+    @FXML
+    private VBox detailVB;
+
 	@FXML
 	private TableView<Ingredient> ingredientsTV;
 	@FXML
@@ -80,6 +85,8 @@ public class AddAndEditViewController {
 	private ImageView thumbnailIV;
 	@FXML
 	private GridPane thumbnailGP;
+    @FXML
+    private Rectangle thumbnailRec;
 
 	@FXML
 	private Button ingredientsAddRowBtn;
@@ -94,9 +101,9 @@ public class AddAndEditViewController {
 	@FXML
 	private Button cancelEditBtn;
 	@FXML
-	private Button newThumbnail;
-	@FXML
-	private Button removeThumbnail;
+    private Button newThumbnailBtn;
+    @FXML
+    private Button removeThumbnailBtn;
 
 	@FXML
 	private TextField titleFld;
@@ -114,7 +121,7 @@ public class AddAndEditViewController {
 	@FXML
 	private void initialize() {
 		initBtns();
-		initThumbnail();
+
 		System.out.println("initializing ...");
 		if (recipe != null) {
 			try {
@@ -126,7 +133,8 @@ public class AddAndEditViewController {
 		} else {
 			initFakeData();
 		}
-	}
+        initThumbnail();
+    }
 
 	private void initIngredientsTV(ObservableList<Ingredient> ingredientsObservableList) {
 
@@ -274,19 +282,21 @@ public class AddAndEditViewController {
 			}
 		});
 
-		newThumbnail.setOnAction(event -> {
-			configurePictureFileChooser(fileChooser);
+        newThumbnailBtn.setOnAction(event -> {
+            configurePictureFileChooser(fileChooser);
 			File file = fileChooser.showOpenDialog(Template.primaryStage);
 
 			if (file != null) {
 				showThumbnail(file);
-			}
+                newThumbnailBtn.setText("Change Picture");
+            }
 		});
 
-		removeThumbnail.setOnAction(event -> {
-			thumbnailIV.setImage(null);
+        removeThumbnailBtn.setOnAction(event -> {
+            thumbnailIV.setImage(null);
 			thumbnailSourcePath = null;
-		});
+            newThumbnailBtn.setText("New Picture");
+        });
 
 		ingredientsAddRowBtn.setFocusTraversable(false);
 		ingredientsRemoveRowBtn.setFocusTraversable(false);
@@ -295,9 +305,14 @@ public class AddAndEditViewController {
 	}
 
 	private void initThumbnail() {
-		thumbnailIV.fitWidthProperty().bind(thumbnailGP.widthProperty().multiply(0.8));
-		thumbnailIV.fitHeightProperty().bind(thumbnailGP.heightProperty());
-	}
+        thumbnailGP.prefWidthProperty().bind(frameGrid.widthProperty().multiply(0.58));
+
+        thumbnailIV.fitWidthProperty().bind(frameGrid.widthProperty().multiply(0.58).multiply(0.8));
+        thumbnailIV.fitHeightProperty().bind(detailVB.heightProperty().multiply(0.5));
+
+        thumbnailRec.widthProperty().bind(frameGrid.widthProperty().multiply(0.58).multiply(0.8));
+        thumbnailRec.heightProperty().bind(detailVB.heightProperty().multiply(0.5));
+    }
 
 	private void addRow(TableView tableView) {
 		TablePosition pos = tableView.getFocusModel().getFocusedCell();
@@ -642,23 +657,19 @@ public class AddAndEditViewController {
 		steps.addAll(stepList);
 		briefDescriptionFld.setText(briefDescription);
 		descriptionFld.setText(description);
-		
-		if(selectedRecipe.getThumbnail() != null && !selectedRecipe.getThumbnail().equals("")) {
-			
-			Path thumbnailPath = Paths.get("src/resources/" + selectedRecipe.getThumbnail());
-			thumbnailIV.setImage(new Image(thumbnailPath.toUri().toURL().toString()));
-			thumbnailIV.setPreserveRatio(true);
-		}
+
+        showThumbnail(selectedRecipe.getThumbnail());
+
 
 		initIngredientsTV(ingredients);
 		initStepsTV(steps);
 	}
 
 	private void initFakeData() {
-		ingredients.addAll(new Ingredient("Please edit here", 0, "... and here"), new Ingredient("name", 0, "unit"),
-				new Ingredient("", 0, ""));
+        ingredients.addAll(new Ingredient("Name", 0, "unit"), new Ingredient("", 0, ""),
+                new Ingredient("", 0, ""));
 
-		steps.addAll(new Step(1, "Please edit step here"), new Step(2, "... more steps"), new Step(3, "... and more"));
+        steps.addAll(new Step(1, "Your step description"), new Step(2, ""), new Step(3, ""));
 
 		initIngredientsTV(ingredients);
 		initStepsTV(steps);
@@ -786,24 +797,35 @@ public class AddAndEditViewController {
 				.addAll(new FileChooser.ExtensionFilter("Image", "*.jpeg", "*.jpg", "*.png", "*.bmp"));
 	}
 
-	private void showThumbnail(File file) {
-		thumbnailSourcePath = Paths.get(file.toURI());
-		if (thumbnailIV.getImage() != null) {
-			thumbnailIV.setImage(null);
-		}
-		System.out.println(thumbnailSourcePath);
-		try {
-			thumbnailIV.setImage(new Image(thumbnailSourcePath.toUri().toURL().toString()));
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			//System.out.println(thumbnailSourcePath.toUri().toURL().toString());
-			e.printStackTrace();
-		}
-		thumbnailIV.setPreserveRatio(true);
-		thumbnailIV.setSmooth(true);
-		thumbnailIV.setCache(true);
+    private void showThumbnail(File file) {
+        thumbnailSourcePath = Paths.get(file.toURI());
+        if (thumbnailIV.getImage() != null) {
+            thumbnailIV.setImage(null);
+        }
+        System.out.println(thumbnailSourcePath);
+        try {
+            thumbnailIV.setImage(new Image(thumbnailSourcePath.toUri().toURL().toString()));
+        } catch (MalformedURLException e) {
 
-	}
+            e.printStackTrace();
+        }
+        thumbnailIV.setPreserveRatio(true);
+        thumbnailIV.setSmooth(true);
+        thumbnailIV.setCache(true);
+    }
+
+    private void showThumbnail(String thumbnailName) {
+        if (thumbnailName != null && !thumbnailName.equals("")) {
+            Path thumbnailPath = Paths.get("src/resources/" + thumbnailName);
+            try {
+                thumbnailIV.setImage(new Image(thumbnailPath.toUri().toURL().toString()));
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            thumbnailIV.setPreserveRatio(true);
+            thumbnailIV.setSmooth(true);
+        }
+    }
 
 	public void setRecipe(Recipe recipe) {
 		this.recipe = recipe;

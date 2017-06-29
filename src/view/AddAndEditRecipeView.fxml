@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Rectangle?>
 <GridPane alignment="CENTER" hgap="0" vgap="0"
           xmlns:fx="http://javafx.com/fxml"
           fx:id="frameGrid" minHeight="500" minWidth="800"
-          >
+          stylesheets="/stylesheet/AddAndEditView.css">
     <columnConstraints>
-        <ColumnConstraints prefWidth="420" hgrow="ALWAYS" fx:id="listCol"/>
-        <ColumnConstraints prefWidth="500" hgrow="ALWAYS" fx:id="detailCol"/>
+        <ColumnConstraints percentWidth="42" hgrow="ALWAYS" fx:id="listCol"/>
+        <ColumnConstraints percentWidth="58" hgrow="ALWAYS" fx:id="detailCol"/>
     </columnConstraints>
     <rowConstraints>
         <RowConstraints percentHeight="100" fx:id="frameRow"/>
@@ -56,7 +56,7 @@
 
     <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" fx:id="detailVB">
         <Label text="Steps" labelFor="$stepsTV"/>
-        <TableView VBox.vgrow="ALWAYS" fx:id="stepsTV" prefHeight="350">
+        <TableView fx:id="stepsTV" prefHeight="350">
             <columns>
                 <TableColumn fx:id="stepOrderCol" text="#"/>
                 <TableColumn fx:id="stepDescriptionCol" text="Your steps ..."/>
@@ -74,10 +74,14 @@
             <rowConstraints>
                 <RowConstraints percentHeight="100" prefHeight="200"/>
             </rowConstraints>
-            <ImageView GridPane.rowIndex="0" GridPane.columnIndex="0" fx:id="thumbnailIV"/>
-            <VBox GridPane.rowIndex="0" GridPane.columnIndex="1" spacing="10">
-                <Button text="New Picture" fx:id="newThumbnail"/>
-                <Button text="Delete Picture" fx:id="removeThumbnail"/>
+            <StackPane GridPane.rowIndex="0" GridPane.columnIndex="0">
+                <Rectangle fx:id="thumbnailRec"/>
+                <Label text="Add a picture?" StackPane.alignment="CENTER"/>
+                <ImageView fx:id="thumbnailIV"/>
+            </StackPane>
+            <VBox GridPane.rowIndex="0" GridPane.columnIndex="1" spacing="10" alignment="CENTER" fx:id="thumbnailBtnVB">
+                <Button text="New Picture" fx:id="newThumbnailBtn"/>
+                <Button text="Delete Picture" fx:id="removeThumbnailBtn"/>
             </VBox>
         </GridPane>
         <AnchorPane>
