@@ -56,7 +56,8 @@ public class AddAndEditViewController {
 
 	private FileChooser fileChooser = new FileChooser();
 	private Path thumbnailSourcePath;
-	private String thumbnailName;
+    private Path thumbnailOriginalPath;
+    private String thumbnailName;
 
     @FXML
     private GridPane frameGrid;
@@ -431,8 +432,8 @@ public class AddAndEditViewController {
 					isFavorite = MainPageController.selectedRecipe.getIsFavorite();
 					newRecipe.setIsFavorite(isFavorite);
 					newRecipe.setId(recipe.getId());
-					copyThumbnail(thumbnailSourcePath, newRecipe.getId());
-					newRecipe.setThumbnail(thumbnailName);
+                    copyThumbnail(thumbnailSourcePath, newRecipe.getId());
+                    newRecipe.setThumbnail(thumbnailName);
 					myRecipeDAO.updateRecipe(newRecipe);
 					myStepDAO.updateSteps(new ArrayList<>(steps));
 					myIngredientDAO.updateIngredients(new ArrayList<>(ingredients));
@@ -886,8 +887,10 @@ public class AddAndEditViewController {
 			thumbnailName = newRecipeId + extension;
 			
 			String destination = projectFile.getCanonicalPath() + "\\src\\resources\\" + thumbnailName;
-			
-			File desFile = new File(destination);
+            if (destination.equals(sourcePath.toString())) {
+                return;
+            }
+            File desFile = new File(destination);
 			
 			byte[] buffer = new byte[1024];
 			int dataNum;
