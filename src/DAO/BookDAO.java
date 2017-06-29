@@ -21,10 +21,12 @@ import com.itextpdf.text.pdf.draw.DottedLineSeparator;
 import com.itextpdf.text.pdf.draw.LineSeparator;
 
 import javafx.application.HostServices;
+import javafx.stage.FileChooser;
 import model.Book;
 import model.Ingredient;
 import model.Recipe;
 import model.Step;
+import view.Template;
 
 public class BookDAO {
 
@@ -95,8 +97,17 @@ public class BookDAO {
 		try {
 
 			Document document = new Document();
+			
+			 FileChooser fileChooser = new FileChooser();
+	         fileChooser.setTitle("Save Cookbook pdf");
+	         
+	         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.pdf)", "*.pdf");
+	         fileChooser.getExtensionFilters().add(extFilter);
 
-			File file = new File(FILE);
+	         File ioFile = fileChooser.showSaveDialog(Template.primaryStage);
+			
+
+			File file = new File(ioFile.getAbsolutePath());
 
 			PdfWriter.getInstance(document, new FileOutputStream(file));
 

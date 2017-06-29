@@ -2,6 +2,7 @@ package controller;
 
 import java.awt.Toolkit;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -44,6 +45,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.stage.FileChooser;
 import model.Ingredient;
 import model.Recipe;
 import model.Step;
@@ -140,11 +142,28 @@ public class MainPageController extends TemplateController implements Initializa
 
 		BookDAO onePage = new BookDAO();
 
-		onePage.creatFile();
+		onePage.creatFile();;
 		
-		onePage.showFile();
-		
-		System.out.println("Export PDF Successfully");
+	
+         
+//         System.out.println(file.getAbsolutePath());;
+//         
+//         FileWriter fileWriter = null;
+//         
+//         fileWriter = new FileWriter(file);
+//         
+//         fileWriter.write(onePage.creatFile());
+//         
+//         fileWriter.close();
+//         
+////         if (file != null) {
+////             try {
+////                 File.write(onePage.creatFile(), "pdf", file);
+////             } catch (IOException ex) {
+////                 System.out.println(ex.getMessage());
+////             }
+////         }
+
     	
     }
 
