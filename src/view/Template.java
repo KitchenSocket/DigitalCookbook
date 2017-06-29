@@ -30,7 +30,7 @@ public class Template extends Application {
 		
         Template.primaryStage = primaryStage;
 
-        Template.primaryStage.getIcons().add(new Image(new File("src/resources/groot.jpg").toURI().toString(), 80, 80, false, false));
+        Template.primaryStage.getIcons().add(new Image(new File("src/resources/COOKING NAVIGATOR-1.png").toURI().toString(), 80, 80, false, false));
         Template.primaryStage.setTitle("CookbookApp");
 
 
