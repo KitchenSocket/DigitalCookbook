@@ -231,7 +231,7 @@ public class BookDAO {
 			// add image TODO 
 			// ------------------------------------------
 			// Image image = Image.getInstance(page.getRecipeThumbnail());
-			Image image = Image.getInstance(recipe.getThumbnail());
+			Image image = Image.getInstance("src/resources/" + recipe.getThumbnail());
 			
 			image.setAbsolutePosition(400, 680);
 			
