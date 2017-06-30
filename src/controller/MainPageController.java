@@ -607,7 +607,7 @@ public class MainPageController extends TemplateController implements Initializa
 
 			if (searchWord.equals("")) {
 				JOptionPane.showMessageDialog(null, "Please enter key words.", null, JOptionPane.ERROR_MESSAGE);// Jpane
-																												// alert
+																				// alert
 
 			} else {
 
@@ -632,11 +632,11 @@ public class MainPageController extends TemplateController implements Initializa
 
 					RecipeDAO recipeDAO = new RecipeDAO();
 
-					ArrayList<Recipe> results = recipeDAO.getRecipeListByIngredientName(searchbar.getText());
+					recipeSearchResultsTVatLeft = recipeDAO.getRecipeListByName(searchbar.getText());
 
-					if (checkSearchResult(results)) {
+					if (checkSearchResult(recipeSearchResultsTVatLeft)) {
 
-						showRecipeList(results);
+						showRecipeList(recipeSearchResultsTVatLeft);
 
 					}
 
@@ -652,7 +652,7 @@ public class MainPageController extends TemplateController implements Initializa
 
 			if (searchWord.equals("")) {
 				JOptionPane.showMessageDialog(null, "No entry word", null, JOptionPane.ERROR_MESSAGE);// Jpane
-																										// alert
+																				// alert
 
 			} else {
 
@@ -662,11 +662,11 @@ public class MainPageController extends TemplateController implements Initializa
 
 					RecipeDAO recipeDAO = new RecipeDAO();
 
-					ArrayList<Recipe> results = recipeDAO.getRecipeListByNameInFavorite(searchbar.getText());
+					recipeSearchResultsTVatLeft = recipeDAO.getRecipeListByNameInFavorite(searchbar.getText());
 
-					if (checkSearchResult(results)) {
+					if (checkSearchResult(recipeSearchResultsTVatLeft)) {
 
-						showRecipeList(results);
+						showRecipeList(recipeSearchResultsTVatLeft);
 
 					}
 
@@ -676,11 +676,11 @@ public class MainPageController extends TemplateController implements Initializa
 					System.out.println("searchByIngredientName");
 					RecipeDAO recipeDAO = new RecipeDAO();
 
-					ArrayList<Recipe> results = recipeDAO.getRecipeListByIngredientNameInFavorite(searchbar.getText());
+					recipeSearchResultsTVatLeft = recipeDAO.getRecipeListByIngredientNameInFavorite(searchbar.getText());
 
-					if (checkSearchResult(results)) {
+					if (checkSearchResult(recipeSearchResultsTVatLeft)) {
 
-						showRecipeList(results);
+						showRecipeList(recipeSearchResultsTVatLeft);
 
 					}
 				}
@@ -898,11 +898,19 @@ public class MainPageController extends TemplateController implements Initializa
 	 * @author Qiwen Gu
 	 */
 
-	public boolean checkSearchResult(ArrayList<Recipe> results) {
+	public boolean checkSearchResult(ArrayList<Recipe> results) throws IOException {
 
 		if (results.size() == 0) {
 			JOptionPane.showMessageDialog(null, "Sorry, no recipe is found.", null, JOptionPane.ERROR_MESSAGE);// Jpane
 			// alert
+			if(mainOrFavView ==1 ){
+				
+				TemplateController.loadContent("/view/MainOrFavView.fxml", "Main");
+			} else if(mainOrFavView ==2){
+				
+				TemplateController.loadContent("/view/MainOrFavView.fxml", "Fav");
+				
+			}
 			return false;
 		} else {
 			return true;
