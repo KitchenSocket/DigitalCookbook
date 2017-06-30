@@ -2,6 +2,7 @@ package DAO;
 
 import java.awt.Desktop;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import com.itextpdf.text.Chapter;
@@ -242,7 +243,17 @@ public class BookDAO {
 			// add image TODO 
 			// ------------------------------------------
 			// Image image = Image.getInstance(page.getRecipeThumbnail());
-			Image image = Image.getInstance("src/resources/" + recipe.getThumbnail());
+			Image image = null  ;
+			
+			try{
+				 image = Image.getInstance("src/resources/" + recipe.getThumbnail());
+				
+
+				
+			} catch(FileNotFoundException ex){
+				
+				 image = Image.getInstance("src/resources/pizza_img.png");
+			}
 			
 			image.setAbsolutePosition(400, 680);
 			
