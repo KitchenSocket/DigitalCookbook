@@ -16,8 +16,23 @@
 }
 
 #frameGrid {
+    /*-fx-padding: 8px 0px 0px 0px;*/
+    /*-fx-hgap: 8px;*/
+}
+
+#listVB {
+    /*-fx-spacing: 6px;*/
     -fx-padding: 8px 0px 0px 0px;
-    -fx-hgap: 8px;
+    -fx-background-color: beige;
+}
+
+#detailVB {
+    -fx-padding: 8px 0px 0px 0px;
+    -fx-background-color: #f5f5d2;
+}
+
+.text-field {
+    -fx-font-size: 14px;
 }
 
 .text-area {
@@ -25,7 +40,7 @@
 }
 
 .label {
-    -fx-font-size: 12px;
+    -fx-font-size: 15px;
     -fx-font-weight: bold;
 }
 
@@ -36,15 +51,21 @@
     -fx-text-fill: white;
     -fx-background-color: #f5d677;
     -fx-background-radius: 0;
+
 }
 
 .button:hover {
     -fx-font-weight: bold;
     -fx-cursor: hand;
+    -fx-effect: innershadow(gaussian, #f5e184, 1, 1.0, 0, 0);
+
 }
 
 .button:pressed {
-    -fx-stroke: black;
-    -fx-stroke-type: inside;
-    -fx-stroke-width: 3px;
+    -fx-background-color: #f5c75d;
+    -fx-effect: innershadow(gaussian, #f5d677, 1, 1.0, 0, 0);
+}
+
+.hbox {
+    -fx-spacing: 20px;
 }

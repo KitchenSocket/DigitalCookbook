@@ -160,6 +160,21 @@ public class AddAndEditViewController {
 				return object;
 			}
 		}));
+
+//		ingredientNameCol.setCellFactory(new Callback<TableColumn<Ingredient, String>, TableCell<Ingredient, String>>() {
+//            @Override
+//            public TableCell<Ingredient, String> call(TableColumn<Ingredient, String> param) {
+//                return new BetterTextFieldTableCell(cellChange -> {
+//                    TableCellChangeInfo changeInfo = (TableCellChangeInfo)cellChange;
+//                    Ingredient oldIngredient = ingredientsTV.getItems().get(changeInfo.getRow());
+//                    //Save committed value to the object in tableview (and maybe to DB)
+//                    oldIngredient.setName(changeInfo.getNewValue());
+//                    return true;
+//                });
+//            }
+//        });
+
+
 		ingredientQuantityCol.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Number>() {
 			@Override
 			public Number fromString(String string) {
@@ -208,10 +223,14 @@ public class AddAndEditViewController {
 			cellEditCommitForIngredient(event);
 			ingredientsTV.requestFocus();
 		});
+
 		ingredientUnitCol.setOnEditCommit(event -> {
 			cellEditCommitForIngredient(event);
 			ingredientsTV.requestFocus();
 		});
+
+        //ingredientNameCol.focusP
+
 
 		// switch to edit mode on keypress
 		// this must be KeyEvent.KEY_PRESSED so that the key gets forwarded to
@@ -525,8 +544,12 @@ public class AddAndEditViewController {
 			ingredientTemp = ingredientIterator.next();
 			if (ingredientTemp.getName().equals("") || ingredientTemp.getName() == null) {
 				ingredientIterator.remove();
-			}
-		}
+            } else {
+                if (!isNew) {
+                    ingredientTemp.setRecipeId(selectedRecipeId);
+                }
+            }
+        }
 
 		while (stepIterator.hasNext()) {
 			stepTemp = stepIterator.next();
@@ -535,7 +558,10 @@ public class AddAndEditViewController {
 			} else {
 				stepTemp.setStepOrder(stepOrder);
 				stepOrder++;
-			}
+                if (!isNew) {
+                    stepTemp.setRecipeId(selectedRecipeId);
+                }
+            }
 		}
 	}
 
@@ -935,4 +961,6 @@ public class AddAndEditViewController {
 		}
 			
 	}
+
+
 }

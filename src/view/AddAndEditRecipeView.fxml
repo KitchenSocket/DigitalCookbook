@@ -48,7 +48,7 @@
                 <TableColumn fx:id="ingredientUnitCol" text="Unit"/>
             </columns>
         </TableView>
-        <HBox>
+        <HBox spacing="10">
             <Button text="Add Row" fx:id="ingredientsAddRowBtn"/>
             <Button text="Remove Row" fx:id="ingredientsRemoveRowBtn"/>
         </HBox>
@@ -62,7 +62,7 @@
                 <TableColumn fx:id="stepDescriptionCol" text="Your steps ..."/>
             </columns>
         </TableView>
-        <HBox>
+        <HBox spacing="10">
             <Button text="Add Row" fx:id="stepsAddRowBtn"/>
             <Button text="Remove Row" fx:id="stepsRemoveRowBtn"/>
         </HBox>
