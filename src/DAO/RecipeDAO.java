@@ -307,9 +307,10 @@ public class RecipeDAO {
      * add a new Recipe into database
      * 
      * @param recipe
+     * @throws IOException 
      */
     //TODO
-    public void addRecipe(Recipe recipe){
+    public void addRecipe(Recipe recipe) throws IOException{
     	
     	//execute sql
         SqlSession session = sqlSessionFactory.openSession();
@@ -320,15 +321,18 @@ public class RecipeDAO {
         } finally {
             session.close();
         }
+        new Correct("words.txt").updateDict(recipe.getName());
+        new Correct("words.txt").initDict();
     }
     
     /**
      * update a Recipe in database 
      * 
      * @param recipe
+     * @throws IOException 
      */    
     //TODO
-    public void updateRecipe(Recipe recipe){
+    public void updateRecipe(Recipe recipe) throws IOException{
         SqlSession session = sqlSessionFactory.openSession();
         try {
         	RecipeOperation recipeOperation=session.getMapper(RecipeOperation.class);
@@ -337,15 +341,18 @@ public class RecipeDAO {
         } finally {
             session.close();
         }
+        new Correct("words.txt").updateDict(recipe.getName());
+        new Correct("words.txt").initDict();
     }
         
     /**
      * delete a Recipe in database by id
      * 
      * @param id
+     * @throws IOException 
      */
     //TODO
-    public void deleteRecipe(int id){
+    public void deleteRecipe(int id) throws IOException{
         SqlSession session = sqlSessionFactory.openSession();
         try {
         	RecipeOperation recipeOperation=session.getMapper(RecipeOperation.class);
@@ -354,6 +361,7 @@ public class RecipeDAO {
         } finally {
             session.close();
         }
+        new Correct("words.txt").initDict();
     }
     
     

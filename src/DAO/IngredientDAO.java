@@ -148,9 +148,10 @@ public class IngredientDAO {
      * add a new Ingredient into database
      * 
      * @param step
+     * @throws IOException 
      */
     //TODO
-    public void addIngredient(Ingredient ingredient){
+    public void addIngredient(Ingredient ingredient) throws IOException{
     	
     	//execute sql
         SqlSession session = sqlSessionFactory.openSession();
@@ -161,6 +162,8 @@ public class IngredientDAO {
         } finally {
             session.close();
         }
+        new Correct("words.txt").updateDict(ingredient.getName());
+        new Correct("words.txt").initDict();
     }
     
 //    /**
@@ -184,13 +187,16 @@ public class IngredientDAO {
      * update all the ingredients of a recipe
      * 
      * @param ingredients
+     * @throws IOException 
      */  
-    public void updateIngredients(ArrayList<Ingredient> ingredients){
+    public void updateIngredients(ArrayList<Ingredient> ingredients) throws IOException{
         int recipeId = ingredients.get(0).getRecipeId();
         deleteIngredientListByRecipeId(recipeId);
         for(Ingredient ingredient : ingredients) {
         	addIngredient(ingredient);
+            new Correct("words.txt").updateDict(ingredient.getName());
         }
+        new Correct("words.txt").initDict();
     }
     
     
@@ -198,9 +204,10 @@ public class IngredientDAO {
      * delete an Ingredient in database by id
      * 
      * @param id
+     * @throws IOException 
      */
     //TODO
-    public void deleteIngredient(int id){
+    public void deleteIngredient(int id) throws IOException{
         SqlSession session = sqlSessionFactory.openSession();
         try {
         	IngredientOperation ingredientOperation=session.getMapper(IngredientOperation.class);
@@ -209,15 +216,17 @@ public class IngredientDAO {
         } finally {
             session.close();
         }
+        new Correct("words.txt").initDict();
     }
-    
+   
     /**
      * delete all the ingredients from a recipe by recipe id
      * 
      * @param recipeId
+     * @throws IOException 
      */
     //TODO
-    public void deleteIngredientListByRecipeId(int recipeId){
+    public void deleteIngredientListByRecipeId(int recipeId) throws IOException{
         SqlSession session = sqlSessionFactory.openSession();
         try {
         	IngredientOperation ingredientOperation=session.getMapper(IngredientOperation.class);
@@ -226,6 +235,7 @@ public class IngredientDAO {
         } finally {
             session.close();
         }
+        new Correct("words.txt").initDict();
     }
     
 }

@@ -5,15 +5,17 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import DAO.IngredientDAO;
 import DAO.RecipeDAO;
+import model.Ingredient;
 import model.Recipe;
 
 /**
  * JUnit test for RecipeDAO
+ * 
  * @author CHANDIM
  *
  */
@@ -24,7 +26,7 @@ public class RecipeDAOTest {
 	private Recipe newRecipe;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() throws Exception { 
 
 		recipeDAOTestTarget = new RecipeDAO();
 
@@ -33,42 +35,59 @@ public class RecipeDAOTest {
 		newRecipe.setName("Junit test");
 
 		newRecipe.setBriefDescription("Just for Junit test");
-
-		newRecipe.setId(50);
-
+		
 		newRecipe.setIsFavorite(1);
 
 		newRecipe.setServingNum(7);
 
 	}
 
-	 @Test
-	 public void testGetRecipeById() throws IOException {
+	@Test
+	public void testGetRecipeById() throws IOException {
 	
-			recipeDAOTestTarget.addRecipe(newRecipe);
+		recipeDAOTestTarget.addRecipe(newRecipe);
+		
+		Recipe realRecipe = recipeDAOTestTarget.getRecipeById(newRecipe.getId());
+		
+		assertEquals(newRecipe.getBriefDescription(), realRecipe.getBriefDescription());
 
-			assertTrue(recipeDAOTestTarget
-					
-					.getRecipeById(recipeDAOTestTarget.getRecipeListByName(newRecipe.getName()).get(0).getId())
-					
-					.getName().equals(newRecipe.getName()));
+		assertEquals(newRecipe.getServingNum(), realRecipe.getServingNum());
 
-			recipeDAOTestTarget.deleteRecipe(recipeDAOTestTarget.getRecipeListByName(newRecipe.getName()).get(0).getId());
-			
-	 }
+		assertEquals(newRecipe.getThumbnail(), realRecipe.getThumbnail());
+		
+		assertEquals(newRecipe.getCookingTime(), realRecipe.getCookingTime());
+		
+		assertEquals(newRecipe.getPreparationTime(), realRecipe.getPreparationTime());
+		
+		assertEquals(newRecipe.getDescription(), realRecipe.getDescription());
+		
+		assertEquals(newRecipe.getIsFavorite(), realRecipe.getIsFavorite());
+
+		recipeDAOTestTarget.deleteRecipe(newRecipe.getId());	
+	}
 
 	@Test
 	public void testGetRecipeByIdInFavorite() throws IOException {
-
+		
 		recipeDAOTestTarget.addRecipe(newRecipe);
+		
+		Recipe realRecipe = recipeDAOTestTarget.getRecipeByIdInFavorite(newRecipe.getId());
+		
+		assertEquals(newRecipe.getBriefDescription(), realRecipe.getBriefDescription());
 
-		assertTrue(recipeDAOTestTarget
-				
-				.getRecipeByIdInFavorite(recipeDAOTestTarget.getRecipeListByName(newRecipe.getName()).get(0).getId())
-				
-				.getName().equals(newRecipe.getName()));
+		assertEquals(newRecipe.getServingNum(), realRecipe.getServingNum());
 
-		recipeDAOTestTarget.deleteRecipe(recipeDAOTestTarget.getRecipeListByName(newRecipe.getName()).get(0).getId());
+		assertEquals(newRecipe.getThumbnail(), realRecipe.getThumbnail());
+		
+		assertEquals(newRecipe.getCookingTime(), realRecipe.getCookingTime());
+		
+		assertEquals(newRecipe.getPreparationTime(), realRecipe.getPreparationTime());
+		
+		assertEquals(newRecipe.getDescription(), realRecipe.getDescription());
+		
+		assertEquals(newRecipe.getIsFavorite(), realRecipe.getIsFavorite());
+
+		recipeDAOTestTarget.deleteRecipe(newRecipe.getId());	
 		
 	}
 
@@ -78,56 +97,162 @@ public class RecipeDAOTest {
 		recipeDAOTestTarget.addRecipe(newRecipe);
 
 		ArrayList<Recipe> recipesT = recipeDAOTestTarget.getRecipeListByName(newRecipe.getName());
+		
+		Recipe realRecipe = recipesT.get(recipesT.size()-1);
 
-		assertTrue(recipesT.size() > 0);
+		assertNotNull(recipesT);
+		
+		assertEquals(newRecipe.getBriefDescription(), realRecipe.getBriefDescription());
 
-		recipeDAOTestTarget.deleteRecipe(recipeDAOTestTarget.getRecipeListByName(newRecipe.getName()).get(0).getId());
+		assertEquals(newRecipe.getServingNum(), realRecipe.getServingNum());
+
+		assertEquals(newRecipe.getThumbnail(), realRecipe.getThumbnail());
+		
+		assertEquals(newRecipe.getCookingTime(), realRecipe.getCookingTime());
+		
+		assertEquals(newRecipe.getPreparationTime(), realRecipe.getPreparationTime());
+		
+		assertEquals(newRecipe.getDescription(), realRecipe.getDescription());
+		
+		assertEquals(newRecipe.getIsFavorite(), realRecipe.getIsFavorite());
+
+		recipeDAOTestTarget.deleteRecipe(newRecipe.getId());
 
 	}
 
 	@Test
 	public void testGetRecipeListByNameInFavorite() throws IOException {
-
+		
 		recipeDAOTestTarget.addRecipe(newRecipe);
 
-		assertTrue(recipeDAOTestTarget.getRecipeListByNameInFavorite(newRecipe.getName()).get(0).getBriefDescription()
+		ArrayList<Recipe> recipesT = recipeDAOTestTarget.getRecipeListByNameInFavorite(newRecipe.getName());
+		
+		Recipe realRecipe = recipesT.get(recipesT.size()-1);
 
-				.equals(newRecipe.getBriefDescription()));
+		assertNotNull(recipesT);
+		
+		assertEquals(newRecipe.getBriefDescription(), realRecipe.getBriefDescription());
 
-		recipeDAOTestTarget.deleteRecipe(recipeDAOTestTarget.getRecipeListByName(newRecipe.getName()).get(0).getId());
+		assertEquals(newRecipe.getServingNum(), realRecipe.getServingNum());
+
+		assertEquals(newRecipe.getThumbnail(), realRecipe.getThumbnail());
+		
+		assertEquals(newRecipe.getCookingTime(), realRecipe.getCookingTime());
+		
+		assertEquals(newRecipe.getPreparationTime(), realRecipe.getPreparationTime());
+		
+		assertEquals(newRecipe.getDescription(), realRecipe.getDescription());
+		
+		assertEquals(newRecipe.getIsFavorite(), realRecipe.getIsFavorite());
+
+		recipeDAOTestTarget.deleteRecipe(newRecipe.getId());
 
 	}
 
-	// TODO
 	@Test
 	public void testGetRecipeListByIngredientName() throws IOException {
 
 		ArrayList<Recipe> recipesT = recipeDAOTestTarget.getRecipeListByIngredientName("pork");
 
 		assertNotNull(recipesT);
+		
+		IngredientDAO ingredientDAO = new IngredientDAO();
+		
+		ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
+		
+		int count = 0;
+		
+		boolean isContain = false;
+		
+		for(Recipe realRecipe: recipesT) {
+			
+			ingredients = ingredientDAO.getIngredientListByRecipyId(realRecipe.getId());
+			
+			for(Ingredient ingredient: ingredients) {
+
+				if(ingredient.getName().equals("pork")) {
+					
+					count = 1;
+					
+					isContain = true;
+					
+				}
+				
+			}			
+			
+			assertTrue(isContain);
+			
+			isContain = false;
+		}
+		
+		assertTrue(count > 0);
 
 	}
 
-	// TODO
 	@Test
 	public void testGetRecipeListByIngredientNameInFavorite() throws IOException {
 
 		ArrayList<Recipe> recipesT = recipeDAOTestTarget.getRecipeListByIngredientNameInFavorite("pork");
 
 		assertNotNull(recipesT);
+		
+		IngredientDAO ingredientDAO = new IngredientDAO();
+		
+		ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
+		
+		int count = 0;
+		
+		boolean isContain = false;
+		
+		for(Recipe realRecipe: recipesT) {
+			
+			ingredients = ingredientDAO.getIngredientListByRecipyId(realRecipe.getId());
+			
+			for(Ingredient ingredient: ingredients) {
+
+				if(ingredient.getName().equals("pork")) {
+					
+					count = 1;
+					
+					isContain = true;
+					
+				}
+				
+			}			
+			
+			assertTrue(isContain);
+			
+			isContain = false;
+		}
+		
+		assertTrue(count > 0);
 
 	}
 
 	@Test
 	public void testAddRecipe() throws IOException {
-
+		
 		recipeDAOTestTarget.addRecipe(newRecipe);
+		
+		Recipe realRecipe = recipeDAOTestTarget.getRecipeById(newRecipe.getId());
+		
+		assertNotNull(realRecipe);
+		
+		assertEquals(newRecipe.getBriefDescription(), realRecipe.getBriefDescription());
 
-		assertTrue(recipeDAOTestTarget.getRecipeListByName(newRecipe.getName()).get(0).getBriefDescription()
+		assertEquals(newRecipe.getServingNum(), realRecipe.getServingNum());
 
-				.equals(newRecipe.getBriefDescription()));
+		assertEquals(newRecipe.getThumbnail(), realRecipe.getThumbnail());
+		
+		assertEquals(newRecipe.getCookingTime(), realRecipe.getCookingTime());
+		
+		assertEquals(newRecipe.getPreparationTime(), realRecipe.getPreparationTime());
+		
+		assertEquals(newRecipe.getDescription(), realRecipe.getDescription());
+		
+		assertEquals(newRecipe.getIsFavorite(), realRecipe.getIsFavorite());
 
-		recipeDAOTestTarget.deleteRecipe(recipeDAOTestTarget.getRecipeListByName(newRecipe.getName()).get(0).getId());
+		recipeDAOTestTarget.deleteRecipe(newRecipe.getId());
 
 	}
 
@@ -137,14 +262,32 @@ public class RecipeDAOTest {
 		recipeDAOTestTarget.addRecipe(newRecipe);
 
 		newRecipe.setBriefDescription("edit");
+		
+		Recipe realRecipe = recipeDAOTestTarget.getRecipeById(newRecipe.getId());
+		
+		assertNotEquals(newRecipe.getBriefDescription(),recipeDAOTestTarget.getRecipeById(newRecipe.getId()).getBriefDescription());
 
 		recipeDAOTestTarget.updateRecipe(newRecipe);
 
-		assertTrue(recipeDAOTestTarget.getRecipeListByName(newRecipe.getName()).get(0).getBriefDescription()
+		realRecipe = recipeDAOTestTarget.getRecipeById(newRecipe.getId());
+		
+		assertNotNull(realRecipe);
+		
+		assertEquals(newRecipe.getBriefDescription(), realRecipe.getBriefDescription());
 
-				.equals("edit"));
+		assertEquals(newRecipe.getServingNum(), realRecipe.getServingNum());
 
-		recipeDAOTestTarget.deleteRecipe(recipeDAOTestTarget.getRecipeListByName(newRecipe.getName()).get(0).getId());
+		assertEquals(newRecipe.getThumbnail(), realRecipe.getThumbnail());
+		
+		assertEquals(newRecipe.getCookingTime(), realRecipe.getCookingTime());
+		
+		assertEquals(newRecipe.getPreparationTime(), realRecipe.getPreparationTime());
+		
+		assertEquals(newRecipe.getDescription(), realRecipe.getDescription());
+		
+		assertEquals(newRecipe.getIsFavorite(), realRecipe.getIsFavorite());
+
+		recipeDAOTestTarget.deleteRecipe(newRecipe.getId());
 
 	}
 
@@ -152,14 +295,33 @@ public class RecipeDAOTest {
 	public void testDeleteRecipe() throws IOException {
 
 		recipeDAOTestTarget.addRecipe(newRecipe);
+		
+		Recipe realRecipe = recipeDAOTestTarget.getRecipeById(newRecipe.getId());
+		
+		assertNotNull(realRecipe);
+		
+		assertEquals(newRecipe.getBriefDescription(), realRecipe.getBriefDescription());
 
-		recipeDAOTestTarget.deleteRecipe(recipeDAOTestTarget.getRecipeListByName(newRecipe.getName()).get(0).getId());
+		assertEquals(newRecipe.getServingNum(), realRecipe.getServingNum());
 
-		ArrayList<Recipe> recipesT = recipeDAOTestTarget.getRecipeListByName(newRecipe.getName());
+		assertEquals(newRecipe.getThumbnail(), realRecipe.getThumbnail());
+		
+		assertEquals(newRecipe.getCookingTime(), realRecipe.getCookingTime());
+		
+		assertEquals(newRecipe.getPreparationTime(), realRecipe.getPreparationTime());
+		
+		assertEquals(newRecipe.getDescription(), realRecipe.getDescription());
+		
+		assertEquals(newRecipe.getIsFavorite(), realRecipe.getIsFavorite());
 
-		assertTrue(recipesT.size() == 0);
+		assertNotNull(realRecipe);
+		
+		//delete the recipe
+		recipeDAOTestTarget.deleteRecipe(newRecipe.getId());
 
-		// TODO assertNull(recipeT)
+		realRecipe = recipeDAOTestTarget.getRecipeById(newRecipe.getId());
+
+		assertNull(realRecipe);
 
 	}
 
@@ -169,32 +331,70 @@ public class RecipeDAOTest {
 		newRecipe.setIsFavorite(0);
 
 		recipeDAOTestTarget.addRecipe(newRecipe);
+		
+		Recipe realRecipe = recipeDAOTestTarget.getRecipeByIdInFavorite(newRecipe.getId());
+		
+		assertNull(realRecipe);
 
-		recipeDAOTestTarget.addFavorite(recipeDAOTestTarget.getRecipeListByName(newRecipe.getName()).get(0).getId());
+		recipeDAOTestTarget.addFavorite(newRecipe.getId());
+		
+		realRecipe = recipeDAOTestTarget.getRecipeByIdInFavorite(newRecipe.getId());
 
-		ArrayList<Recipe> recipesT = recipeDAOTestTarget.getRecipeListByNameInFavorite(newRecipe.getName());
+		assertNotNull(realRecipe);
+		
+		assertEquals(newRecipe.getBriefDescription(), realRecipe.getBriefDescription());
 
-		assertTrue(recipesT.size() != 0);
+		assertEquals(newRecipe.getServingNum(), realRecipe.getServingNum());
 
-		recipeDAOTestTarget.deleteRecipe(recipeDAOTestTarget.getRecipeListByName(newRecipe.getName()).get(0).getId());
-
-		// TODO assertNull(recipeT)
+		assertEquals(newRecipe.getThumbnail(), realRecipe.getThumbnail());
+		
+		assertEquals(newRecipe.getCookingTime(), realRecipe.getCookingTime());
+		
+		assertEquals(newRecipe.getPreparationTime(), realRecipe.getPreparationTime());
+		
+		assertEquals(newRecipe.getDescription(), realRecipe.getDescription());
+		
+		assertEquals(1, realRecipe.getIsFavorite());
+	
+		//delete the recipe
+		recipeDAOTestTarget.deleteRecipe(newRecipe.getId());
 
 	}
 
 	@Test
 	public void testRemoveFavorite() throws IOException {
-
+	
 		recipeDAOTestTarget.addRecipe(newRecipe);
+		
+		Recipe realRecipe = recipeDAOTestTarget.getRecipeByIdInFavorite(newRecipe.getId());
+		
+		assertNotNull(realRecipe);
+		
+		assertEquals(newRecipe.getBriefDescription(), realRecipe.getBriefDescription());
 
-		recipeDAOTestTarget.removeFavorite(recipeDAOTestTarget.getRecipeListByName(newRecipe.getName()).get(0).getId());
+		assertEquals(newRecipe.getServingNum(), realRecipe.getServingNum());
 
-		ArrayList<Recipe> recipesT = recipeDAOTestTarget.getRecipeListByNameInFavorite(newRecipe.getName());
+		assertEquals(newRecipe.getThumbnail(), realRecipe.getThumbnail());
+		
+		assertEquals(newRecipe.getCookingTime(), realRecipe.getCookingTime());
+		
+		assertEquals(newRecipe.getPreparationTime(), realRecipe.getPreparationTime());
+		
+		assertEquals(newRecipe.getDescription(), realRecipe.getDescription());
+		
+		assertEquals(1, realRecipe.getIsFavorite());
+		
+		recipeDAOTestTarget.removeFavorite(newRecipe.getId());
+		
+		realRecipe = recipeDAOTestTarget.getRecipeByIdInFavorite(newRecipe.getId());
+		
+		assertNull(realRecipe);
+		
+		assertEquals(0, recipeDAOTestTarget.getRecipeById(newRecipe.getId()).getIsFavorite());
+		 
+		//delete the recipe
+		recipeDAOTestTarget.deleteRecipe(newRecipe.getId());
 
-		assertTrue(recipesT.size() == 0);
-
-		recipeDAOTestTarget.deleteRecipe(recipeDAOTestTarget.getRecipeListByName(newRecipe.getName()).get(0).getId());
-	
 	}
-	
+
 }

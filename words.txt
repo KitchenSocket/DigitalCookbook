@@ -1,17 +1,158 @@
-hong
-shao
-rou
-hong shao rou
-kung
-pao
+
+
+Junit test
+Junit
+test
+
+Kung Pao chicken
+Kung
+Pao
 chicken
-kung pao chicken
-ma
-po
-dou
-fu
-mapo doufu rou
-yuxiang
+
+Yuxiang shredded pork
+Yuxiang
 shredded
 pork
-yuxiang shredded pork
+
+Mapo doufu rou
+Mapo
+doufu
+rou
+
+SauerKraut Suppe
+SauerKraut
+Suppe
+
+Steamed eggs
+Steamed
+eggs
+
+Cheese Cake
+Cheese
+Cake
+
+Roasted beef with potato
+Roasted
+beef
+with
+potato
+
+Hong Shao Rou—Red Braised Pork Belly
+Hong
+Shao
+Rou—Red
+Braised
+Pork
+Belly
+
+Egg fried rice
+Egg
+fried
+rice
+
+youhao
+youhao
+
+peanut
+peanut
+
+soya sause
+soya
+sause
+
+Chinese broccoli
+Chinese
+broccoli
+
+chili
+chili
+
+toufu
+toufu
+
+egg
+egg
+
+oil
+oil
+
+salt
+salt
+
+water
+water
+
+green onion
+green
+onion
+
+warm water
+warm
+water
+
+Fresh cheese
+Fresh
+cheese
+
+Fresh cream
+Fresh
+cream
+
+Sugar
+Sugar
+
+Vanilla extract
+Vanilla
+extract
+
+aginomoto
+aginomoto
+
+Beef Brisket
+Beef
+Brisket
+
+Cooking wine
+Cooking
+wine
+
+gatlic
+gatlic
+
+ginger
+ginger
+
+green pepper
+green
+pepper
+
+shallot
+shallot
+
+soybean sauce
+soybean
+sauce
+
+sugar
+sugar
+
+brown sugar
+brown
+sugar
+
+hot water
+hot
+water
+
+soy sauce
+soy
+sauce
+
+Name
+Name
+
+a Junit test
+a
+Junit
+test
+

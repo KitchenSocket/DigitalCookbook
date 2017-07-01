@@ -1,11 +1,18 @@
 package DAO;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Scanner;
+
+import model.Ingredient;
+import model.Recipe;
+
 
 /**
  * spell corrector correct user input according to the dictionary txt file 
@@ -20,10 +27,14 @@ public class Correct {
 	private final HashMap<String, Integer> dictionaryWords = new HashMap<String, Integer>();
 
 	private final static char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
+	 
+	private File file;
 
-	public Correct(String file) throws IOException {
+	public Correct(String fileName) throws IOException {
+		
+		this.file = new File(fileName);
 
-		BufferedReader in = new BufferedReader(new FileReader(file));
+		BufferedReader in = new BufferedReader(new FileReader(fileName));
 
 		// get content from dictionary file
 		for (String temp = in.readLine(); temp != null; temp = in.readLine()) {
@@ -33,7 +44,14 @@ public class Correct {
 			// duplicated word>1
 			dictionaryWords.put(temp, dictionaryWords.containsKey(temp) ? dictionaryWords.get(temp) + 1 : 1);
 		}
+		
+		if(!file.exists()) {
+			file.createNewFile();
+		}
+		
+		
 		in.close();
+		
 	}
 
 	/**
@@ -47,7 +65,7 @@ public class Correct {
 	 * @param word
 	 * @return ArrayList<String>
 	 */
-	private final ArrayList<String> edits(String word) {
+	private final ArrayList<String> edits(String word) { 
 
 		ArrayList<String> result = new ArrayList<String>();
 
@@ -135,12 +153,97 @@ public class Correct {
 
 	}
 
+	/**
+	 * update the words txt content
+	 * 
+	 * @param word
+	 * @throws IOException
+	 */
+	public final void updateDict(String word) throws IOException {
+
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		
+		OutputStream os = new FileOutputStream(file,true);
+		
+		ArrayList<String> content = new ArrayList<String>();
+		
+		ArrayList<String> oneLine = new ArrayList<String>();
+		
+		for (String line = br.readLine(); line != null; line = br.readLine()) {
+
+			oneLine = new ArrayList<String>(Arrays.asList(line.split(" ")));
+			
+			content.add(line.trim());
+			
+			content.addAll(oneLine);
+			
+			System.out.println(line);
+			
+		}
+		
+		br.close();
+		
+
+		
+		if(!content.contains(word)) {
+			
+			word += "\r\n";
+			
+			os.write(word.getBytes());
+
+			oneLine = new ArrayList<String>(Arrays.asList(word.split(" ")));
+			
+			for(String singleWord : oneLine) {
+				
+				singleWord += "\r\n"; 
+				
+				os.write(singleWord.getBytes());
+			}
+			
+		}
+		
+		os.close();
+		
+	}
+	
+	/**
+	 * initialize word.txt
+	 * 
+	 * @throws IOException
+	 */
+	public final void initDict() throws IOException {
+		
+		RecipeDAO DAO = new RecipeDAO();
+		
+		ArrayList<Recipe> list = DAO.getRecipeListByName("%");
+		
+		IngredientDAO DAOI = new IngredientDAO();
+		
+		ArrayList<Ingredient> listI = DAOI.getIngredientListByName("%");
+		
+		for( Recipe recipe : list) {
+			
+			updateDict(recipe.getName());
+			
+		}
+		
+		for( Ingredient ingredient : listI) {
+			
+			updateDict(ingredient.getName());
+			
+		}
+		
+	}
+	
+	
 	public static void main(String args[]) throws IOException {
-		Scanner scan = new Scanner(System.in);
+		//Scanner scan = new Scanner(System.in);
 		// while(scan.hasNextLine()){
-		String in = scan.nextLine().trim();
-		System.out.println((new Correct("words.txt")).correct(in));
-		// }
+		//String in = scan.nextLine().trim();
+		//System.out.println((new Correct("words.txt")).correct(in));
+		Correct test = new Correct("C:\\Users\\CHANDIM\\Desktop\\fakk.txt");
+		test.updateDict("hong shao rou");
+		
 	}
 
 }

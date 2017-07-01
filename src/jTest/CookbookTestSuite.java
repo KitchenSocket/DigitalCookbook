@@ -6,18 +6,11 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({ 
 	
 	//DAO
-	IngredientDAOTest.class, 
-	
-	BookDAOTest.class,
-	
-	CorrectTest.class,
-	
 	RecipeDAOTest.class,
 	
-	//controller
+	IngredientDAOTest.class, 
 	
-	MainPageControllerTest.class,
-	
+	StepDAOTest.class,
 	
 }) 
 public class CookbookTestSuite { }
