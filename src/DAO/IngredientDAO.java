@@ -48,40 +48,13 @@ public class IngredientDAO {
     public static void main(String[] args) throws IOException {
     	
     	IngredientDAO DAO=new IngredientDAO();
+    	
     	DAO.getIngredientListByName("%");
     	
     	//DAO.deleteIngredientListByRecipeId(3);
-    	
-    	//DAO.getIngredientListByName("%");
 
-    	//DAO.getIngredientListByRecipyId(2);
-    	//DAO.getIngredientById(2);
+    	DAO.getIngredientListByRecipyId(2);
   }
-    
-    /**
-     * returns the required Ingredient class by the received id
-     * 
-     * @param id
-     * @return Ingredient class
-     */
-    public Ingredient getIngredientById(int id){
-    	
-    	//get resources
-    	Ingredient result = new Ingredient();
-    	
-    	//execute sql
-		SqlSession session = sqlSessionFactory.openSession();
-		try {
-			IngredientOperation ingredientOperation=session.getMapper(IngredientOperation.class);           
-			result = ingredientOperation.selectIngredientByID(id);	
-			
-			//test code
-			//System.out.println(result);
-		} finally {
-		    session.close();
-		}
-		return result;
-    }
   
     /**
      * returns an ArrayList of class Ingredient by name
@@ -166,23 +139,6 @@ public class IngredientDAO {
         new Correct("words.txt").initDict();
     }
     
-//    /**
-//     * update an Ingredient in database 
-//     * 
-//     * @param ingredient
-//     */    
-//    //TODO
-//    public void updateIngredient(Ingredient ingredient){
-//        SqlSession session = sqlSessionFactory.openSession();
-//        try {
-//        	IngredientOperation ingredientOperation=session.getMapper(IngredientOperation.class);
-//        	ingredientOperation.updateIngredient(ingredient);
-//            session.commit();
-//        } finally {
-//            session.close();
-//        }
-//    }
-    
     /**
      * update all the ingredients of a recipe
      * 
@@ -195,26 +151,6 @@ public class IngredientDAO {
         for(Ingredient ingredient : ingredients) {
         	addIngredient(ingredient);
             new Correct("words.txt").updateDict(ingredient.getName());
-        }
-        new Correct("words.txt").initDict();
-    }
-    
-    
-    /**
-     * delete an Ingredient in database by id
-     * 
-     * @param id
-     * @throws IOException 
-     */
-    //TODO
-    public void deleteIngredient(int id) throws IOException{
-        SqlSession session = sqlSessionFactory.openSession();
-        try {
-        	IngredientOperation ingredientOperation=session.getMapper(IngredientOperation.class);
-        	ingredientOperation.deleteIngredient(id);
-            session.commit();
-        } finally {
-            session.close();
         }
         new Correct("words.txt").initDict();
     }

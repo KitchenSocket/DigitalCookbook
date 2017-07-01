@@ -3,15 +3,6 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="inter.StepOperation">
-
-	<!-- select step by id -->
-    <select id="selectStepByID" parameterType="int" resultType="Step">
-        select * from step where id = #{id}
-    </select>
-    
-    <select id="selectStepByRecipeIdAndOrder" parameterType="map" resultType="Step">
-		select * from step where recipeId = #{recipeId} AND stepOrder = #{stepOrder}
-	</select>
     
     <!-- define a map to formalize the return value -->
     <resultMap type="Step" id="resultStepList">
@@ -20,11 +11,6 @@
         <result column="description" property="description" />
         <result column="pic" property="pic" />
     </resultMap>
-
-    <!-- select a result map by step description, using map defined before -->
-    <select id="selectStepsByDescription" parameterType="string" resultMap="resultStepList">
-        select * from step where description like #{description}
-    </select>
     
     <!-- get all the steps of a recipe by recipe id -->
     <select id="selectStepsByRecipeId" parameterType="int" resultMap="resultStepList">
@@ -36,18 +22,7 @@
         insert into step(recipeId,stepOrder,description,pic)  
              values(#{recipeId},#{stepOrder},#{description},#{pic})  
     </insert>
-    
-    <!-- update step -->
-    <update id="updateStep" parameterType="Step" >
-        update step set recipeId=#{recipeId},stepOrder=#{stepOrder},
-        	description=#{description},pic=#{pic} where id=#{id}
-    </update>
-    
-    <!-- delete step -->
-    <delete id="deleteStep" parameterType="int">
-        delete from step where id=#{id}
-    </delete>
-    
+   
     <!-- delete all the steps from a recipe by recipe id -->
     <delete id="deleteStepListByRecipeId" parameterType="int">
         delete from step where recipeId=#{recipeId}

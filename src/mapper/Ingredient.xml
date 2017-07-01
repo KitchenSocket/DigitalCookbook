@@ -4,11 +4,6 @@
 
 <!-- mapper for ingredient model -->
 <mapper namespace="inter.IngredientOperation">
-
-	<!-- select ingredient by id -->
-    <select id="selectIngredientByID" parameterType="int" resultType="Ingredient">
-        select * from ingredient where id = #{id}
-    </select>
     
     <!-- define a map to formalize the return value -->
     <resultMap type="Ingredient" id="resultIngredientList">
@@ -33,17 +28,6 @@
         insert into ingredient(recipeId,name,quantity,unit)  
              values(#{recipeId},#{name},#{quantity},#{unit})  
     </insert>
-    
-    <!-- update ingredient -->
-    <update id="updateIngredient" parameterType="Ingredient" >
-        update ingredient set recipeId=#{recipeId},name=#{name},
-        	quantity=#{quantity},unit=#{unit} where id=#{id}
-    </update>
-    
-    <!-- delete ingredient -->
-    <delete id="deleteIngredient" parameterType="int">
-        delete from ingredient where id=#{id}
-    </delete>
     
     <!-- delete all the ingredients from a recipe by recipe id -->
     <delete id="deleteIngredientListByRecipeId" parameterType="int">
