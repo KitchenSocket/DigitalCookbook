@@ -3,12 +3,18 @@ package controller;
 import DAO.IngredientDAO;
 import DAO.RecipeDAO;
 import DAO.StepDAO;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
@@ -19,6 +25,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
+import javafx.util.Callback;
 import javafx.util.StringConverter;
 import model.Ingredient;
 import model.Recipe;
@@ -161,18 +168,7 @@ public class AddAndEditViewController {
 			}
 		}));
 
-//		ingredientNameCol.setCellFactory(new Callback<TableColumn<Ingredient, String>, TableCell<Ingredient, String>>() {
-//            @Override
-//            public TableCell<Ingredient, String> call(TableColumn<Ingredient, String> param) {
-//                return new BetterTextFieldTableCell(cellChange -> {
-//                    TableCellChangeInfo changeInfo = (TableCellChangeInfo)cellChange;
-//                    Ingredient oldIngredient = ingredientsTV.getItems().get(changeInfo.getRow());
-//                    //Save committed value to the object in tableview (and maybe to DB)
-//                    oldIngredient.setName(changeInfo.getNewValue());
-//                    return true;
-//                });
-//            }
-//        });
+//		ingredientNameCol.setCellFactory(factory -> new ExperimentalTextFieldTableCell<Ingredient, String> ());
 
 
 		ingredientQuantityCol.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Number>() {
@@ -990,5 +986,218 @@ public class AddAndEditViewController {
 			
 	}
 
+    //	public void trysomething() {
+//	    ingredientsTV.editingCellProperty()
+//
+//
+//                focuseProperty().addListener(new ChangeListener<Boolean>() {
+//            @Override
+//            public void changed(ObservableValue<? extends Boolean> ov, Boolean focusLost, Boolean focusGained) {
+//                if (focusLost) {
+//                    Node editor = getGraphic();
+//                    if (editor instanceof TextInputControl) {
+//                        TextInputControl tic = (TextInputControl) editor;
+//                        String text = tic.getText();
+//                        if (!isEditing()) {
+//                            // Sadly there is no way to know if the focus lost was because the user hit Esc (in which case we REALLY do want to cancel the edit)
+//                            // Or if they just clicked on another active row within the Tableview.
+//                            System.err.println("Editing false but still have a TextField in the Graphic... Manually firing an event...");
+//                            TableView table = getTableView();
+//                            TablePosition tp = new TablePosition<>(table, getTableRow().getIndex(), getTableColumn());
+//                            TableColumn.CellEditEvent editEvent = new TableColumn.CellEditEvent(
+//                                    table, tp, TableColumn.editCommitEvent(), text);
+//                            Event.fireEvent(getTableColumn(), editEvent);
+//                        } else {
+//                            commitEdit(text);
+//                        }
+//                    }
+//                }
+//            }
+//        };)
+//    }
+
+
+    public class ExperimentalTextFieldTableCell<S, T> extends TextFieldTableCell<S, T> {
+        private TextField textField;
+
+        @Override
+        public void startEdit() {
+            super.startEdit();
+            if (textField == null) {
+                createTextField();
+            }
+            textField.focusedProperty().addListener(focusListener);
+        }
+
+        private final ChangeListener<Boolean> focusListener = new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> ov, Boolean focusLost, Boolean focusGained) {
+                if (focusLost) {
+                    Node editor = getGraphic();
+                    if (editor instanceof TextInputControl) {
+                        TextInputControl tic = (TextInputControl) editor;
+                        String text = tic.getText();
+                        if (!isEditing()) {
+                            // Sadly there is no way to know if the focus lost was because the user hit Esc (in which case we REALLY do want to cancel the edit)
+                            // Or if they just clicked on another active row within the Tableview.
+                            System.err.println("Editing false but still have a TextField in the Graphic... Manually firing an event...");
+                            TableView table = getTableView();
+                            TablePosition tp = new TablePosition<>(table, getTableRow().getIndex(), getTableColumn());
+                            TableColumn.CellEditEvent editEvent = new TableColumn.CellEditEvent(
+                                    table, tp, TableColumn.editCommitEvent(), text);
+                            Event.fireEvent(getTableColumn(), editEvent);
+                        } else {
+                            commitEdit((T) text);
+                        }
+                    }
+                }
+            }
+        };
+
+        private void createTextField() {
+            textField = new TextField("");
+            textField.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
+            textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+                @Override
+                public void handle(KeyEvent t) {
+                    if (t.getCode() == KeyCode.ENTER) {
+                        commitEdit((T) textField.getText());
+                        ExperimentalTextFieldTableCell.this.getTableView().requestFocus();//why does it lose focus??
+                        //this.getTableView().getSelectionModel().selectBelowCell();
+                    } else if (t.getCode() == KeyCode.ESCAPE) {
+                        cancelEdit();
+                    }
+                }
+            });
+
+            textField.setOnKeyReleased(new EventHandler<KeyEvent>() {
+                @Override
+                public void handle(KeyEvent t) {
+                    if (t.getCode().isDigitKey()) {
+
+
+                        //BetterTextFieldTableCell.setText(textField.getText());
+
+                        //textField.setText(BetterTextFieldTableCell.getText());
+                        textField.deselect();
+                        textField.end();
+                        textField.positionCaret(textField.getLength() + 2);//works sometimes
+
+                    }
+                }
+            });
+        }
+
+        public final ObjectProperty<StringConverter<T>> converterProperty = new SimpleObjectProperty<StringConverter<T>>(new StringConverter<T>() {
+            @Override
+            public T fromString(String string) {
+                return (T) string;
+            }
+
+            @Override
+            public String toString(T object) {
+                return object.toString();
+            }
+        });
+
+        public ExperimentalTextFieldTableCell() {
+            super();
+        }
+    }
+
+
+    public class BetterTextFieldTableCell extends TableCell {
+        private TextField textField;
+        Callback commitChange;
+
+        public TextField getTextField() {
+            return textField;
+        }
+
+
+        public BetterTextFieldTableCell(Callback commitChange) {
+            this.commitChange = commitChange;
+        }
+
+        @Override
+        public void startEdit() {
+            super.startEdit();
+            if (getTextField() == null) {
+                createTextField();
+            }
+            setText(null);
+            setGraphic(textField);
+            setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+            textField.requestFocus();
+            getTextField().focusedProperty().addListener(new ChangeListener<Boolean>() {
+                @Override
+                public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
+                    if (!arg2) {
+                        //commitEdit is replaced with own callback
+                        //commitEdit(getTextArea().getText());
+
+                        //Update item now since otherwise, it won't get refreshed
+                        setItem(getTextField().getText());
+                        //Example, provide TableRow and index to get Object of TableView in callback implementation
+                        commitChange.call(new TableCellChangeInfo(getTableRow().getIndex(), getTextField().getText()));
+                    }
+                }
+            });
+        }
+
+        private void createTextField() {
+            textField = new TextField("");
+            textField.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
+            textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+                @Override
+                public void handle(KeyEvent t) {
+                    if (t.getCode() == KeyCode.ENTER) {
+                        commitEdit(textField.getText());
+                        BetterTextFieldTableCell.this.getTableView().requestFocus();//why does it lose focus??
+                        BetterTextFieldTableCell.this.getTableView().getSelectionModel().selectBelowCell();
+                    } else if (t.getCode() == KeyCode.ESCAPE) {
+                        cancelEdit();
+                    }
+                }
+            });
+
+            textField.setOnKeyReleased(new EventHandler<KeyEvent>() {
+                @Override
+                public void handle(KeyEvent t) {
+                    if (t.getCode().isDigitKey()) {
+
+
+                        //BetterTextFieldTableCell.setText(textField.getText());
+
+                        //textField.setText(BetterTextFieldTableCell.getText());
+                        textField.deselect();
+                        textField.end();
+                        textField.positionCaret(textField.getLength() + 2);//works sometimes
+
+                    }
+                }
+            });
+        }
+    }
+
+    public class TableCellChangeInfo {
+        TableRow tableRow;
+        int row;
+        String newValue;
+
+        public TableCellChangeInfo(int row, String newValue) {
+            //this.tableRow = tableRow;
+            this.row = row;
+            this.newValue = newValue;
+        }
+
+        public int getRow() {
+            return row;
+        }
+
+        public String getNewValue() {
+            return newValue;
+        }
+    }
 
 }

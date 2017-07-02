@@ -22,13 +22,17 @@
 
 #listVB {
     /*-fx-spacing: 6px;*/
-    -fx-padding: 8px 0px 0px 0px;
-    -fx-background-color: beige;
+    -fx-padding: 8px 4px 0px 0px;
+    -fx-background-color: rgba(245, 242, 230, 0.4);
 }
 
 #detailVB {
-    -fx-padding: 8px 0px 0px 0px;
-    -fx-background-color: #f5f5d2;
+    -fx-padding: 8px 0px 0px 4px;
+    -fx-background-color: rgb(245, 242, 230);
+}
+
+#thumbnailSP {
+    -fx-padding: 5px;
 }
 
 .text-field {
@@ -42,14 +46,16 @@
 .label {
     -fx-font-size: 15px;
     -fx-font-weight: bold;
+
+    -fx-padding: 3px 0px 0px 0px;
 }
 
 .button {
-    -fx-font-size: 12px;
+    -fx-font-size: 13px;
     -fx-pref-width: 100px;
     -fx-pref-height: 20px;
     -fx-text-fill: white;
-    -fx-background-color: #f5d677;
+    -fx-background-color: #e8ba36;
     -fx-background-radius: 0;
 
 }
@@ -57,7 +63,7 @@
 .button:hover {
     -fx-font-weight: bold;
     -fx-cursor: hand;
-    -fx-effect: innershadow(gaussian, #f5e184, 1, 1.0, 0, 0);
+    -fx-effect: innershadow(gaussian, #f5dd6c, 1, 1.0, 0, 0);
 
 }
 
@@ -66,6 +72,3 @@
     -fx-effect: innershadow(gaussian, #f5d677, 1, 1.0, 0, 0);
 }
 
-.hbox {
-    -fx-spacing: 20px;
-}

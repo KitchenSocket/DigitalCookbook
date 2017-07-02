@@ -74,7 +74,7 @@
             <rowConstraints>
                 <RowConstraints percentHeight="100" prefHeight="200"/>
             </rowConstraints>
-            <StackPane GridPane.rowIndex="0" GridPane.columnIndex="0">
+            <StackPane GridPane.rowIndex="0" GridPane.columnIndex="0" fx:id="thumbnailSP">
                 <Rectangle fx:id="thumbnailRec"/>
                 <Label text="Add a picture?" StackPane.alignment="CENTER"/>
                 <ImageView fx:id="thumbnailIV"/>
