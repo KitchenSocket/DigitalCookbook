@@ -4,6 +4,7 @@ import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -732,7 +733,7 @@ public class MainPageController extends TemplateController implements Initializa
 	 * @param int recipeId, fetch ingredients by recipeId.
 	 * 
 	 * 
-	 * @author Shi Wenbin
+	 * @author Shi Wenbin, Qiwen Gu
 	 */
 
 	public void showIngredientTable(int recipeId, float multi) throws IOException {
@@ -747,9 +748,15 @@ public class MainPageController extends TemplateController implements Initializa
 		 
 		 for(int i = 0; i<ingredientSize;i++){
 			 
-			 ingredients.get(i).setQuantity((int)(ingredients.get(i).getQuantity() * multi));
+			 double   quantity   =   (double)(ingredients.get(i).getQuantity() * multi);  
 			 
-		 }
+			 BigDecimal   changeForm   =   new   BigDecimal(quantity);  
+			 
+			 double   quantityChange   = changeForm.setScale(2,   BigDecimal.ROUND_HALF_UP).doubleValue(); 
+			 
+			 ingredients.get(i).setQuantity(quantityChange);
+			 
+		 } 
 
 		ingredientTable
 				.setItems(convertArrayListToOberservableList(ingredients));
