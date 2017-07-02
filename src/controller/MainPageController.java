@@ -184,7 +184,7 @@ public class MainPageController extends TemplateController implements Initializa
 	
 	 protected ArrayList<Ingredient> ingredients= new ArrayList<>(); 
 	
-	/*
+	/**
 	 * A listener method , when enter key clicked, do the search method.
 	 * 
 	 * @param
@@ -205,7 +205,7 @@ public class MainPageController extends TemplateController implements Initializa
     	
     }
     
-	/*
+	/**
 	 * A listener method when minus serving Number button is clecked, recaculate the preparation time.
 	 * 
 	 * @param
@@ -238,7 +238,7 @@ public class MainPageController extends TemplateController implements Initializa
     	
     }
     
-	/*
+	/**
 	 * A listener method when plus serving Number button is clecked, recaculate the preparation time.
 	 * 
 	 * @param
@@ -423,12 +423,12 @@ public class MainPageController extends TemplateController implements Initializa
 		
 	}
 
-	/*
+	/**
 	 * Initialize table column type. which is name, quantity and unit.
 	 * 
 	 * @param
 	 * 
-	 * @author Shi Wenbin
+	 * @author Shi Wenbin, Qiwen Gu
 	 */
 
 	public void initableValueType() {
@@ -446,7 +446,7 @@ public class MainPageController extends TemplateController implements Initializa
 
 	}
 
-	/*
+	/**
 	 * A listener method set to monitor the recipeList, if user click one of
 	 * those recipes, this recipe's detailed info will be shown at the right
 	 * side.
@@ -577,16 +577,9 @@ public class MainPageController extends TemplateController implements Initializa
 
 	}
 
-	/*
-	 * A method to show searched recipes in the recipeList, for user to choose
-	 * and click.
-	 * 
-	 * @param String searchName
-	 * 
-	 * @author Shi Wenbin
-	 */
 
-	/*
+
+	/**
 	 * search method
 	 * 
 	 * @param event search click event
@@ -600,6 +593,14 @@ public class MainPageController extends TemplateController implements Initializa
 
 	}
 
+	/**
+	 * A method to show searched recipes in the recipeList, for user to choose
+	 * and click.
+	 * 
+	 * @param String searchName
+	 * 
+	 * @author Shi Wenbin,	Qiwen Gu
+	 */
 	protected void searchBehaviour() throws IOException {
 		if(mainOrFavView == 1){
 			
@@ -775,7 +776,7 @@ public class MainPageController extends TemplateController implements Initializa
 
 	}
 
-	/*
+	/**
 	 * add favorite recipe method(button color change need to be done)
 	 * 
 	 * @param event search click event
@@ -828,8 +829,12 @@ public class MainPageController extends TemplateController implements Initializa
 		}
 	}
 
-	/*
+	/**
 	 * edit recipe method(need a new view to be done)
+	 * 
+	 * @param event	edit click event
+	 * 
+	 * @author Qiwen Gu
 	 */
 	@FXML
 	public void editRecipe(ActionEvent event) throws IOException {
@@ -838,7 +843,7 @@ public class MainPageController extends TemplateController implements Initializa
 	}
 
 	
-	/*
+	/**
 	 * delete recipe method
 	 * 
 	 * @param event search click event
@@ -890,7 +895,7 @@ public class MainPageController extends TemplateController implements Initializa
 
 	}
 	
-	/*
+	/**
 	 * pop up window to say "No results matched", when user enter keywords which can not be found in database.
 	 * 
 	 * @param ArrayList<Recipe> results
@@ -941,6 +946,14 @@ public class MainPageController extends TemplateController implements Initializa
 
 	}
 	
+	/**
+	 * show the recipe's detailed information
+	 * 
+	 * @param recipe the chosen recipe
+	 * @throws IOException
+	 * 
+	 * @author Shi Wenbin, Qiwen Gu
+	 */
 	public void showDetailedRecipe(Recipe recipe) throws IOException {
 
 		showIngredientTable(recipe.getId(),1); // recipe

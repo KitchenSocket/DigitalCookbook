@@ -367,6 +367,11 @@ public class AddAndEditViewController {
 		}
 	}
 
+	/*
+	 * Save the recipe to the database
+	 * 
+	 * @author Gang Shao, Qiwen Gu
+	 */
 	private void saveRecipe() throws Exception {
 		if (!isValid()) {
 			return;
@@ -486,6 +491,13 @@ public class AddAndEditViewController {
 		}
 	}
 
+	/*
+	 * Compare whether the recipe is changed
+	 * 
+	 * @param newRecipe	user's input
+	 * 
+	 * @author Qiwen Gu
+	 */
 	public boolean compare(Recipe newRecipe) {
 
 		boolean partOne = true;
@@ -861,6 +873,14 @@ public class AddAndEditViewController {
 		this.isNew = bool;
 	}
 
+	/*
+	 * Copy the chosen Thumbnail into resources
+	 * 
+	 * @param file	 the path of the picture
+	 * @param toFile	the path of the destination
+	 * 
+	 * @author Qiwen Gu
+	 */
 	public static void copyThumbnail(File file, File toFile) throws Exception {
 		byte[] buffer = new byte[1024];
 		int dataNum;
@@ -904,6 +924,14 @@ public class AddAndEditViewController {
 		}
 	}
 
+	/*
+	 * Copy the chosen Thumbnail into resources
+	 * 
+	 * @param sourcePath	 the path of the picture
+	 * @param newRecipeId	the owner' recipeId of the picture
+	 * 
+	 * @author Qiwen Gu, Gang Shao
+	 */
 	public void copyThumbnail(Path sourcePath, int newRecipeId) throws Exception {
 		if (sourcePath != null && !sourcePath.equals("")) {
 			File srcFile = new File(sourcePath.toString());
