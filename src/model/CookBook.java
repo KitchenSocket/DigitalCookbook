@@ -1,11 +1,8 @@
 package model;
 
 import java.sql.*;
-import java.util.LinkedList;
-
 import javafx.application.Application;
 import view.Template;
-import model.Recipe;
 
 /**
  * A class for the program entry point and some test recipes.
@@ -14,10 +11,7 @@ import model.Recipe;
  * 
  */
 public class CookBook {
-
-	private LinkedList<Recipe> myRecipeList = new LinkedList<>();
 	
-  
     /**
      * Program entry point.
      *
@@ -30,15 +24,4 @@ public class CookBook {
 
     }
 
-//	private void add(Recipe recipe) {
-//		// TODO Auto-generated method stub
-//		myRecipeList.add(recipe);
-//		
-//	}
-	
-//	public void getRecipe(String recipeName) {
-//		
-//		System.out.println(Recipe.search(recipeName, myRecipeList));
-//		
-//	}
 }

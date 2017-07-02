@@ -20,7 +20,7 @@ import model.Recipe;
  *
  */
 public class RecipeDAOTest {
-
+ 
 	private RecipeDAO recipeDAOTestTarget;
 
 	private Recipe newRecipe;
@@ -40,7 +40,7 @@ public class RecipeDAOTest {
 
 		newRecipe.setServingNum(7);
 
-	}
+	} 
 
 	@Test
 	public void testGetRecipeById() throws IOException {

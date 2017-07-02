@@ -309,7 +309,6 @@ public class RecipeDAO {
      * @param recipe
      * @throws IOException 
      */
-    //TODO
     public void addRecipe(Recipe recipe) throws IOException{
     	
     	//execute sql
@@ -330,8 +329,7 @@ public class RecipeDAO {
      * 
      * @param recipe
      * @throws IOException 
-     */    
-    //TODO
+     */ 
     public void updateRecipe(Recipe recipe) throws IOException{
         SqlSession session = sqlSessionFactory.openSession();
         try {
@@ -351,7 +349,6 @@ public class RecipeDAO {
      * @param id
      * @throws IOException 
      */
-    //TODO
     public void deleteRecipe(int id) throws IOException{
         SqlSession session = sqlSessionFactory.openSession();
         try {
@@ -370,7 +367,6 @@ public class RecipeDAO {
      * 
      * @param id
      */
-    //TODO
     public void addFavorite(int id){
         SqlSession session = sqlSessionFactory.openSession();
         try {
@@ -387,7 +383,6 @@ public class RecipeDAO {
      * 
      * @param id
      */
-    //TODO
     public void removeFavorite(int id){
         SqlSession session = sqlSessionFactory.openSession();
         try {

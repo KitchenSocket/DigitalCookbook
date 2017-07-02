@@ -40,7 +40,7 @@ public class StepDAOTest {
 		newStep = new Step();
 		newStep.setDescription("only for JUnit test");
 		newStep.setRecipeId(2);
-		newStep.setStepOrder(4);
+		newStep.setStepOrder(5);
 		
 
 	}
@@ -82,7 +82,7 @@ public class StepDAOTest {
 
 		newStep.setDescription(newStep.getStepDescription() + " edit");
 
-		newSteps.set(3, newStep);
+		newSteps.set(4, newStep);
 
 		stepDAOTestTarget.updateSteps(newSteps);
 
@@ -112,24 +112,30 @@ public class StepDAOTest {
 	public void recover() {
 
 		Step step1 = new Step();
-		step1.setDescription("The first step of Kung Pao chicken.");
+		step1.setDescription("Add the chicken and stir gently to coat. ");
 		step1.setRecipeId(2);
 		step1.setStepOrder(1);
 
 		Step step2 = new Step();
-		step2.setDescription("The second step of Kung Pao chicken.");
+		step2.setDescription("Stir until the sugar and sauces are dissolved and set aside.");
 		step2.setRecipeId(2);
 		step2.setStepOrder(2);
 
 		Step step3 = new Step();
-		step3.setDescription("The third step of Kung Pao chicken.");
+		step3.setDescription("Add the peanut oil and swirl to coat the base. Add the chilies and stir-fry for about 30 seconds, or until the chilies have just begun to blacken and the oil is slightly fragrant. Add the chicken and stir-fry until no longer pink, 2 to 3 minutes.");
 		step3.setRecipeId(2);
 		step3.setStepOrder(3);
 
+		Step step4 = new Step();
+		step4.setDescription("Stir in the peanuts and cook for another 1 to 2 minutes. Transfer to a serving plate, sprinkle the scallion greens on top, and serve.");
+		step4.setRecipeId(2);
+		step4.setStepOrder(4);
+		
 		newSteps = new ArrayList<Step>();
 		newSteps.add(step1);
 		newSteps.add(step2);
 		newSteps.add(step3);
+		newSteps.add(step4);
 
 		stepDAOTestTarget.updateSteps(newSteps);
 

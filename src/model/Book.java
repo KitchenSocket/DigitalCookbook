@@ -9,12 +9,21 @@ import model.Ingredient;
 import model.Recipe;
 import model.Step;
 
+/**
+ * book object contains all information about a recipe including recipe name,
+ * thumb nail, preparation and cooking time ingredient information and step
+ * information use for the PDF export
+ * 
+ * 
+ * @author CHANDIM
+ *
+ */
 public class Book {
-	
+
 	final RecipeDAO recipeDAO = new RecipeDAO();
 	final IngredientDAO ingredientDAO = new IngredientDAO();
 	final StepDAO stepDAO = new StepDAO();
-	
+
 	private String recipeName;
 	private String recipeThumbnail;
 	private int recipePreTime;
@@ -23,9 +32,9 @@ public class Book {
 	private int recipeServNum;
 	private ArrayList<Ingredient> ingredients;
 	private ArrayList<Step> steps;
-	
+
 	public Book() {
-//
+		//
 	}
 
 	public RecipeDAO getRecipeDAO() {
@@ -79,7 +88,7 @@ public class Book {
 	public void setRecipeThumbnail(String recipeThumbnail) {
 		this.recipeThumbnail = recipeThumbnail;
 	}
-	
+
 	public void setRecipePreTime(int recipePreTime) {
 		this.recipePreTime = recipePreTime;
 	}
@@ -110,7 +119,11 @@ public class Book {
 				+ recipeCookTime + ", recipeDescrip=" + recipeDescrip + ", recipeServNum=" + recipeServNum
 				+ ", ingredients=" + ingredients + ", steps=" + steps + "]";
 	}
-	
+
+	/**
+	 * constructor with parameter of a recipe
+	 * @param recipe
+	 */
 	public Book(Recipe recipe) {
 		this.recipeName = recipe.getName();
 		this.recipePreTime = recipe.getPreparationTime();
@@ -121,5 +134,5 @@ public class Book {
 		this.steps = this.getStepDAO().getStepListByRecipyId(recipe.getId());
 
 	}
-	
+
 }

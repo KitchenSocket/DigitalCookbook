@@ -123,7 +123,6 @@ public class IngredientDAO {
      * @param step
      * @throws IOException 
      */
-    //TODO
     public void addIngredient(Ingredient ingredient) throws IOException{
     	
     	//execute sql
@@ -161,7 +160,6 @@ public class IngredientDAO {
      * @param recipeId
      * @throws IOException 
      */
-    //TODO
     public void deleteIngredientListByRecipeId(int recipeId) throws IOException{
         SqlSession session = sqlSessionFactory.openSession();
         try {

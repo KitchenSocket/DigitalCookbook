@@ -169,6 +169,7 @@ public class Correct {
 		
 		ArrayList<String> oneLine = new ArrayList<String>();
 		
+		//get contents of the words file
 		for (String line = br.readLine(); line != null; line = br.readLine()) {
 
 			oneLine = new ArrayList<String>(Arrays.asList(line.split(" ")));
@@ -183,8 +184,7 @@ public class Correct {
 		
 		br.close();
 		
-
-		
+		//add new words into the words file if it's not contained in the words file
 		if(!content.contains(word)) {
 			
 			word += "\r\n";
@@ -208,6 +208,7 @@ public class Correct {
 	
 	/**
 	 * initialize word.txt
+	 * write all recipes' name and ingredients'name into the words
 	 * 
 	 * @throws IOException
 	 */
@@ -235,14 +236,17 @@ public class Correct {
 		
 	}
 	
-	
+	/**
+	 * mainly for test
+	 * 
+	 * @param args
+	 * @throws IOException
+	 */
 	public static void main(String args[]) throws IOException {
 		//Scanner scan = new Scanner(System.in);
 		// while(scan.hasNextLine()){
 		//String in = scan.nextLine().trim();
 		//System.out.println((new Correct("words.txt")).correct(in));
-		Correct test = new Correct("C:\\Users\\CHANDIM\\Desktop\\fakk.txt");
-		test.updateDict("hong shao rou");
 		
 	}
 

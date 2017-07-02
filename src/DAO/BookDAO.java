@@ -21,17 +21,19 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.DottedLineSeparator;
 import com.itextpdf.text.pdf.draw.LineSeparator;
 
-import javafx.application.HostServices;
 import javafx.stage.FileChooser;
 import model.Book;
-import model.Ingredient;
 import model.Recipe;
-import model.Step;
 import view.Template;
 
+/**
+ * export the recipes in the favorite folder
+ * 
+ * 
+ * @author CHANDIM
+ *
+ */
 public class BookDAO {
-
-	private static String FILE;
 
 	private static Font bodyFont;
 
@@ -39,34 +41,18 @@ public class BookDAO {
 
 	private static Font subTitleFont;
 
-	// private static Font catFont;
-	// private static Font redFont;
-	// private static Font subFont;
-	// private static Font smallBold;
-	// private static Font courier;
-
 	public BookDAO() throws DocumentException, IOException {
-
-		FILE = "myCookBook.pdf";
 
 		bodyFont = new Font(Font.FontFamily.HELVETICA, 25, Font.BOLD);
 
 		BaseFont base = BaseFont.createFont("resources/Ormont_Light.ttf", BaseFont.WINANSI, BaseFont.EMBEDDED);
 
 		titleFont = new Font(base, 40, Font.NORMAL);
-		
+
 		subTitleFont = new Font(Font.FontFamily.HELVETICA, 15, Font.BOLD);
 
-		// TODO set font
-		// catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
-		// redFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL,
-		// BaseColor.RED);
-		// subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
-		// smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
-		// courier = new Font(Font.FontFamily.COURIER, 18, Font.ITALIC |
-		// Font.UNDERLINE);
 	}
-	
+ 
 	/**
 	 * create a file and add content
 	 * 
@@ -74,12 +60,10 @@ public class BookDAO {
 	 */
 	public void showFile() {
 		try {
-			
-			 File pdfFile = new File("C:\\Users\\asus\\git\\DigitalCookbook\\myCookBook.pdf");
 
+			File pdfFile = new File("C:\\Users\\asus\\git\\DigitalCookbook\\myCookBook.pdf");
 
 			Desktop.getDesktop().open(pdfFile);
-
 
 		} catch (Exception e) {
 
@@ -98,15 +82,14 @@ public class BookDAO {
 		try {
 
 			Document document = new Document();
-			
-			 FileChooser fileChooser = new FileChooser();
-	         fileChooser.setTitle("Save Cookbook pdf");
-	         
-	         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.pdf)", "*.pdf");
-	         fileChooser.getExtensionFilters().add(extFilter);
 
-	         File ioFile = fileChooser.showSaveDialog(Template.primaryStage);
-			
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.setTitle("Save Cookbook pdf");
+
+			FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.pdf)", "*.pdf");
+			fileChooser.getExtensionFilters().add(extFilter);
+
+			File ioFile = fileChooser.showSaveDialog(Template.primaryStage);
 
 			File file = new File(ioFile.getAbsolutePath());
 
@@ -228,39 +211,34 @@ public class BookDAO {
 
 			// set the title of this page(recipe name)
 			Paragraph placeHolder = new Paragraph(Chunk.NEWLINE);
+			
 			Paragraph rName = new Paragraph(page.getRecipeName(), bodyFont);
-
-			// rName.setSpacingBefore(1000);
-
-			// rName.setAlignment(Element.ALIGN_CENTER);
 
 			Chapter details = new Chapter(placeHolder, 0);
 
 			details.add(Chunk.NEWLINE);
+			
 			details.add(rName);
+			
 			details.setNumberDepth(0);
 
-			// add image TODO 
-			// ------------------------------------------
-			// Image image = Image.getInstance(page.getRecipeThumbnail());
-			Image image = null  ;
-			
-			try{
-				 image = Image.getInstance("src/resources/" + recipe.getThumbnail());
-				
+			// add image
+			Image image = null;
 
-				
-			} catch(FileNotFoundException ex){
-				
-				 image = Image.getInstance("src/resources/pizza_img.png");
+			try {
+
+				image = Image.getInstance("src/resources/" + recipe.getThumbnail());
+
+			} catch (FileNotFoundException ex) {
+
+				image = Image.getInstance("src/resources/pizza_img.png");
 			}
-			
+
 			image.setAbsolutePosition(400, 680);
-			
+
 			image.scaleToFit(150, 150);
-			
+
 			details.add(image);
-			// -------------------------------------------
 
 			// preparation time and cooking time
 			details.add(Chunk.NEWLINE);
@@ -281,13 +259,13 @@ public class BookDAO {
 			// ingredients
 			details.add(Chunk.NEWLINE);
 
-			details.add(new Paragraph("Ingredient",subTitleFont));
+			details.add(new Paragraph("Ingredient", subTitleFont));
 
 			details.add(new Chunk(new DottedLineSeparator()));
 
 			for (int i = 0; i < page.getIngredients().size(); i++) {
 
-				details.add(new Paragraph(String.valueOf(i+1) + ". " + page.getIngredients().get(i).getName() + " "
+				details.add(new Paragraph(String.valueOf(i + 1) + ". " + page.getIngredients().get(i).getName() + " "
 
 						+ page.getIngredients().get(i).getQuantity() + " "
 
@@ -298,13 +276,13 @@ public class BookDAO {
 			// steps
 			details.add(Chunk.NEWLINE);
 
-			details.add(new Paragraph("Step",subTitleFont));
+			details.add(new Paragraph("Step", subTitleFont));
 
 			details.add(new Chunk(new DottedLineSeparator()));
 
 			for (int i = 0; i < page.getSteps().size(); i++) {
 
-				details.add(new Paragraph(String.valueOf(i+1) + ". " + page.getSteps().get(i).getStepDescription()));
+				details.add(new Paragraph(String.valueOf(i + 1) + ". " + page.getSteps().get(i).getStepDescription()));
 
 			}
 
@@ -320,6 +298,12 @@ public class BookDAO {
 
 	}
 
+	/**
+	 * mainly for test
+	 * @param arg
+	 * @throws DocumentException
+	 * @throws IOException
+	 */
 	public static void main(String[] arg) throws DocumentException, IOException {
 
 		BookDAO onePage = new BookDAO();
