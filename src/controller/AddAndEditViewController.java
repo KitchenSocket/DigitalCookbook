@@ -497,8 +497,6 @@ public class AddAndEditViewController {
 
                 TemplateController.loadContent("/view/MainOrFavView.fxml", "Main");
             }
-
-
         }
     }
 

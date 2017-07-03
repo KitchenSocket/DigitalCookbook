@@ -1,23 +1,10 @@
 package controller;
 
-import java.awt.Toolkit;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.ResourceBundle;
-import java.util.Stack;
-import javax.swing.JOptionPane;
-
-import com.itextpdf.text.DocumentException;
-
-import DAO.BookDAO;
+import DAO.ExportPDF;
 import DAO.IngredientDAO;
 import DAO.RecipeDAO;
 import DAO.StepDAO;
+import com.itextpdf.text.DocumentException;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -26,16 +13,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -43,15 +21,19 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.stage.FileChooser;
 import model.Ingredient;
 import model.Recipe;
 import model.Step;
-import test.RecipeTest;
 import view.Template;
+
+import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 /**
  * Controller of mainPage.
@@ -141,7 +123,7 @@ public class MainPageController extends TemplateController implements Initializa
     @FXML
     void exportPdf(ActionEvent event) throws DocumentException, IOException {
 
-		BookDAO onePage = new BookDAO();
+		ExportPDF onePage = new ExportPDF();
 
 		onePage.creatFile();;
 		
