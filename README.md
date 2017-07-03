@@ -29,5 +29,4 @@ public class CookBook {
 
 }
 ```
-<br/>
 Run it and you can see our work. Enjoy~
