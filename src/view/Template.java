@@ -1,19 +1,14 @@
 package view;
 
-import java.io.File;
-import java.io.IOException;
-
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+
+import java.io.File;
+import java.io.IOException;
 
 public class Template extends Application {
 	
@@ -30,8 +25,8 @@ public class Template extends Application {
 		
         Template.primaryStage = primaryStage;
 
-        Template.primaryStage.getIcons().add(new Image(new File("src/resources/COOKING NAVIGATOR-1.png").toURI().toString(), 80, 80, false, false));
-        Template.primaryStage.setTitle("CookbookApp");
+        Template.primaryStage.getIcons().add(new Image(new File("src/resources/COOKING_NAVIGATOR.png").toURI().toString(), 80, 80, false, false));
+        Template.primaryStage.setTitle("Cooking Navigator");
 
 
         FXMLLoader loader = new FXMLLoader();

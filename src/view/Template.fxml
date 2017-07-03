@@ -21,7 +21,7 @@
 
         <TilePane fx:id="bottomBtnTP" prefColumns="1" prefRows="1" prefTileWidth="80" AnchorPane.bottomAnchor="0"
                   AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
-            <Button fx:id="addRecipeBtn" prefHeight="80" prefWidth="80" style="-fx-background-color: ;"/>
+            <Button fx:id="addRecipeBtn" prefHeight="80" prefWidth="80"/>
         </TilePane>
       <ProgressIndicator fx:id="bar" layoutY="167.0" prefHeight="70.0" prefWidth="80.0" progress="0.0" />
     </AnchorPane>
@@ -49,7 +49,8 @@
                      <HBox prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
                       <VBox prefHeight="200.0" prefWidth="800.0" alignment="CENTER">
                         <children>
-                           <Label alignment="CENTER" prefHeight="200.0" prefWidth="800.0" text="Welcome to your digital cookbook" VBox.vgrow="ALWAYS">
+                            <Label alignment="CENTER" prefHeight="200.0" prefWidth="800.0"
+                                   text="Welcome to Cooking Navigator" VBox.vgrow="ALWAYS">
                               <font>
                                  <Font name="Arial" size="47.0" />
                               </font>
@@ -106,6 +107,9 @@
       </children>
        <VBox alignment="CENTER">
            <Label text="Made by KitchenSocket Group (Chen Sijie, Gu Qiwen, Liu Yuefeng, Shao Gang, Shi Wenbin) for SWE II Java Project: "
+                  style="-fx-text-fill: gray; -fx-font-size: 13px"/>
+           <Label/>
+           <Label text="Icon of 'pdf export' is designed by Freepik from http://www.flaticon.com/free-icon/pdf-file-format-symbol_29099"
                   style="-fx-text-fill: gray; -fx-font-size: 13px"/>
            <Label text="Icons of 'home', 'heart', 'add', 'search' and 'edit' are designed by Enes Dal and licensed under CC BY 3.0 https://www.iconfinder.com/iconsets/freeline"
                   style="-fx-text-fill: gray; -fx-font-size: 13px"/>

@@ -476,8 +476,8 @@ public class MainPageController extends TemplateController implements Initializa
 					
 					String uri ="src/resources/" +  selectedRecipe.getId() + ".png";
 					if(selectedRecipe.getThumbnail() == null){
-						
-						recipeImg.setImage(new Image( new File("src/resources/pizza_img.png").toURI().toString(),  80, 80, false, false));
+
+						recipeImg.setImage(new Image(new File("src/resources/COOKING_NAVIGATOR.png").toURI().toString(), 80, 80, false, false));
 						
 						
 					} else {
@@ -579,8 +579,8 @@ public class MainPageController extends TemplateController implements Initializa
 	/**
 	 * A method to show searched recipes in the recipeList, for user to choose
 	 * and click.
-	 * 
-	 * @param String searchName
+	 *
+	 *
 	 * 
 	 * @author Shi Wenbin,	Qiwen Gu
 	 */

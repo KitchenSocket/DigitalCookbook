@@ -1,17 +1,15 @@
 package controller;
 
-import java.io.File;
-import java.net.URL;
-import java.util.ResourceBundle;
-
-import org.apache.ibatis.javassist.bytecode.stackmap.BasicBlock.Catch;
-
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import model.Recipe;
+
+import java.io.File;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /*
  * One Anchor in a listview, this class put each recipes' info to this anchor. And all the anchorView makes up the brief info list in the Main Page.
@@ -63,11 +61,11 @@ public class BriefRecipeInMainPageController implements Initializable {
 				String uri ="src/resources/" +  selectedRecipe.getId() + ".png";
 				
 		if(selectedRecipe.getThumbnail() == null){
-			
-			recipeImg.setImage(new Image( new File("src/resources/pizza_img.png").toURI().toString(),  80, 80, false, false));
-			
-			
-		} else {
+
+            recipeImg.setImage(new Image(new File("src/resources/COOKING_NAVIGATOR.png").toURI().toString(), 80, 80, false, false));
+
+
+        } else {
 			recipeImg.setImage(new Image( new File("src/resources/" + selectedRecipe.getThumbnail()).toURI().toString(),  80, 80, false, false));
 			
 			
