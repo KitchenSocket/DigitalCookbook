@@ -1,37 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ProgressIndicator?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.TilePane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-
 <GridPane fx:id="rootBP" alignment="CENTER" minHeight="500" minWidth="800" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.TemplateController">
     <columnConstraints>
-        <ColumnConstraints fx:id="naviCol" prefWidth="80" />
-        <ColumnConstraints fx:id="contentCol" hgrow="ALWAYS" prefWidth="1120" />
+        <ColumnConstraints fx:id="naviCol" prefWidth="80"/>
+        <ColumnConstraints fx:id="contentCol" hgrow="ALWAYS" prefWidth="1120"/>
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints fx:id="contentRow" percentHeight="100" />
+        <RowConstraints fx:id="contentRow" percentHeight="100"/>
     </rowConstraints>
-        <AnchorPane fx:id="naviAP" GridPane.columnIndex="0" GridPane.rowIndex="0">
-            <TilePane fx:id="topBtnTP" orientation="VERTICAL" prefColumns="1" prefRows="2" prefTileWidth="80" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
-                <Button fx:id="mainPageBtn" prefHeight="80" prefWidth="80" />
-                <Button fx:id="favBtn" prefHeight="80" prefWidth="80" />
-            </TilePane>
+    <AnchorPane fx:id="naviAP" GridPane.columnIndex="0" GridPane.rowIndex="0">
+        <TilePane fx:id="topBtnTP" orientation="VERTICAL" prefColumns="1" prefRows="2" prefTileWidth="80"
+                  AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+            <Button fx:id="mainPageBtn" prefHeight="80" prefWidth="80"/>
+            <Button fx:id="favBtn" prefHeight="80" prefWidth="80"/>
+        </TilePane>
 
-            <TilePane fx:id="bottomBtnTP" prefColumns="1" prefRows="1" prefTileWidth="80" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
-                <Button fx:id="addRecipeBtn" prefHeight="80" prefWidth="80" style="-fx-background-color: ;" />
-            </TilePane>
+        <TilePane fx:id="bottomBtnTP" prefColumns="1" prefRows="1" prefTileWidth="80" AnchorPane.bottomAnchor="0"
+                  AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+            <Button fx:id="addRecipeBtn" prefHeight="80" prefWidth="80" style="-fx-background-color: ;"/>
+        </TilePane>
       <ProgressIndicator fx:id="bar" layoutY="167.0" prefHeight="70.0" prefWidth="80.0" progress="0.0" />
-        </AnchorPane>
+    </AnchorPane>
    <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
       <children>
          <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
@@ -54,13 +47,21 @@
                <HBox prefHeight="100.0" prefWidth="200.0">
                   <children>
                      <HBox prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                     <VBox prefHeight="100.0" prefWidth="800.0">
+                      <VBox prefHeight="200.0" prefWidth="800.0" alignment="CENTER">
                         <children>
                            <Label alignment="CENTER" prefHeight="200.0" prefWidth="800.0" text="Welcome to your digital cookbook" VBox.vgrow="ALWAYS">
                               <font>
                                  <Font name="Arial" size="47.0" />
                               </font>
                            </Label>
+                            <VBox alignment="CENTER" prefWidth="250" VBox.vgrow="ALWAYS">
+                                <Label text="With this cookbook, you can easily view recipes, favorite recipes and also add new recipes."
+                                       style="-fx-font-size: 16" wrapText="true"/>
+                                <Label text="We prepared some good recipes for you, enjoy!" style="-fx-font-size: 16"/>
+                                <VBox.margin>
+                                    <Insets top="10.0"/>
+                                </VBox.margin>
+                            </VBox>
                            <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
                               <children>
                                  <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
@@ -76,7 +77,7 @@
                                  </HBox>
                               </children>
                               <VBox.margin>
-                                 <Insets top="50.0" />
+                                  <Insets top="40.0"/>
                               </VBox.margin>
                            </VBox>
                         </children>
@@ -86,6 +87,7 @@
                </HBox>
             </children>
          </VBox>
+
          <VBox prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
             <children>
                <HBox prefHeight="100.0" prefWidth="200.0">
@@ -102,5 +104,11 @@
             </children>
          </VBox>
       </children>
+       <VBox alignment="CENTER">
+           <Label text="Made by KitchenSocket Group (Chen Sijie, Gu Qiwen, Liu Yuefeng, Shao Gang, Shi Wenbin) for SWE II Java Project: "
+                  style="-fx-text-fill: gray; -fx-font-size: 13px"/>
+           <Label text="Icons of 'home', 'heart', 'add', 'search' and 'edit' are designed by Enes Dal and licensed under CC BY 3.0 https://www.iconfinder.com/iconsets/freeline"
+                  style="-fx-text-fill: gray; -fx-font-size: 13px"/>
+       </VBox>
    </VBox>
 </GridPane>
