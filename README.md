@@ -1,4 +1,4 @@
-<h1>Cooking Navigator<h1/>
+#Cooking Navigator
 Cooing Navigator is a digital cookbook which you can easily view recipes, add recipes into your favorite folder. You can also add new recipes into it and update them later.<br/>
 
 ## Contributers
