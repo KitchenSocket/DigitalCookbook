@@ -46,7 +46,7 @@ import java.util.Optional;
 /**
  * a class for controlling and initializing add & edit view and further save.
  *
- * @author Gang Shao
+ * @author Gang Shao, Qiwen Gu
  */
 public class AddAndEditViewController {
 
@@ -487,57 +487,6 @@ public class AddAndEditViewController {
 		}
 	}
 
-	/*
-	 * Compare whether the recipe is changed
-	 * 
-	 * @param newRecipe	user's input
-	 * 
-	 * @author Qiwen Gu
-	 */
-	public boolean compare(Recipe newRecipe) {
-
-		boolean partOne = true;
-		boolean partStep = true;
-		boolean partIngredient = true;
-		ArrayList<Ingredient> origionIngredients = myIngredientDAO
-				.getIngredientListByRecipyId(MainPageController.selectedRecipe.getId());
-		ArrayList<Step> origionSteps = myStepDAO.getStepListByRecipyId(MainPageController.selectedRecipe.getId());
-		if (newRecipe.getName() != MainPageController.selectedRecipe.getName()
-				|| newRecipe.getBriefDescription() != MainPageController.selectedRecipe.getBriefDescription()
-				|| newRecipe.getDescription() != MainPageController.selectedRecipe.getDescription()
-				|| newRecipe.getServingNum() != MainPageController.selectedRecipe.getServingNum()
-				|| newRecipe.getCookingTime() != MainPageController.selectedRecipe.getCookingTime()
-				|| newRecipe.getPreparationTime() != MainPageController.selectedRecipe.getPreparationTime()) {
-			partOne = false;
-		}
-
-		if (steps.size() == origionSteps.size()) {
-			int order = 0;
-			for (Step step : steps) {
-				if (step.getStepDescription() != origionSteps.get(order).getStepDescription()) {
-					partStep = false;
-					order++;
-				}
-			}
-		}
-
-		if (ingredients.size() == origionIngredients.size()) {
-			int order = 0;
-			for (Ingredient ingredient : ingredients) {
-				if (ingredient.getName() != origionIngredients.get(order).getName()
-						|| ingredient.getQuantity() != origionIngredients.get(order).getQuantity()
-						|| ingredient.getUnit() != origionIngredients.get(order).getUnit()) {
-					partIngredient = false;
-					order++;
-				}
-			}
-		}
-		if (!partOne && !partStep && !partIngredient) {
-			return true;
-		} else {
-			return false;
-		}
-	}
 
 	private void optimize() {
 		Iterator<Ingredient> ingredientIterator = ingredients.iterator();
