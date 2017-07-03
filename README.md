@@ -9,8 +9,8 @@ This project is from ECUST-Fachhochschule Luebeck 2018, IT class, SWE lecture, g
 updated version Eclipse, mysql, java runtime environment 6+
 
 ### Step by Step
-1. Open mysql, creat a new schema 'cookbook'
-2. Import the DB dump files
+1. Open mysql, creat a new schema 'cookbook', make sure you have got the right spelling.
+2. Import the DB dump files into the schema created
 3. Open Eclipse, clone this project and find src->model.CookBook.java, you may see the following code:<br/>
 ```Java
 public class CookBook {
