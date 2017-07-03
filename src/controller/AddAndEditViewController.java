@@ -3,18 +3,12 @@ package controller;
 import DAO.IngredientDAO;
 import DAO.RecipeDAO;
 import DAO.StepDAO;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
@@ -25,7 +19,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.FileChooser;
-import javafx.util.Callback;
 import javafx.util.StringConverter;
 import model.Ingredient;
 import model.Recipe;
@@ -52,20 +45,23 @@ public class AddAndEditViewController {
 
 	private int selectedRecipeId;
 	private boolean isNew = true;
+    private boolean hasShowEditInformation = false;
 
 	private Recipe recipe;
 	private ObservableList<Step> steps = FXCollections.observableArrayList();
 	private ObservableList<Ingredient> ingredients = FXCollections.observableArrayList();
 
-	private RecipeDAO myRecipeDAO = new RecipeDAO();
+    //initiate DAOs
+    private RecipeDAO myRecipeDAO = new RecipeDAO();
 	private IngredientDAO myIngredientDAO = new IngredientDAO();
 	private StepDAO myStepDAO = new StepDAO();
 
-	private FileChooser fileChooser = new FileChooser();
+    //initiate filechooser
+    private FileChooser fileChooser = new FileChooser();
 	private Path thumbnailSourcePath;
-    private Path thumbnailOriginalPath;
     private String thumbnailName;
 
+    //define elements in the fxml
     @FXML
     private GridPane frameGrid;
     @FXML
@@ -126,202 +122,251 @@ public class AddAndEditViewController {
 	@FXML
 	private TextArea descriptionFld;
 
-	@FXML
-	private void initialize() {
-		initBtns();
+    /**
+     * initialize buttons, data and thumbnail.
+     *
+     * @author Gang Shao
+     */
+    @FXML
+    private void initialize() {
+        initBtns();
 
-		System.out.println("initializing ...");
-		if (recipe != null) {
-			try {
-				initData();
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-				System.out.println("error loading thumbnail.");
-			}
-		} else {
-			initFakeData();
-		}
+        System.out.println("initializing ...");
+        if (recipe != null) {
+            try {
+                initData();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                System.out.println("error loading thumbnail.");
+            }
+        } else {
+            initFakeData();
+        }
         initThumbnail();
     }
 
-	private void initIngredientsTV(ObservableList<Ingredient> ingredientsObservableList) {
+    /**
+     * initialize the TableView for input of ingredients
+     * @param ingredientsObservableList the ingredients that will be put into the TableView
+     * @author Gang Shao
+     */
+    private void initIngredientsTV(ObservableList<Ingredient> ingredientsObservableList) {
 
-		ingredientNameCol.setCellValueFactory(cellValue -> new SimpleStringProperty(cellValue.getValue().getName()));
-		ingredientQuantityCol
-				.setCellValueFactory(cellValue -> new SimpleDoubleProperty(cellValue.getValue().getQuantity()));
-		ingredientUnitCol.setCellValueFactory(cellValue -> new SimpleStringProperty(cellValue.getValue().getUnit()));
+        //set cell value factory for each column for the value in each cell
+        ingredientNameCol.setCellValueFactory(cellValue -> new SimpleStringProperty(cellValue.getValue().getName()));
+        ingredientQuantityCol
+                .setCellValueFactory(cellValue -> new SimpleDoubleProperty(cellValue.getValue().getQuantity()));
+        ingredientUnitCol.setCellValueFactory(cellValue -> new SimpleStringProperty(cellValue.getValue().getUnit()));
 
-		ingredientNoCol.prefWidthProperty().bind(ingredientsTV.widthProperty().multiply(0.05));
-		ingredientNameCol.prefWidthProperty().bind(ingredientsTV.widthProperty().multiply(0.446));
-		ingredientQuantityCol.prefWidthProperty().bind(ingredientsTV.widthProperty().multiply(0.2));
-		ingredientUnitCol.prefWidthProperty().bind(ingredientsTV.widthProperty().multiply(0.3));
+        //set preferred width for each column
+        ingredientNoCol.prefWidthProperty().bind(ingredientsTV.widthProperty().multiply(0.05));
+        ingredientNameCol.prefWidthProperty().bind(ingredientsTV.widthProperty().multiply(0.445));
+        ingredientQuantityCol.prefWidthProperty().bind(ingredientsTV.widthProperty().multiply(0.2));
+        ingredientUnitCol.prefWidthProperty().bind(ingredientsTV.widthProperty().multiply(0.3));
 
-		ingredientNameCol.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<String>() {
-			@Override
-			public String fromString(String string) {
-				return string;
-			}
+        //set cell factory for each column for how to display value in each cell
+        ingredientNameCol.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<String>() {
+            @Override
+            public String fromString(String string) {
+                return string;
+            }
 
-			@Override
-			public String toString(String object) {
-				return object;
-			}
-		}));
+            @Override
+            public String toString(String object) {
+                return object;
+            }
+        }));
 
-//		ingredientNameCol.setCellFactory(factory -> new ExperimentalTextFieldTableCell<Ingredient, String> ());
+        ingredientQuantityCol.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Number>() {
+            @Override
+            public Number fromString(String string) {
+                try {
+                    return Double.parseDouble(string);
+                } catch (NumberFormatException e) {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Only number allowed in \"Quantity\"");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Your change of quantity to \"" + string
+                            + "\" is not valid. \n For an egg, you can set quantity to 0 and leave the unit blank.");
+                    alert.showAndWait();
+                }
+                return 0d;
+            }
 
+            @Override
+            public String toString(Number object) {
+                return object.toString();
+            }
+        }));
 
-		ingredientQuantityCol.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Number>() {
-			@Override
-			public Number fromString(String string) {
-				try {
-					return Double.parseDouble(string);
-				} catch (NumberFormatException e) {
-					Alert alert = new Alert(Alert.AlertType.WARNING);
-					alert.setTitle("Only number allowed in \"Quantity\"");
-					alert.setHeaderText(null);
-					alert.setContentText("Your change of quantity to \"" + string
-							+ "\" is not valid. \n For an egg, you can set quantity to 0 and leave the unit blank.");
-					alert.showAndWait();
-				}
-				return 0d;
-			}
+        ingredientUnitCol.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<String>() {
+            @Override
+            public String fromString(String string) {
+                return string;
+            }
 
-			@Override
-			public String toString(Number object) {
-				return object.toString();
-			}
-		}));
-		ingredientUnitCol.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<String>() {
-			@Override
-			public String fromString(String string) {
-				return string;
-			}
+            @Override
+            public String toString(String object) {
+                return object;
+            }
+        }));
 
-			@Override
-			public String toString(String object) {
-				return object;
-			}
-		}));
+        ingredientNoCol.setCellFactory(cell -> new NumberCell());
 
-		ingredientNoCol.setCellFactory(cell -> new NumberCell());
+        //set ingredientsObservableList to TableView
+        ingredientsTV.setItems(ingredientsObservableList);
+        ingredientsTV.setEditable(true);
+        ingredientsTV.getSelectionModel().setCellSelectionEnabled(true);
 
-		ingredientsTV.setItems(ingredientsObservableList);
-		ingredientsTV.setEditable(true);
-		ingredientsTV.getSelectionModel().setCellSelectionEnabled(true);
+        //set listener which will save edit and request focus when committing edit
+        ingredientNameCol.setOnEditCommit(event -> {
+            cellEditCommitForIngredient(event);
+            ingredientsTV.requestFocus();
+        });
 
-		ingredientNameCol.setOnEditCommit(event -> {
-			cellEditCommitForIngredient(event);
-			ingredientsTV.requestFocus();
-		});
+        ingredientQuantityCol.setOnEditCommit(event -> {
+            cellEditCommitForIngredient(event);
+            ingredientsTV.requestFocus();
+        });
 
-		ingredientQuantityCol.setOnEditCommit(event -> {
-			cellEditCommitForIngredient(event);
-			ingredientsTV.requestFocus();
-		});
+        ingredientUnitCol.setOnEditCommit(event -> {
+            cellEditCommitForIngredient(event);
+            ingredientsTV.requestFocus();
+        });
 
-		ingredientUnitCol.setOnEditCommit(event -> {
-			cellEditCommitForIngredient(event);
-			ingredientsTV.requestFocus();
-		});
+        //set alert to remind user clicking outside will loose the edits
+        ingredientNameCol.setOnEditCancel(event -> {
+            if (!hasShowEditInformation) {
+                showEditInformation();
+            }
+            ingredientsTV.requestFocus();
+        });
 
-        //ingredientNameCol.focusP
+        ingredientQuantityCol.setOnEditCancel(event -> {
+            if (!hasShowEditInformation) {
+                showEditInformation();
+            }
+            ingredientsTV.requestFocus();
+        });
 
+        ingredientUnitCol.setOnEditCancel(event -> {
+            if (!hasShowEditInformation) {
+                showEditInformation();
+            }
+            ingredientsTV.requestFocus();
+        });
 
-		// switch to edit mode on keypress
-		// this must be KeyEvent.KEY_PRESSED so that the key gets forwarded to
-		// the editing cell; it wouldn't be forwarded on KEY_RELEASED
-		ingredientsTV.addEventFilter(KeyEvent.KEY_PRESSED, new EasyEdit<>(ingredientsTV));
+        //set listener so that it switches to edit mode when pressing any digital/letter key.
+        // this must be KeyEvent.KEY_PRESSED so that the key gets forwarded to, the editing cell; otherwise, it wouldn't be forwarded on KEY_RELEASED
+        ingredientsTV.addEventFilter(KeyEvent.KEY_PRESSED, new EasyEdit<>(ingredientsTV));
 
-		ingredientsTV.addEventFilter(KeyEvent.KEY_RELEASED, new EasySelection<>(ingredientsTV));
-	}
+        ingredientsTV.addEventFilter(KeyEvent.KEY_RELEASED, new EasySelection<>(ingredientsTV));
 
-	private void initStepsTV(ObservableList<Step> stepObservableList) {
-		// stepOrderCol.setCellValueFactory(cellValue -> new
-		// SimpleIntegerProperty(cellValue.getValue().getStepOrder()));
+    }
 
-		stepOrderCol.setCellFactory(cell -> new NumberCell<Step>());
-		stepDescriptionCol
-				.setCellValueFactory(cellValue -> new SimpleStringProperty(cellValue.getValue().getStepDescription()));
+    /**
+     * initialize the TableView for input of setps
+     * @param stepObservableList the steps that will be put into the TableView
+     * @author Gang Shao
+     */
+    private void initStepsTV(ObservableList<Step> stepObservableList) {
 
-		stepOrderCol.prefWidthProperty().bind(stepsTV.widthProperty().multiply(0.05));
-		stepDescriptionCol.prefWidthProperty().bind(stepsTV.widthProperty().multiply(0.946));
+        stepOrderCol.setCellFactory(cell -> new NumberCell<Step>());
+        stepDescriptionCol
+                .setCellValueFactory(cellValue -> new SimpleStringProperty(cellValue.getValue().getStepDescription()));
 
-		stepDescriptionCol.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<String>() {
-			@Override
-			public String fromString(String string) {
-				return string;
-			}
+        stepOrderCol.prefWidthProperty().bind(stepsTV.widthProperty().multiply(0.05));
+        stepDescriptionCol.prefWidthProperty().bind(stepsTV.widthProperty().multiply(0.946));
 
-			@Override
-			public String toString(String object) {
-				return object;
-			}
-		}));
+        stepDescriptionCol.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<String>() {
+            @Override
+            public String fromString(String string) {
+                return string;
+            }
 
-		stepsTV.setItems(stepObservableList);
-		stepsTV.setEditable(true);
-		stepsTV.getSelectionModel().setCellSelectionEnabled(true);
-		// ingredientsTV.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            @Override
+            public String toString(String object) {
+                return object;
+            }
+        }));
 
-		stepDescriptionCol.setOnEditCommit(event -> {
-			cellEditCommitForStep(event);
-			stepsTV.requestFocus();
-		});
+        stepsTV.setItems(stepObservableList);
+        stepsTV.setEditable(true);
+        stepsTV.getSelectionModel().setCellSelectionEnabled(true);
 
-		// switch to edit mode on keypress
-		// this must be KeyEvent.KEY_PRESSED so that the key gets forwarded to
-		// the editing cell; it wouldn't be forwarded on KEY_RELEASED
-		stepsTV.addEventFilter(KeyEvent.KEY_PRESSED, new EasyEdit<>(stepsTV));
+        stepDescriptionCol.setOnEditCommit(event -> {
+            cellEditCommitForStep(event);
+            stepsTV.requestFocus();
+        });
 
-		stepsTV.addEventFilter(KeyEvent.KEY_RELEASED, new EasySelection<>(stepsTV));
-	}
+        // switch to edit mode on keypress
+        // this must be KeyEvent.KEY_PRESSED so that the key gets forwarded to
+        // the editing cell; it wouldn't be forwarded on KEY_RELEASED
+        stepsTV.addEventFilter(KeyEvent.KEY_PRESSED, new EasyEdit<>(stepsTV));
 
-	private void initBtns() {
-		ingredientsAddRowBtn.setOnAction(event -> addRow(ingredientsTV));
-		ingredientsRemoveRowBtn.setOnAction(event -> removeRow(ingredientsTV));
-		stepsAddRowBtn.setOnAction(event -> addRow(stepsTV));
-		stepsRemoveRowBtn.setOnAction(event -> removeRow(stepsTV));
+        stepsTV.addEventFilter(KeyEvent.KEY_RELEASED, new EasySelection<>(stepsTV));
 
-		saveRecipeBtn.setOnAction(event -> {
-			try {
-				saveRecipe();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		});
-		cancelEditBtn.setOnAction(event -> {
-			try {
-				cancelEdit();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		});
+        stepDescriptionCol.setOnEditCancel(event -> {
+            if (!hasShowEditInformation) {
+                showEditInformation();
+            }
+            ingredientsTV.requestFocus();
+        });
+    }
+
+    /**
+     * set listeners on all the buttons
+     * @author Gang Shao
+     */
+    private void initBtns() {
+        ingredientsAddRowBtn.setOnAction(event -> addRow(ingredientsTV));
+        ingredientsRemoveRowBtn.setOnAction(event -> removeRow(ingredientsTV));
+        stepsAddRowBtn.setOnAction(event -> addRow(stepsTV));
+        stepsRemoveRowBtn.setOnAction(event -> removeRow(stepsTV));
+
+        saveRecipeBtn.setOnAction(event -> {
+            try {
+                saveRecipe();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        cancelEditBtn.setOnAction(event -> {
+            try {
+                cancelEdit();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
 
         newThumbnailBtn.setOnAction(event -> {
             configurePictureFileChooser(fileChooser);
-			File file = fileChooser.showOpenDialog(Template.primaryStage);
+            File file = fileChooser.showOpenDialog(Template.primaryStage);
 
-			if (file != null) {
-				showThumbnail(file);
+            if (file != null) {
+                showThumbnail(file);
                 newThumbnailBtn.setText("Change Picture");
             }
-		});
+        });
 
         removeThumbnailBtn.setOnAction(event -> {
             thumbnailIV.setImage(null);
-			thumbnailSourcePath = null;
+            thumbnailSourcePath = null;
             thumbnailName = "";
             newThumbnailBtn.setText("New Picture");
         });
 
-		ingredientsAddRowBtn.setFocusTraversable(false);
-		ingredientsRemoveRowBtn.setFocusTraversable(false);
-		stepsAddRowBtn.setFocusTraversable(false);
-		stepsRemoveRowBtn.setFocusTraversable(false);
-	}
+        ingredientsAddRowBtn.setFocusTraversable(false);
+        ingredientsRemoveRowBtn.setFocusTraversable(false);
+        stepsAddRowBtn.setFocusTraversable(false);
+        stepsRemoveRowBtn.setFocusTraversable(false);
+    }
 
-	private void initThumbnail() {
+    /**
+     * initiate thumbnail area dimensions
+     * @author Gang Shao
+     */
+    private void initThumbnail() {
         thumbnailGP.prefWidthProperty().bind(frameGrid.widthProperty().multiply(0.58));
 
         thumbnailIV.fitWidthProperty().bind(frameGrid.widthProperty().multiply(0.58).multiply(0.8));
@@ -331,176 +376,180 @@ public class AddAndEditViewController {
         thumbnailRec.heightProperty().bind(detailVB.heightProperty().multiply(0.5));
     }
 
-	private void addRow(TableView tableView) {
-		TablePosition pos = tableView.getFocusModel().getFocusedCell();
-		tableView.getSelectionModel().clearSelection();
-		Ingredient ingredient;
-		Step step;
-		int row = tableView.getItems().size() - 1;
-		if (tableView.getId().equals("ingredientsTV")) {
-			ingredient = new Ingredient("", 0, "");
-			tableView.getItems().add(ingredient);
-			tableView.getSelectionModel().select(row + 1, pos.getTableColumn());
-			tableView.scrollTo(ingredient);
-		} else if (tableView.getId().equals("stepsTV")) {
-			step = new Step(row + 2, "");
-			tableView.getItems().add(step);
-			tableView.getSelectionModel().select(row + 1, pos.getTableColumn());
-			tableView.scrollTo(step);
-		}
-	}
+    /**
+     * add a new row to TableView
+     * @param tableView the TableView where a new row will be added to
+     * @author Gang Shao
+     */
+    private void addRow(TableView tableView) {
+        TablePosition pos = tableView.getFocusModel().getFocusedCell();
+        tableView.getSelectionModel().clearSelection();
+        Ingredient ingredient;
+        Step step;
+        int row = tableView.getItems().size() - 1;
+        if (tableView.getId().equals("ingredientsTV")) {
+            ingredient = new Ingredient("", 0, "");
+            tableView.getItems().add(ingredient);
+            tableView.getSelectionModel().select(row + 1, pos.getTableColumn());
+            tableView.scrollTo(ingredient);
+        } else if (tableView.getId().equals("stepsTV")) {
+            step = new Step(row + 2, "");
+            tableView.getItems().add(step);
+            tableView.getSelectionModel().select(row + 1, pos.getTableColumn());
+            tableView.scrollTo(step);
+        }
+    }
 
-	private void removeRow(TableView tableView) {
-		TablePosition pos = tableView.getFocusModel().getFocusedCell();
-		int row = pos.getRow();
-		int col = pos.getColumn();
-		tableView.getSelectionModel().clearSelection();
-		tableView.getItems().remove(row);
-		if (row < tableView.getItems().size()) {
-			tableView.getSelectionModel().select(row, (TableColumn) tableView.getColumns().get(col));
-		} else {
-			tableView.getSelectionModel().select(row - 1, (TableColumn) tableView.getColumns().get(col));
-		}
-	}
+    /**
+     * remove the row selected in a TableView
+     * @param tableView the TableView from which the row will be removed
+     * @author Gang Shao
+     */
+    private void removeRow(TableView tableView) {
+        TablePosition pos = tableView.getFocusModel().getFocusedCell();
+        int row = pos.getRow();
+        int col = pos.getColumn();
+        tableView.getSelectionModel().clearSelection();
+        tableView.getItems().remove(row);
+        if (row < tableView.getItems().size()) {
+            tableView.getSelectionModel().select(row, (TableColumn) tableView.getColumns().get(col));
+        } else {
+            tableView.getSelectionModel().select(row - 1, (TableColumn) tableView.getColumns().get(col));
+        }
+    }
 
 	/*
 	 * Save the recipe to the database
 	 * 
 	 * @author Gang Shao, Qiwen Gu
 	 */
-	private void saveRecipe() throws Exception {
-		if (!isValid()) {
-			return;
-		}
+    private void saveRecipe() throws Exception {
+        if (!isValid()) {
+            return;
+        }
 
-		Alert saveConfirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
-		saveConfirmAlert.setTitle("Confirmation");
-		saveConfirmAlert.setHeaderText("Do you want to save?");
-		Optional<ButtonType> saveOrNot = saveConfirmAlert.showAndWait();
+        Alert saveConfirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        saveConfirmAlert.setTitle("Confirmation");
+        saveConfirmAlert.setHeaderText("Do you want to save?");
+        Optional<ButtonType> saveOrNot = saveConfirmAlert.showAndWait();
 
-		if (saveOrNot.isPresent()) {
-			if (saveOrNot.get() == ButtonType.OK) {
-				Recipe newRecipe = new Recipe();
-				int servingNum = 0;
-				int preparationTime = 0;
-				int cookingTime = 0;
-				int isFavorite = 0;
-				try {
-					servingNum = Integer.parseInt(servingsFld.getText());
-					preparationTime = Integer.parseInt(preparationTimeFld.getText());
-					cookingTime = Integer.parseInt(cookingTimeFld.getText());
+        if (saveOrNot.isPresent()) {
+            if (saveOrNot.get() == ButtonType.OK) {
+                Recipe newRecipe = new Recipe();
+                int servingNum = 0;
+                int preparationTime = 0;
+                int cookingTime = 0;
+                int isFavorite = 0;
+                try {
+                    servingNum = Integer.parseInt(servingsFld.getText());
+                    preparationTime = Integer.parseInt(preparationTimeFld.getText());
+                    cookingTime = Integer.parseInt(cookingTimeFld.getText());
 
-				} catch (NumberFormatException nfe) {
-					Alert aLert = new Alert(Alert.AlertType.ERROR);
-					aLert.setTitle("Something is wrong ...");
-					aLert.setHeaderText(null);
-					aLert.setContentText("Please make sure serving, preparation & cooking time is numeric :D");
-					aLert.showAndWait();
-					return;
-				}
-				String briefDescription = briefDescriptionFld.getText();
-				String description = descriptionFld.getText();
+                } catch (NumberFormatException nfe) {
+                    Alert aLert = new Alert(Alert.AlertType.ERROR);
+                    aLert.setTitle("Something is wrong ...");
+                    aLert.setHeaderText(null);
+                    aLert.setContentText("Please make sure serving, preparation & cooking time is numeric :D");
+                    aLert.showAndWait();
+                    return;
+                }
+                String briefDescription = briefDescriptionFld.getText();
+                String description = descriptionFld.getText();
 
-				newRecipe.setName(titleFld.getText());
-				newRecipe.setServingNum(servingNum);
-				newRecipe.setPreparationTime(preparationTime);
-				newRecipe.setCookingTime(cookingTime);
-				newRecipe.setBriefDescription(briefDescription);
-				newRecipe.setDescription(description);
-				newRecipe.setIsFavorite(isFavorite);
+                newRecipe.setName(titleFld.getText());
+                newRecipe.setServingNum(servingNum);
+                newRecipe.setPreparationTime(preparationTime);
+                newRecipe.setCookingTime(cookingTime);
+                newRecipe.setBriefDescription(briefDescription);
+                newRecipe.setDescription(description);
+                newRecipe.setIsFavorite(isFavorite);
 
-//				if (thumbnailSourcePath != null && !thumbnailSourcePath.equals("")) {
-//					File srcFile = new File(thumbnailSourcePath.toString());
-//					File projectFile = new File("");
-//					String extension = new String(thumbnailSourcePath.toString().substring(thumbnailSourcePath.toString().lastIndexOf('.')));
-//					thumbnailName = newRecipe.getId() + extension;
-//					String destination = projectFile.getCanonicalPath() + "\\src\\resources\\" + newRecipe.getId() + extension;
-//					
-//					newRecipe.setThumbnail(thumbnailName);
-//					
-//					File desFile = new File(destination);
-//					try {
-//						copyThumbnail(srcFile, desFile);
-//					} catch (Exception e) {
-//						e.printStackTrace();
-//					}
-//				} else {
-//					newRecipe.setThumbnail("");
-//				}
-				
-				optimize();
-				
-				if (isNew) {
-					myRecipeDAO.addRecipe(newRecipe);
-					copyThumbnail(thumbnailSourcePath, newRecipe.getId());
-					newRecipe.setThumbnail(thumbnailName);
-					myRecipeDAO.updateRecipe(newRecipe);
-					
-					for (Step step : steps) {
-						step.setRecipeId(newRecipe.getId());
-						System.out.println(newRecipe.getId());
-						myStepDAO.addStep(step);
-					}
-					for (Ingredient ingredient : ingredients) {
-						System.out.println(newRecipe.getId());
-						ingredient.setRecipeId(newRecipe.getId());
-						System.out.println(newRecipe.getId());
-						myIngredientDAO.addIngredient(ingredient);
-					}
-					
-				} else {
-					isFavorite = MainPageController.selectedRecipe.getIsFavorite();
-					newRecipe.setIsFavorite(isFavorite);
-					newRecipe.setId(recipe.getId());
+                optimize();
+
+                if (isNew) {
+                    myRecipeDAO.addRecipe(newRecipe);
                     copyThumbnail(thumbnailSourcePath, newRecipe.getId());
                     newRecipe.setThumbnail(thumbnailName);
-					myRecipeDAO.updateRecipe(newRecipe);
-					myStepDAO.updateSteps(new ArrayList<>(steps));
-					myIngredientDAO.updateIngredients(new ArrayList<>(ingredients));
-				}
-				
-				TemplateController.loadContent("/view/MainOrFavView.fxml", "Main");
-			}
+                    myRecipeDAO.updateRecipe(newRecipe);
 
-			
-		}
-	}
+                    for (Step step : steps) {
+                        step.setRecipeId(newRecipe.getId());
+                        System.out.println(newRecipe.getId());
+                        myStepDAO.addStep(step);
+                    }
+                    for (Ingredient ingredient : ingredients) {
+                        System.out.println(newRecipe.getId());
+                        ingredient.setRecipeId(newRecipe.getId());
+                        System.out.println(newRecipe.getId());
+                        myIngredientDAO.addIngredient(ingredient);
+                    }
 
-	private void cancelEdit() throws IOException {
-		// TODO implement cancelEdit
-		TemplateController.loadContent("/view/MainOrFavView.fxml", "Main");
-	}
+                } else {
+                    isFavorite = MainPageController.selectedRecipe.getIsFavorite();
+                    newRecipe.setIsFavorite(isFavorite);
+                    newRecipe.setId(recipe.getId());
+                    newRecipe.setThumbnail(thumbnailName);
+                    copyThumbnail(thumbnailSourcePath, newRecipe.getId());
+                    myRecipeDAO.updateRecipe(newRecipe);
+                    myStepDAO.updateSteps(new ArrayList<>(steps));
+                    myIngredientDAO.updateIngredients(new ArrayList<>(ingredients));
+                }
 
-	private boolean isValid() {
-		if (titleFld.getText().isEmpty() || servingsFld.getText().isEmpty() || preparationTimeFld.getText().isEmpty()
-				|| cookingTimeFld.getText().isEmpty()) {
-
-			Alert aLert = new Alert(Alert.AlertType.ERROR);
-			aLert.setTitle("Something is missing ...");
-			aLert.setHeaderText(null);
-			aLert.setContentText(
-					"Please make sure you have filled all title, serving, preparation & cooking time blanks :D");
-			aLert.showAndWait();
-			return false;
-		} else {
-			return true;
-		}
-	}
+                TemplateController.loadContent("/view/MainOrFavView.fxml", "Main");
+            }
 
 
-	private void optimize() {
-		Iterator<Ingredient> ingredientIterator = ingredients.iterator();
-		Iterator<Step> stepIterator = steps.iterator();
+        }
+    }
 
-		Ingredient ingredientTemp;
-		Step stepTemp;
+    /**
+     * cancel edit and then jump to main view
+     * @throws IOException exception
+     * @author Gang Shao
+     */
+    private void cancelEdit() throws IOException {
 
-		int stepOrder = 1;
+        TemplateController.loadContent("/view/MainOrFavView.fxml", "Main");
+    }
 
-		while (ingredientIterator.hasNext()) {
-			ingredientTemp = ingredientIterator.next();
-			if (ingredientTemp.getName().equals("") || ingredientTemp.getName() == null) {
-				ingredientIterator.remove();
+    /**
+     * check if the the inputs in title, serving and time empty
+     * @return true if valid, false if invalid.
+     */
+    private boolean isValid() {
+        if (titleFld.getText().isEmpty() || servingsFld.getText().isEmpty() || preparationTimeFld.getText().isEmpty()
+                || cookingTimeFld.getText().isEmpty()) {
+
+            Alert aLert = new Alert(Alert.AlertType.ERROR);
+            aLert.setTitle("Something is missing ...");
+            aLert.setHeaderText(null);
+            aLert.setContentText(
+                    "Please make sure you have filled all title, serving, preparation & cooking time blanks :D");
+            aLert.showAndWait();
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
+    /**
+     * clear empty items in ingredients and steps list
+     * @author Gang Shao
+     */
+    private void optimize() {
+        Iterator<Ingredient> ingredientIterator = ingredients.iterator();
+        Iterator<Step> stepIterator = steps.iterator();
+
+        Ingredient ingredientTemp;
+        Step stepTemp;
+
+        int stepOrder = 1;
+
+        while (ingredientIterator.hasNext()) {
+            ingredientTemp = ingredientIterator.next();
+            if (ingredientTemp.getName().equals("") || ingredientTemp.getName() == null) {
+                ingredientIterator.remove();
             } else {
                 if (!isNew) {
                     ingredientTemp.setRecipeId(selectedRecipeId);
@@ -508,76 +557,85 @@ public class AddAndEditViewController {
             }
         }
 
-		while (stepIterator.hasNext()) {
-			stepTemp = stepIterator.next();
-			if (stepTemp.getStepDescription().equals("") || stepTemp.getStepDescription() == null) {
-				stepIterator.remove();
-			} else {
-				stepTemp.setStepOrder(stepOrder);
-				stepOrder++;
+        while (stepIterator.hasNext()) {
+            stepTemp = stepIterator.next();
+            if (stepTemp.getStepDescription().equals("") || stepTemp.getStepDescription() == null) {
+                stepIterator.remove();
+            } else {
+                stepTemp.setStepOrder(stepOrder);
+                stepOrder++;
                 if (!isNew) {
                     stepTemp.setRecipeId(selectedRecipeId);
                 }
             }
-		}
-	}
+        }
+    }
 
-	private void cellEditCommitForIngredient(TableColumn.CellEditEvent event) {
-		Object newValue = event.getNewValue();
-		TablePosition pos = event.getTablePosition();
+    /**
+     * save the item when commit edit in the cell of Ingredients TableView
+     * @param event cell edit event
+     */
+    private void cellEditCommitForIngredient(TableColumn.CellEditEvent event) {
+        Object newValue = event.getNewValue();
+        TablePosition pos = event.getTablePosition();
 
-		int row = pos.getRow();
-		int col = pos.getColumn();
-		switch (col) {
-		case 0:
-			break;
-		case 1:
-			int index = checkDuplicatesForIngredient((String) newValue, (String) event.getOldValue(), ingredients);
-			if (index != -1) {
-				ingredientsTV.refresh();
-				Alert duplicateAlert = new Alert(Alert.AlertType.WARNING);
-				duplicateAlert.setTitle("Duplicates found");
-				duplicateAlert.setHeaderText("You have just entered the same ingredient.");
-				duplicateAlert.setContentText(
-						"It is the same as: \n \"" + (index + 1) + ". " + ingredients.get(index).getName() + " "
-								+ ingredients.get(index).getQuantity() + " " + ingredients.get(index).getUnit() + "\"");
-				duplicateAlert.showAndWait();
+        int row = pos.getRow();
+        int col = pos.getColumn();
+        switch (col) {
+            case 0:
+                break;
+            case 1:
+                int index = checkDuplicatesForIngredient((String) newValue, (String) event.getOldValue(), ingredients);
+                if (index != -1) {
+                    ingredientsTV.refresh();
+                    Alert duplicateAlert = new Alert(Alert.AlertType.WARNING);
+                    duplicateAlert.setTitle("Duplicates found");
+                    duplicateAlert.setHeaderText("You have just entered the same ingredient.");
+                    duplicateAlert.setContentText(
+                            "It is the same as: \n \"" + (index + 1) + ". " + ingredients.get(index).getName() + " "
+                                    + ingredients.get(index).getQuantity() + " " + ingredients.get(index).getUnit() + "\"");
+                    duplicateAlert.showAndWait();
 
-			} else {
-				ingredientsTV.getItems().get(row).setName(newValue.toString());
-			}
-			break;
-		case 2:
-			ingredientsTV.getItems().get(row).setQuantity(Double.parseDouble(newValue.toString()));
-			break;
-		case 3:
-			ingredientsTV.getItems().get(row).setUnit(newValue.toString());
-			break;
-		}
-	}
+                } else {
+                    ingredientsTV.getItems().get(row).setName(newValue.toString());
+                }
+                break;
+            case 2:
+                ingredientsTV.getItems().get(row).setQuantity(Double.parseDouble(newValue.toString()));
+                break;
+            case 3:
+                ingredientsTV.getItems().get(row).setUnit(newValue.toString());
+                break;
+        }
+    }
 
-	private void cellEditCommitForStep(TableColumn.CellEditEvent event) {
-		Object newValue = event.getNewValue();
-		TablePosition pos = event.getTablePosition();
-		int row = pos.getRow();
-		int col = pos.getColumn();
-		switch (col) {
-		case 1:
-			int index = checkDuplicatesForStep((String) newValue, (String) event.getOldValue(), steps);
-			if (index != -1) {
-				stepsTV.refresh();
-				Alert duplicateAlert = new Alert(Alert.AlertType.WARNING);
-				duplicateAlert.setTitle("Duplicates found");
-				duplicateAlert.setHeaderText("You have just entered the same step.");
-				duplicateAlert.setHeaderText(
-						"It is the same as: \n \"" + (index + 1) + ". " + steps.get(index).getStepDescription() + "\"");
-				duplicateAlert.showAndWait();
-			} else {
-				stepsTV.getItems().get(row).setDescription(newValue.toString());
-			}
-			break;
-		}
-	}
+    /**
+     * save the item when commit edit in the cell of Steps TableView
+     * @param event cell edit event
+     * @author Gang Shao
+     */
+    private void cellEditCommitForStep(TableColumn.CellEditEvent event) {
+        Object newValue = event.getNewValue();
+        TablePosition pos = event.getTablePosition();
+        int row = pos.getRow();
+        int col = pos.getColumn();
+        switch (col) {
+            case 1:
+                int index = checkDuplicatesForStep((String) newValue, (String) event.getOldValue(), steps);
+                if (index != -1) {
+                    stepsTV.refresh();
+                    Alert duplicateAlert = new Alert(Alert.AlertType.WARNING);
+                    duplicateAlert.setTitle("Duplicates found");
+                    duplicateAlert.setHeaderText("You have just entered the same step.");
+                    duplicateAlert.setHeaderText(
+                            "It is the same as: \n \"" + (index + 1) + ". " + steps.get(index).getStepDescription() + "\"");
+                    duplicateAlert.showAndWait();
+                } else {
+                    stepsTV.getItems().get(row).setDescription(newValue.toString());
+                }
+                break;
+        }
+    }
 
 	/**
 	 * Look for any duplicate of ingredient of the same name.
@@ -589,106 +647,133 @@ public class AddAndEditViewController {
 	 * @param ingredientObservableList
 	 *            the list of ingredients
 	 * @return the index of the duplication if found, otherwise return -1.
-	 */
+     *
+     * @author Gang Shao
+     */
 	private int checkDuplicatesForIngredient(String newValue, String oldValue,
-			ObservableList<Ingredient> ingredientObservableList) {
-		if (newValue.equals(oldValue)) {
-			return -1;
-		}
-		for (int i = 0; i < ingredientObservableList.size(); i++) {
-			if (newValue.equals(ingredientObservableList.get(i).getName())) {
-				return i;
-			}
-		}
+                                             ObservableList<Ingredient> ingredientObservableList) {
+        if (newValue.equals(oldValue)) {
+            return -1;
+        }
+        for (int i = 0; i < ingredientObservableList.size(); i++) {
+            if (newValue.equals(ingredientObservableList.get(i).getName())) {
+                return i;
+            }
+        }
 
-		return -1;
-	}
+        return -1;
+    }
 
-	private int checkDuplicatesForStep(String newValue, String oldValue, ObservableList<Step> stepObservableList) {
-		if (newValue.equals(oldValue)) {
-			return -1;
-		}
-		for (int i = 0; i < stepObservableList.size(); i++) {
-			if (newValue.equals(stepObservableList.get(i).getStepDescription())) {
-				return i;
-			}
-		}
+    /**
+     * look for any duplicate of step of the same.
+     * @param newValue the new value of this input
+     * @param oldValue the old value of this input
+     * @param stepObservableList the list of steps
+     * @return the index of the duplication if found, otherwise return -1.
+     * @author Gang Shao
+     */
+    private int checkDuplicatesForStep(String newValue, String oldValue, ObservableList<Step> stepObservableList) {
+        if (newValue.equals(oldValue)) {
+            return -1;
+        }
+        for (int i = 0; i < stepObservableList.size(); i++) {
+            if (newValue.equals(stepObservableList.get(i).getStepDescription())) {
+                return i;
+            }
+        }
 
-		return -1;
-	}
+        return -1;
+    }
 
-	private void initData() throws MalformedURLException {
-		if (isNew) {
-			initFakeData();
-			return;
-		}
+    /**
+     * read and initiate data from the recipe selected to fill in the text fields
+     * @throws MalformedURLException malformed thumbnail URL exception
+     * @author Gang Shao
+     */
+    private void initData() throws MalformedURLException {
+        //if it is a new recipe then initiate fake data.
+        if (isNew) {
+            initFakeData();
+            return;
+        }
+        //otherwise, read and fill in the fields with the recipe data
+        Recipe selectedRecipe = recipe;
 
-		Recipe selectedRecipe = recipe;
+        selectedRecipeId = selectedRecipe.getId();
+        String servingNumber = String.valueOf(selectedRecipe.getServingNum());
+        String preparationTime = String.valueOf(selectedRecipe.getPreparationTime());
+        String cookingTime = String.valueOf(selectedRecipe.getCookingTime());
+        ArrayList<Step> stepList = myStepDAO.getStepListByRecipyId(selectedRecipeId);
+        ArrayList<Ingredient> ingredientList = myIngredientDAO.getIngredientListByRecipyId(selectedRecipeId);
+        String briefDescription = String.valueOf(selectedRecipe.getBriefDescription());
+        String description = String.valueOf(selectedRecipe.getDescription());
 
-		selectedRecipeId = selectedRecipe.getId();
-		String servingNumber = String.valueOf(selectedRecipe.getServingNum());
-		String preparationTime = String.valueOf(selectedRecipe.getPreparationTime());
-		String cookingTime = String.valueOf(selectedRecipe.getCookingTime());
-		ArrayList<Step> stepList = myStepDAO.getStepListByRecipyId(selectedRecipeId);
-		ArrayList<Ingredient> ingredientList = myIngredientDAO.getIngredientListByRecipyId(selectedRecipeId);
-		String briefDescription = String.valueOf(selectedRecipe.getBriefDescription());
-		String description = String.valueOf(selectedRecipe.getDescription());
-
-		titleFld.setText(selectedRecipe.getName());
-		servingsFld.setText(servingNumber);
-		preparationTimeFld.setText(preparationTime);
-		cookingTimeFld.setText(cookingTime);
-		ingredients.addAll(ingredientList);
-		steps.addAll(stepList);
-		briefDescriptionFld.setText(briefDescription);
-		descriptionFld.setText(description);
+        titleFld.setText(selectedRecipe.getName());
+        servingsFld.setText(servingNumber);
+        preparationTimeFld.setText(preparationTime);
+        cookingTimeFld.setText(cookingTime);
+        ingredients.addAll(ingredientList);
+        steps.addAll(stepList);
+        briefDescriptionFld.setText(briefDescription);
+        descriptionFld.setText(description);
         thumbnailName = selectedRecipe.getThumbnail();
 
+        //initiate thumbnail
         showThumbnail(thumbnailName);
 
-		initIngredientsTV(ingredients);
-		initStepsTV(steps);
-	}
+        //initiate TableViews
+        initIngredientsTV(ingredients);
+        initStepsTV(steps);
+    }
 
-	private void initFakeData() {
+    /**
+     * initiate fake data if user is adding a new recipe
+     * @author Gang Shao
+     */
+    private void initFakeData() {
         ingredients.addAll(new Ingredient("Name", 0, "unit"), new Ingredient("", 0, ""),
                 new Ingredient("", 0, ""));
 
         steps.addAll(new Step(1, "Your step description"), new Step(2, ""), new Step(3, ""));
 
-		initIngredientsTV(ingredients);
-		initStepsTV(steps);
-	}
+        initIngredientsTV(ingredients);
+        initStepsTV(steps);
+    }
 
-	private class NumberCell<T> extends TableCell<T, Integer> {
-		public NumberCell() {
-			super();
-		}
+    /**
+     * a class extending TableCell for rendering numbers in the '#' column
+     * @param <T> Type of the items stored in the TableView
+     * @author Gang Shao
+     */
+    private class NumberCell<T> extends TableCell<T, Integer> {
+        public NumberCell() {
+            super();
+        }
 
-		@Override
-		protected void updateItem(Integer item, boolean empty) {
-			super.updateItem(item, empty);
+        @Override
+        protected void updateItem(Integer item, boolean empty) {
+            super.updateItem(item, empty);
 
-			if (this.getTableRow() != null) {
-				int index = this.getTableRow().getIndex();
-				if (index < this.getTableView().getItems().size()) {
-					setText(index + 1 + "");
-				} else {
-					setText("");
-				}
-			} else {
-				setText("");
-			}
-		}
-	};
+            if (this.getTableRow() != null) {
+                int index = this.getTableRow().getIndex();
+                if (index < this.getTableView().getItems().size()) {
+                    setText(index + 1 + "");
+                } else {
+                    setText("");
+                }
+            } else {
+                setText("");
+            }
+        }
+    };
 
-	/**
-	 * class implements EventHandler<KeyEvent> to start edit when user type any
-	 * letter or digit key.
-	 * 
+    /**
+     * class implements EventHandler<KeyEvent> to start edit when user type any letter or digit key.
+     *
 	 * @param <T>
 	 *            generic type of table view
-	 */
+     * @author Gang Shao
+     */
 
 	private class EasyEdit<T> implements EventHandler<KeyEvent> {
 		private TableView<T> tableView;
@@ -717,71 +802,84 @@ public class AddAndEditViewController {
 		}
 	}
 
-	/**
-	 * class implements EventHandler<KeyEvent> to move to next cell when user
-	 * release "Enter".
-	 * 
-	 * @param <T>
-	 *            generic type of table view
-	 */
-	private class EasySelection<T> implements EventHandler<KeyEvent> {
-		private TableView<T> tableView;
+    /**
+     * class implements EventHandler<KeyEvent> to move to next cell when user release "Enter".
+     *
+     * @param <T>
+     *            generic type of table view
+     * @author Gang Shao
+     */
+    private class EasySelection<T> implements EventHandler<KeyEvent> {
+        private TableView<T> tableView;
 
-		private EasySelection(TableView<T> tableView) {
+        private EasySelection(TableView<T> tableView) {
 
-			this.tableView = tableView;
-		}
+            this.tableView = tableView;
+        }
 
-		@Override
-		public void handle(KeyEvent event) {
-			if (event.getCode() == KeyCode.TAB) {
-				return;
-			}
+        @Override
+        public void handle(KeyEvent event) {
+            if (event.getCode() == KeyCode.TAB) {
+                return;
+            }
 
-			if (event.getCode() == KeyCode.ENTER) {
-				// move focus & selection
-				// we need to clear the current selection first or else the
-				// selection would be added to the current selection since
-				// we are in multi selection mode
-				TablePosition pos = tableView.getFocusModel().getFocusedCell();
+            if (event.getCode() == KeyCode.ENTER) {
+                // move focus & selection
+                // we need to clear the current selection first or else the
+                // selection would be added to the current selection since
+                // we are in multi selection mode
+                TablePosition pos = tableView.getFocusModel().getFocusedCell();
 
-				// if the selection at this position is disabled, then select
-				// first cell
-				if (pos.getRow() == -1) {
-					tableView.getSelectionModel().select(0);
-				}
-				// select next cell in same row
-				else if (pos.getColumn() < tableView.getColumns().size() - 1) {
-					// pos.getRow(),
-					// ingredientsTV.getColumns().get(pos.getColumn() + 1));
-					tableView.getSelectionModel().selectNext();
-				}
-				// select first cell in next row, when reaching one row's
-				// end
-				else if (pos.getColumn() == tableView.getColumns().size() - 1
-						&& pos.getRow() != tableView.getItems().size() - 1) {
-					tableView.getSelectionModel().clearAndSelect(pos.getRow() + 1, tableView.getColumns().get(1));
-				}
-				// add new row when we are at the last row
-				else if (pos.getRow() == tableView.getItems().size() - 1) {
-					addRow(tableView);
-					tableView.getSelectionModel().clearAndSelect(pos.getRow() + 1, tableView.getColumns().get(1));
-				}
-			}
-		}
-	}
+                // if the selection at this position is disabled, then select
+                // first cell
+                if (pos.getRow() == -1) {
+                    tableView.getSelectionModel().select(0);
+                }
+                // select next cell in same row
+                else if (pos.getColumn() < tableView.getColumns().size() - 1) {
+                    // pos.getRow(),
+                    // ingredientsTV.getColumns().get(pos.getColumn() + 1));
+                    tableView.getSelectionModel().selectNext();
+                }
+                // select first cell in next row, when reaching one row's
+                // end
+                else if (pos.getColumn() == tableView.getColumns().size() - 1
+                        && pos.getRow() != tableView.getItems().size() - 1) {
+                    tableView.getSelectionModel().clearAndSelect(pos.getRow() + 1, tableView.getColumns().get(1));
+                }
+                // add new row when we are at the last row
+                else if (pos.getRow() == tableView.getItems().size() - 1) {
+                    addRow(tableView);
+                    tableView.getSelectionModel().clearAndSelect(pos.getRow() + 1, tableView.getColumns().get(1));
+                }
+            }
+        }
+    }
 
-	public AddAndEditViewController() {
+    /**
+     * constructor
+     */
+    public AddAndEditViewController() {
 
-	}
+    }
 
-	private void configurePictureFileChooser(FileChooser fileChooser) {
-		fileChooser.setTitle("Choose your recipe pictures");
-		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-		fileChooser.getExtensionFilters()
-				.addAll(new FileChooser.ExtensionFilter("Image", "*.jpeg", "*.jpg", "*.png", "*.bmp"));
-	}
+    /**
+     * configures the file chooser for recipe thumbnail
+     * @param fileChooser the fileChooser needed to be configured
+     * @author Gang Shao
+     */
+    private void configurePictureFileChooser(FileChooser fileChooser) {
+        fileChooser.setTitle("Choose your recipe pictures");
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        fileChooser.getExtensionFilters()
+                .addAll(new FileChooser.ExtensionFilter("Image", "*.jpeg", "*.jpg", "*.png", "*.bmp"));
+    }
 
+    /**
+     * show thumbnail to the view with an instance of file
+     * @param file the thumbnail file
+     * @author Gang Shao
+     */
     private void showThumbnail(File file) {
         thumbnailSourcePath = Paths.get(file.toURI());
         if (thumbnailIV.getImage() != null) {
@@ -797,6 +895,11 @@ public class AddAndEditViewController {
         thumbnailIV.setSmooth(true);
     }
 
+    /**
+     * show thumbnail to the view with the file name
+     * @param thumbnailName the file name
+     * @author Gang Shao
+     */
     private void showThumbnail(String thumbnailName) {
         if (thumbnailName != null && !thumbnailName.equals("")) {
             Path thumbnailPath = Paths.get("src/resources/" + thumbnailName);
@@ -932,221 +1035,19 @@ public class AddAndEditViewController {
 				}
 			}
 		}
-			
-	}
 
-    //	public void trysomething() {
-//	    ingredientsTV.editingCellProperty()
-//
-//
-//                focuseProperty().addListener(new ChangeListener<Boolean>() {
-//            @Override
-//            public void changed(ObservableValue<? extends Boolean> ov, Boolean focusLost, Boolean focusGained) {
-//                if (focusLost) {
-//                    Node editor = getGraphic();
-//                    if (editor instanceof TextInputControl) {
-//                        TextInputControl tic = (TextInputControl) editor;
-//                        String text = tic.getText();
-//                        if (!isEditing()) {
-//                            // Sadly there is no way to know if the focus lost was because the user hit Esc (in which case we REALLY do want to cancel the edit)
-//                            // Or if they just clicked on another active row within the Tableview.
-//                            System.err.println("Editing false but still have a TextField in the Graphic... Manually firing an event...");
-//                            TableView table = getTableView();
-//                            TablePosition tp = new TablePosition<>(table, getTableRow().getIndex(), getTableColumn());
-//                            TableColumn.CellEditEvent editEvent = new TableColumn.CellEditEvent(
-//                                    table, tp, TableColumn.editCommitEvent(), text);
-//                            Event.fireEvent(getTableColumn(), editEvent);
-//                        } else {
-//                            commitEdit(text);
-//                        }
-//                    }
-//                }
-//            }
-//        };)
-//    }
-
-
-    public class ExperimentalTextFieldTableCell<S, T> extends TextFieldTableCell<S, T> {
-        private TextField textField;
-
-        @Override
-        public void startEdit() {
-            super.startEdit();
-            if (textField == null) {
-                createTextField();
-            }
-            textField.focusedProperty().addListener(focusListener);
-        }
-
-        private final ChangeListener<Boolean> focusListener = new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> ov, Boolean focusLost, Boolean focusGained) {
-                if (focusLost) {
-                    Node editor = getGraphic();
-                    if (editor instanceof TextInputControl) {
-                        TextInputControl tic = (TextInputControl) editor;
-                        String text = tic.getText();
-                        if (!isEditing()) {
-                            // Sadly there is no way to know if the focus lost was because the user hit Esc (in which case we REALLY do want to cancel the edit)
-                            // Or if they just clicked on another active row within the Tableview.
-                            System.err.println("Editing false but still have a TextField in the Graphic... Manually firing an event...");
-                            TableView table = getTableView();
-                            TablePosition tp = new TablePosition<>(table, getTableRow().getIndex(), getTableColumn());
-                            TableColumn.CellEditEvent editEvent = new TableColumn.CellEditEvent(
-                                    table, tp, TableColumn.editCommitEvent(), text);
-                            Event.fireEvent(getTableColumn(), editEvent);
-                        } else {
-                            commitEdit((T) text);
-                        }
-                    }
-                }
-            }
-        };
-
-        private void createTextField() {
-            textField = new TextField("");
-            textField.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
-            textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
-                @Override
-                public void handle(KeyEvent t) {
-                    if (t.getCode() == KeyCode.ENTER) {
-                        commitEdit((T) textField.getText());
-                        ExperimentalTextFieldTableCell.this.getTableView().requestFocus();//why does it lose focus??
-                        //this.getTableView().getSelectionModel().selectBelowCell();
-                    } else if (t.getCode() == KeyCode.ESCAPE) {
-                        cancelEdit();
-                    }
-                }
-            });
-
-            textField.setOnKeyReleased(new EventHandler<KeyEvent>() {
-                @Override
-                public void handle(KeyEvent t) {
-                    if (t.getCode().isDigitKey()) {
-
-
-                        //BetterTextFieldTableCell.setText(textField.getText());
-
-                        //textField.setText(BetterTextFieldTableCell.getText());
-                        textField.deselect();
-                        textField.end();
-                        textField.positionCaret(textField.getLength() + 2);//works sometimes
-
-                    }
-                }
-            });
-        }
-
-        public final ObjectProperty<StringConverter<T>> converterProperty = new SimpleObjectProperty<StringConverter<T>>(new StringConverter<T>() {
-            @Override
-            public T fromString(String string) {
-                return (T) string;
-            }
-
-            @Override
-            public String toString(T object) {
-                return object.toString();
-            }
-        });
-
-        public ExperimentalTextFieldTableCell() {
-            super();
-        }
     }
 
-
-    public class BetterTextFieldTableCell extends TableCell {
-        private TextField textField;
-        Callback commitChange;
-
-        public TextField getTextField() {
-            return textField;
-        }
-
-
-        public BetterTextFieldTableCell(Callback commitChange) {
-            this.commitChange = commitChange;
-        }
-
-        @Override
-        public void startEdit() {
-            super.startEdit();
-            if (getTextField() == null) {
-                createTextField();
-            }
-            setText(null);
-            setGraphic(textField);
-            setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-            textField.requestFocus();
-            getTextField().focusedProperty().addListener(new ChangeListener<Boolean>() {
-                @Override
-                public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
-                    if (!arg2) {
-                        //commitEdit is replaced with own callback
-                        //commitEdit(getTextArea().getText());
-
-                        //Update item now since otherwise, it won't get refreshed
-                        setItem(getTextField().getText());
-                        //Example, provide TableRow and index to get Object of TableView in callback implementation
-                        commitChange.call(new TableCellChangeInfo(getTableRow().getIndex(), getTextField().getText()));
-                    }
-                }
-            });
-        }
-
-        private void createTextField() {
-            textField = new TextField("");
-            textField.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
-            textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
-                @Override
-                public void handle(KeyEvent t) {
-                    if (t.getCode() == KeyCode.ENTER) {
-                        commitEdit(textField.getText());
-                        BetterTextFieldTableCell.this.getTableView().requestFocus();//why does it lose focus??
-                        BetterTextFieldTableCell.this.getTableView().getSelectionModel().selectBelowCell();
-                    } else if (t.getCode() == KeyCode.ESCAPE) {
-                        cancelEdit();
-                    }
-                }
-            });
-
-            textField.setOnKeyReleased(new EventHandler<KeyEvent>() {
-                @Override
-                public void handle(KeyEvent t) {
-                    if (t.getCode().isDigitKey()) {
-
-
-                        //BetterTextFieldTableCell.setText(textField.getText());
-
-                        //textField.setText(BetterTextFieldTableCell.getText());
-                        textField.deselect();
-                        textField.end();
-                        textField.positionCaret(textField.getLength() + 2);//works sometimes
-
-                    }
-                }
-            });
-        }
-    }
-
-    public class TableCellChangeInfo {
-        TableRow tableRow;
-        int row;
-        String newValue;
-
-        public TableCellChangeInfo(int row, String newValue) {
-            //this.tableRow = tableRow;
-            this.row = row;
-            this.newValue = newValue;
-        }
-
-        public int getRow() {
-            return row;
-        }
-
-        public String getNewValue() {
-            return newValue;
-        }
+    /**
+     * show information alert to remind user edits will be ignored when clicking out of the cell
+     *
+     * @author Gang Shao
+     */
+    private void showEditInformation() {
+        Alert editLost = new Alert(Alert.AlertType.INFORMATION);
+        editLost.setHeaderText("Sorry for your inconvenience. \nPlease press ENTER to save.");
+        editLost.setContentText("Edits will only be saved if you press \"Enter\", clicking outside or press ESC will ignore what you have just entered. \nAfter pressing \"Enter\", edits will be saved and move to the next cell automatically for you.");
+        editLost.show();
     }
 
 }
