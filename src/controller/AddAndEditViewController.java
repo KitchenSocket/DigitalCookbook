@@ -504,8 +504,8 @@ public class AddAndEditViewController {
                     isFavorite = MainPageController.selectedRecipe.getIsFavorite();
                     newRecipe.setIsFavorite(isFavorite);
                     newRecipe.setId(recipe.getId());
-                    newRecipe.setThumbnail(thumbnailName);
                     copyThumbnail(thumbnailSourcePath, newRecipe.getId());
+                    newRecipe.setThumbnail(thumbnailName);
                     myRecipeDAO.updateRecipe(newRecipe);
                     myStepDAO.updateSteps(new ArrayList<>(steps));
                     myIngredientDAO.updateIngredients(new ArrayList<>(ingredients));
@@ -745,6 +745,7 @@ public class AddAndEditViewController {
         briefDescriptionFld.setText(briefDescription);
         descriptionFld.setText(description);
         thumbnailName = selectedRecipe.getThumbnail();
+        System.out.println(thumbnailName);
 
         //initiate thumbnail
         showThumbnail(thumbnailName);
