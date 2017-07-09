@@ -33,14 +33,14 @@
                   <Button fx:id="searchBtn" maxHeight="26.0" maxWidth="26.0" mnemonicParsing="false" onAction="#search" prefHeight="26.0" prefWidth="26.0" />
                </children>
             </HBox>
-            <AnchorPane>
+            <AnchorPane prefHeight="43.0">
                <children>
-                  <RadioButton fx:id="ingredientNameRadioBtn" layoutX="90.0" layoutY="2.0" mnemonicParsing="false" style="-fx-background-color: Transparent;" text="ingredient">
+                  <RadioButton fx:id="ingredientNameRadioBtn" layoutX="90.0" layoutY="9.0" mnemonicParsing="false" style="-fx-background-color: Transparent;" text="ingredient">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </RadioButton>
-                  <RadioButton fx:id="recipeNameRadioBtn" layoutY="1.0" mnemonicParsing="false" style="-fx-background-color: Transparent;" text="recipe">
+                  <RadioButton fx:id="recipeNameRadioBtn" layoutY="8.0" mnemonicParsing="false" style="-fx-background-color: Transparent;" text="recipe">
                      <padding>
                         <Insets top="2.0" />
                      </padding>
@@ -48,6 +48,7 @@
                         <Font size="16.0" />
                      </font>
                   </RadioButton>
+                  <Button fx:id="exportPdfBtn" layoutX="230.0" mnemonicParsing="false" onAction="#exportPdf" prefHeight="43.0" prefWidth="38.0" style="-fx-background-color: Transparent;" />
                </children>
             </AnchorPane>
             <ListView fx:id="matchRecipeList" prefHeight="735.0" prefWidth="420.0" VBox.vgrow="ALWAYS" />
@@ -113,7 +114,7 @@
                            </font>
                         </Label>
                         <Button fx:id="servingNumMinusBtn" mnemonicParsing="false" onAction="#servingNumMinus" prefHeight="31.0" prefWidth="30.0" style="-fx-background-color: Transparent;" />
-                        <TextField fx:id="servingNum" editable="false" prefHeight="31.0" prefWidth="30.0" text="1" />
+                        <TextField fx:id="servingNum" alignment="CENTER" editable="false" prefWidth="100.0" text="1" HBox.hgrow="ALWAYS" />
                         <Button fx:id="servingNumPlusBtn" mnemonicParsing="false" onAction="#servingNumPlus" prefHeight="31.0" prefWidth="30.0" style="-fx-background-color: Transparent;" />
                      </children>
                   </HBox>
@@ -145,7 +146,6 @@
                      </font>
                   </Label>
                   <VBox HBox.hgrow="ALWAYS" />
-                  <Button fx:id="exportPdfBtn" mnemonicParsing="false" onAction="#exportPdf" prefHeight="43.0" prefWidth="38.0" style="-fx-background-color: Transparent;" />
                   <Button fx:id="addFavBtn" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#addFavRecipe" prefHeight="43.0" prefWidth="38.0" style="-fx-background-color: Transparent;">
                      <HBox.margin>
                         <Insets />

@@ -235,7 +235,7 @@ public class MainPageController extends TemplateController implements Initializa
     	int servingNumber = new Integer(servingNum.getText());
 
     	
-    	if(servingNumber < 9){
+    	
     		
         	servingNumber++;
         	
@@ -251,7 +251,7 @@ public class MainPageController extends TemplateController implements Initializa
 			
 			showIngredientTable(selectedRecipe.getId(), multi);
     		
-    	} 
+    	
 
     }
 
@@ -346,6 +346,10 @@ public class MainPageController extends TemplateController implements Initializa
 				new File("src/resources/recipe_search_button.png").toURI().toString(), 15, 17, false, false)));
 
 
+		exportPdfBtn.setOpacity(1);
+		exportPdfBtn.setGraphic(new ImageView(
+				new Image(new File("src/resources/pdf.png").toURI().toString(), 30, 30, false, false)));
+	
 		
 
 		try {
@@ -379,7 +383,7 @@ public class MainPageController extends TemplateController implements Initializa
 		searchBtn.setGraphic(new ImageView(new Image(
 				new File("src/resources/recipe_search_button.png").toURI().toString(), 15, 17, false, false)));
 
-		
+		exportPdfBtn.setOpacity(0);
 		
 		
 
