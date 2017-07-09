@@ -5,6 +5,8 @@ import DAO.IngredientDAO;
 import DAO.RecipeDAO;
 import DAO.StepDAO;
 import com.itextpdf.text.DocumentException;
+import com.sun.org.apache.bcel.internal.generic.FLOAD;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -32,6 +34,7 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -211,9 +214,12 @@ public class MainPageController extends TemplateController implements Initializa
         	
         	servingNum.setText(new Integer(servingNumber).toString());
         	
-			cookingTime.setText(new Integer((int) (selectedRecipe.getCookingTime() * multi)).toString());
+        	
+        	DecimalFormat df = new DecimalFormat("#.00");
+        	
+			cookingTime.setText(df.format(new Float((float) (selectedRecipe.getCookingTime() * multi))));
 
-			prepareTime.setText(new Integer((int) (selectedRecipe.getPreparationTime() * multi)).toString());
+			prepareTime.setText(df.format(new Float((float) (selectedRecipe.getPreparationTime() * multi))));
 			
 			showIngredientTable(selectedRecipe.getId(), multi);
     		
@@ -245,9 +251,12 @@ public class MainPageController extends TemplateController implements Initializa
         	
         	servingNum.setText(new Integer(servingNumber).toString());
         	
-			cookingTime.setText(new Integer((int) (selectedRecipe.getCookingTime() * multi)).toString());
+        	DecimalFormat df = new DecimalFormat("#.00");
+        	
+			cookingTime.setText(df.format(new Float((float) (selectedRecipe.getCookingTime() * multi))));
 
-			prepareTime.setText(new Integer((int) (selectedRecipe.getPreparationTime() * multi)).toString());
+			prepareTime.setText(df.format(new Float((float) (selectedRecipe.getPreparationTime() * multi))));
+
 			
 			showIngredientTable(selectedRecipe.getId(), multi);
     		
