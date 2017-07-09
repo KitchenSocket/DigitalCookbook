@@ -19,7 +19,7 @@
     <!--<gridLinesVisible>true</gridLinesVisible>-->
 
     <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" fx:id="listVB">
-        <Label text="Title" labelFor="$titleFld"/>
+        <Label text="Title" labelFor="$titleFld" fx:id="titleLbl"/>
         <TextField promptText="ie. Braised Pork" fx:id="titleFld"/>
         <TilePane prefColumns="3" prefRows="1" >
             <VBox>
@@ -35,9 +35,9 @@
                 <TextField promptText="ie. 40" fx:id="cookingTimeFld"/>
             </VBox>
         </TilePane>
-        <Label text="Brief Description" labelFor="$briefDescriptionFld"/>
+        <Label text="Brief Introduction" labelFor="$briefDescriptionFld" fx:id="briefDescriptionLbl"/>
         <TextField promptText="ie. A traditional style of Chinese pork cuisine." fx:id="briefDescriptionFld"/>
-        <Label text="More Description" labelFor="$descriptionFld"/>
+        <Label text="Detailed Description" labelFor="$descriptionFld" fx:id="descriptionLbl"/>
         <TextArea promptText="ie. Say more about this recipe :D" fx:id="descriptionFld"/>
         <Label text="Ingredients" labelFor="$ingredientsTV"/>
         <TableView VBox.vgrow="ALWAYS" fx:id="ingredientsTV">

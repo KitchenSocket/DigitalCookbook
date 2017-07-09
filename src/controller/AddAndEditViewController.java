@@ -43,22 +43,22 @@ import java.util.Optional;
  */
 public class AddAndEditViewController {
 
-	private int selectedRecipeId;
-	private boolean isNew = true;
+    private int selectedRecipeId;
+    private boolean isNew = true;
     private boolean hasShowEditInformation = false;
 
-	private Recipe recipe;
-	private ObservableList<Step> steps = FXCollections.observableArrayList();
-	private ObservableList<Ingredient> ingredients = FXCollections.observableArrayList();
+    private Recipe recipe;
+    private ObservableList<Step> steps = FXCollections.observableArrayList();
+    private ObservableList<Ingredient> ingredients = FXCollections.observableArrayList();
 
     //initiate DAOs
     private RecipeDAO myRecipeDAO = new RecipeDAO();
-	private IngredientDAO myIngredientDAO = new IngredientDAO();
-	private StepDAO myStepDAO = new StepDAO();
+    private IngredientDAO myIngredientDAO = new IngredientDAO();
+    private StepDAO myStepDAO = new StepDAO();
 
     //initiate filechooser
     private FileChooser fileChooser = new FileChooser();
-	private Path thumbnailSourcePath;
+    private Path thumbnailSourcePath;
     private String thumbnailName;
 
     //define elements in the fxml
@@ -67,60 +67,68 @@ public class AddAndEditViewController {
     @FXML
     private VBox detailVB;
 
-	@FXML
-	private TableView<Ingredient> ingredientsTV;
-	@FXML
-	private TableColumn<Ingredient, Integer> ingredientNoCol;
-	@FXML
-	private TableColumn<Ingredient, String> ingredientNameCol;
-	@FXML
-	private TableColumn<Ingredient, Number> ingredientQuantityCol;
-	@FXML
-	private TableColumn<Ingredient, String> ingredientUnitCol;
+    @FXML
+    private TableView<Ingredient> ingredientsTV;
+    @FXML
+    private TableColumn<Ingredient, Integer> ingredientNoCol;
+    @FXML
+    private TableColumn<Ingredient, String> ingredientNameCol;
+    @FXML
+    private TableColumn<Ingredient, Number> ingredientQuantityCol;
+    @FXML
+    private TableColumn<Ingredient, String> ingredientUnitCol;
 
-	@FXML
-	private TableView<Step> stepsTV;
-	@FXML
-	private TableColumn<Step, Integer> stepOrderCol;
-	@FXML
-	private TableColumn<Step, String> stepDescriptionCol;
+    @FXML
+    private TableView<Step> stepsTV;
+    @FXML
+    private TableColumn<Step, Integer> stepOrderCol;
+    @FXML
+    private TableColumn<Step, String> stepDescriptionCol;
 
-	@FXML
-	private ImageView thumbnailIV;
-	@FXML
-	private GridPane thumbnailGP;
+    @FXML
+    private ImageView thumbnailIV;
+    @FXML
+    private GridPane thumbnailGP;
     @FXML
     private Rectangle thumbnailRec;
 
-	@FXML
-	private Button ingredientsAddRowBtn;
-	@FXML
-	private Button ingredientsRemoveRowBtn;
-	@FXML
-	private Button stepsAddRowBtn;
-	@FXML
-	private Button stepsRemoveRowBtn;
-	@FXML
-	private Button saveRecipeBtn;
-	@FXML
-	private Button cancelEditBtn;
-	@FXML
+    @FXML
+    private Button ingredientsAddRowBtn;
+    @FXML
+    private Button ingredientsRemoveRowBtn;
+    @FXML
+    private Button stepsAddRowBtn;
+    @FXML
+    private Button stepsRemoveRowBtn;
+    @FXML
+    private Button saveRecipeBtn;
+    @FXML
+    private Button cancelEditBtn;
+    @FXML
     private Button newThumbnailBtn;
     @FXML
     private Button removeThumbnailBtn;
 
-	@FXML
-	private TextField titleFld;
-	@FXML
-	private TextField servingsFld;
-	@FXML
-	private TextField preparationTimeFld;
-	@FXML
-	private TextField cookingTimeFld;
-	@FXML
-	private TextField briefDescriptionFld;
-	@FXML
-	private TextArea descriptionFld;
+    @FXML
+    private Label titleLbl;
+    @FXML
+    private Label briefDescriptionLbl;
+    @FXML
+    private Label descriptionLbl;
+
+
+    @FXML
+    private TextField titleFld;
+    @FXML
+    private TextField servingsFld;
+    @FXML
+    private TextField preparationTimeFld;
+    @FXML
+    private TextField cookingTimeFld;
+    @FXML
+    private TextField briefDescriptionFld;
+    @FXML
+    private TextArea descriptionFld;
 
     /**
      * initialize buttons, data and thumbnail.
@@ -147,6 +155,7 @@ public class AddAndEditViewController {
 
     /**
      * initialize the TableView for input of ingredients
+     *
      * @param ingredientsObservableList the ingredients that will be put into the TableView
      * @author Gang Shao
      */
@@ -266,6 +275,7 @@ public class AddAndEditViewController {
 
     /**
      * initialize the TableView for input of setps
+     *
      * @param stepObservableList the steps that will be put into the TableView
      * @author Gang Shao
      */
@@ -316,6 +326,7 @@ public class AddAndEditViewController {
 
     /**
      * set listeners on all the buttons
+     *
      * @author Gang Shao
      */
     private void initBtns() {
@@ -364,6 +375,7 @@ public class AddAndEditViewController {
 
     /**
      * initiate thumbnail area dimensions
+     *
      * @author Gang Shao
      */
     private void initThumbnail() {
@@ -378,6 +390,7 @@ public class AddAndEditViewController {
 
     /**
      * add a new row to TableView
+     *
      * @param tableView the TableView where a new row will be added to
      * @author Gang Shao
      */
@@ -402,6 +415,7 @@ public class AddAndEditViewController {
 
     /**
      * remove the row selected in a TableView
+     *
      * @param tableView the TableView from which the row will be removed
      * @author Gang Shao
      */
@@ -418,11 +432,11 @@ public class AddAndEditViewController {
         }
     }
 
-	/*
-	 * Save the recipe to the database
-	 * 
-	 * @author Gang Shao, Qiwen Gu
-	 */
+    /*
+     * Save the recipe to the database
+     *
+     * @author Gang Shao, Qiwen Gu
+     */
     private void saveRecipe() throws Exception {
         if (!isValid()) {
             return;
@@ -435,6 +449,10 @@ public class AddAndEditViewController {
 
         if (saveOrNot.isPresent()) {
             if (saveOrNot.get() == ButtonType.OK) {
+                if (!optimize()) {
+                    return;
+                }
+
                 Recipe newRecipe = new Recipe();
                 int servingNum = 0;
                 int preparationTime = 0;
@@ -463,8 +481,6 @@ public class AddAndEditViewController {
                 newRecipe.setBriefDescription(briefDescription);
                 newRecipe.setDescription(description);
                 newRecipe.setIsFavorite(isFavorite);
-
-                optimize();
 
                 if (isNew) {
                     myRecipeDAO.addRecipe(newRecipe);
@@ -502,6 +518,7 @@ public class AddAndEditViewController {
 
     /**
      * cancel edit and then jump to main view
+     *
      * @throws IOException exception
      * @author Gang Shao
      */
@@ -512,6 +529,7 @@ public class AddAndEditViewController {
 
     /**
      * check if the the inputs in title, serving and time empty
+     *
      * @return true if valid, false if invalid.
      */
     private boolean isValid() {
@@ -533,9 +551,19 @@ public class AddAndEditViewController {
 
     /**
      * clear empty items in ingredients and steps list
+     *
      * @author Gang Shao
      */
-    private void optimize() {
+    private boolean optimize() {
+        boolean isOptimized = false;
+        if (showTooLongInformation(titleLbl, titleFld) == ButtonType.OK && showTooLongInformation(briefDescriptionLbl, briefDescriptionFld) == ButtonType.OK &&
+                showTooLongInformation(descriptionLbl, descriptionFld) == ButtonType.OK) {
+            isOptimized = true;
+        } else {
+            System.out.println("Not OK, abort!");
+            return isOptimized;
+        }
+
         Iterator<Ingredient> ingredientIterator = ingredients.iterator();
         Iterator<Step> stepIterator = steps.iterator();
 
@@ -567,10 +595,13 @@ public class AddAndEditViewController {
                 }
             }
         }
+
+        return isOptimized;
     }
 
     /**
      * save the item when commit edit in the cell of Ingredients TableView
+     *
      * @param event cell edit event
      */
     private void cellEditCommitForIngredient(TableColumn.CellEditEvent event) {
@@ -609,6 +640,7 @@ public class AddAndEditViewController {
 
     /**
      * save the item when commit edit in the cell of Steps TableView
+     *
      * @param event cell edit event
      * @author Gang Shao
      */
@@ -635,20 +667,16 @@ public class AddAndEditViewController {
         }
     }
 
-	/**
-	 * Look for any duplicate of ingredient of the same name.
-	 * 
-	 * @param newValue
-	 *            the new value of this input
-	 * @param oldValue
-	 *            the old value of this input
-	 * @param ingredientObservableList
-	 *            the list of ingredients
-	 * @return the index of the duplication if found, otherwise return -1.
+    /**
+     * Look for any duplicate of ingredient of the same name.
      *
+     * @param newValue                 the new value of this input
+     * @param oldValue                 the old value of this input
+     * @param ingredientObservableList the list of ingredients
+     * @return the index of the duplication if found, otherwise return -1.
      * @author Gang Shao
      */
-	private int checkDuplicatesForIngredient(String newValue, String oldValue,
+    private int checkDuplicatesForIngredient(String newValue, String oldValue,
                                              ObservableList<Ingredient> ingredientObservableList) {
         if (newValue.equals(oldValue)) {
             return -1;
@@ -664,8 +692,9 @@ public class AddAndEditViewController {
 
     /**
      * look for any duplicate of step of the same.
-     * @param newValue the new value of this input
-     * @param oldValue the old value of this input
+     *
+     * @param newValue           the new value of this input
+     * @param oldValue           the old value of this input
      * @param stepObservableList the list of steps
      * @return the index of the duplication if found, otherwise return -1.
      * @author Gang Shao
@@ -685,6 +714,7 @@ public class AddAndEditViewController {
 
     /**
      * read and initiate data from the recipe selected to fill in the text fields
+     *
      * @throws MalformedURLException malformed thumbnail URL exception
      * @author Gang Shao
      */
@@ -726,6 +756,7 @@ public class AddAndEditViewController {
 
     /**
      * initiate fake data if user is adding a new recipe
+     *
      * @author Gang Shao
      */
     private void initFakeData() {
@@ -740,6 +771,7 @@ public class AddAndEditViewController {
 
     /**
      * a class extending TableCell for rendering numbers in the '#' column
+     *
      * @param <T> Type of the items stored in the TableView
      * @author Gang Shao
      */
@@ -763,48 +795,48 @@ public class AddAndEditViewController {
                 setText("");
             }
         }
-    };
+    }
+
+    ;
 
     /**
      * class implements EventHandler<KeyEvent> to start edit when user type any letter or digit key.
      *
-	 * @param <T>
-	 *            generic type of table view
+     * @param <T> generic type of table view
      * @author Gang Shao
      */
 
-	private class EasyEdit<T> implements EventHandler<KeyEvent> {
-		private TableView<T> tableView;
+    private class EasyEdit<T> implements EventHandler<KeyEvent> {
+        private TableView<T> tableView;
 
-		private EasyEdit(TableView<T> tableView) {
-			this.tableView = tableView;
-		}
+        private EasyEdit(TableView<T> tableView) {
+            this.tableView = tableView;
+        }
 
-		@Override
-		public void handle(KeyEvent event) {
-			if (event.getCode() == KeyCode.ENTER) {
-				// event.consume(); // don't consume the event or else the
-				// values won't be updated;
-				return;
-			}
+        @Override
+        public void handle(KeyEvent event) {
+            if (event.getCode() == KeyCode.ENTER) {
+                // event.consume(); // don't consume the event or else the
+                // values won't be updated;
+                return;
+            }
 
-			// switch to edit mode on keypress, but only if we aren't already in
-			// edit mode
-			if (tableView.getEditingCell() == null) {
-				if (event.getCode().isLetterKey() || event.getCode().isDigitKey()) {
-					TablePosition focusedCellPosition = tableView.getFocusModel().getFocusedCell();
-					tableView.edit(focusedCellPosition.getRow(), focusedCellPosition.getTableColumn());
-				}
-			}
+            // switch to edit mode on keypress, but only if we aren't already in
+            // edit mode
+            if (tableView.getEditingCell() == null) {
+                if (event.getCode().isLetterKey() || event.getCode().isDigitKey()) {
+                    TablePosition focusedCellPosition = tableView.getFocusModel().getFocusedCell();
+                    tableView.edit(focusedCellPosition.getRow(), focusedCellPosition.getTableColumn());
+                }
+            }
 
-		}
-	}
+        }
+    }
 
     /**
      * class implements EventHandler<KeyEvent> to move to next cell when user release "Enter".
      *
-     * @param <T>
-     *            generic type of table view
+     * @param <T> generic type of table view
      * @author Gang Shao
      */
     private class EasySelection<T> implements EventHandler<KeyEvent> {
@@ -863,6 +895,7 @@ public class AddAndEditViewController {
 
     /**
      * configures the file chooser for recipe thumbnail
+     *
      * @param fileChooser the fileChooser needed to be configured
      * @author Gang Shao
      */
@@ -875,6 +908,7 @@ public class AddAndEditViewController {
 
     /**
      * show thumbnail to the view with an instance of file
+     *
      * @param file the thumbnail file
      * @author Gang Shao
      */
@@ -895,6 +929,7 @@ public class AddAndEditViewController {
 
     /**
      * show thumbnail to the view with the file name
+     *
      * @param thumbnailName the file name
      * @author Gang Shao
      */
@@ -911,128 +946,128 @@ public class AddAndEditViewController {
         }
     }
 
-	public void setRecipe(Recipe recipe) {
-		this.recipe = recipe;
-	}
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
+    }
 
-	public void setIsNew(boolean bool) {
-		this.isNew = bool;
-	}
+    public void setIsNew(boolean bool) {
+        this.isNew = bool;
+    }
 
-	/*
-	 * Copy the chosen Thumbnail into resources
-	 * 
-	 * @param file	 the path of the picture
-	 * @param toFile	the path of the destination
-	 * 
-	 * @author Qiwen Gu
-	 */
-	public static void copyThumbnail(File file, File toFile) throws Exception {
-		byte[] buffer = new byte[1024];
-		int dataNum;
-		FileInputStream fis;
-		FileOutputStream fos;
-		if (file.isDirectory()) {
-			String filepath = file.getAbsolutePath();
-			filepath = filepath.replaceAll("\\\\", "/");
-			String toFilepath = toFile.getAbsolutePath();
-			toFilepath = toFilepath.replaceAll("\\\\", "/");
-			int lastIndex = filepath.lastIndexOf("/");
-			toFilepath = toFilepath + filepath.substring(lastIndex, filepath.length());
-			File copy = new File(toFilepath);
-			if (!copy.exists()) {
-				copy.mkdir();
-			}
-			for (File f : file.listFiles()) {
-				copyThumbnail(f, copy);
-			}
-		} else {
-			if (toFile.isDirectory()) {
-				String filepath = file.getAbsolutePath();
-				filepath = filepath.replaceAll("\\\\", "/");
-				String toFilepath = toFile.getAbsolutePath();
-				toFilepath = toFilepath.replaceAll("\\\\", "/");
-				int lastIndex = filepath.lastIndexOf("/");
-				toFilepath = toFilepath + filepath.substring(lastIndex, filepath.length());
-				File newFile = new File(toFilepath);
-				fis = new FileInputStream(file);
-				fos = new FileOutputStream(newFile);
-				while ((dataNum = fis.read(buffer)) != -1) {
-					fos.write(buffer, 0, dataNum);
-				}
-			} else {
-				fis = new FileInputStream(file);
-				fos = new FileOutputStream(toFile);
-				while ((dataNum = fis.read(buffer)) != -1) {
-					fos.write(buffer, 0, dataNum);
-				}
-			}
-		}
-	}
+    /*
+     * Copy the chosen Thumbnail into resources
+     *
+     * @param file	 the path of the picture
+     * @param toFile	the path of the destination
+     *
+     * @author Qiwen Gu
+     */
+    public static void copyThumbnail(File file, File toFile) throws Exception {
+        byte[] buffer = new byte[1024];
+        int dataNum;
+        FileInputStream fis;
+        FileOutputStream fos;
+        if (file.isDirectory()) {
+            String filepath = file.getAbsolutePath();
+            filepath = filepath.replaceAll("\\\\", "/");
+            String toFilepath = toFile.getAbsolutePath();
+            toFilepath = toFilepath.replaceAll("\\\\", "/");
+            int lastIndex = filepath.lastIndexOf("/");
+            toFilepath = toFilepath + filepath.substring(lastIndex, filepath.length());
+            File copy = new File(toFilepath);
+            if (!copy.exists()) {
+                copy.mkdir();
+            }
+            for (File f : file.listFiles()) {
+                copyThumbnail(f, copy);
+            }
+        } else {
+            if (toFile.isDirectory()) {
+                String filepath = file.getAbsolutePath();
+                filepath = filepath.replaceAll("\\\\", "/");
+                String toFilepath = toFile.getAbsolutePath();
+                toFilepath = toFilepath.replaceAll("\\\\", "/");
+                int lastIndex = filepath.lastIndexOf("/");
+                toFilepath = toFilepath + filepath.substring(lastIndex, filepath.length());
+                File newFile = new File(toFilepath);
+                fis = new FileInputStream(file);
+                fos = new FileOutputStream(newFile);
+                while ((dataNum = fis.read(buffer)) != -1) {
+                    fos.write(buffer, 0, dataNum);
+                }
+            } else {
+                fis = new FileInputStream(file);
+                fos = new FileOutputStream(toFile);
+                while ((dataNum = fis.read(buffer)) != -1) {
+                    fos.write(buffer, 0, dataNum);
+                }
+            }
+        }
+    }
 
-	/*
-	 * Copy the chosen Thumbnail into resources
-	 * 
-	 * @param sourcePath	 the path of the picture
-	 * @param newRecipeId	the owner' recipeId of the picture
-	 * 
-	 * @author Qiwen Gu, Gang Shao
-	 */
-	public void copyThumbnail(Path sourcePath, int newRecipeId) throws Exception {
-		if (sourcePath != null && !sourcePath.equals("")) {
-			File srcFile = new File(sourcePath.toString());
-			File projectFile = new File("");
-			String extension = new String(sourcePath.toString().substring(sourcePath.toString().lastIndexOf('.')));
-			
-			thumbnailName = newRecipeId + extension;
-			
-			String destination = projectFile.getCanonicalPath() + "\\src\\resources\\" + thumbnailName;
+    /*
+     * Copy the chosen Thumbnail into resources
+     *
+     * @param sourcePath	 the path of the picture
+     * @param newRecipeId	the owner' recipeId of the picture
+     *
+     * @author Qiwen Gu, Gang Shao
+     */
+    public void copyThumbnail(Path sourcePath, int newRecipeId) throws Exception {
+        if (sourcePath != null && !sourcePath.equals("")) {
+            File srcFile = new File(sourcePath.toString());
+            File projectFile = new File("");
+            String extension = new String(sourcePath.toString().substring(sourcePath.toString().lastIndexOf('.')));
+
+            thumbnailName = newRecipeId + extension;
+
+            String destination = projectFile.getCanonicalPath() + "\\src\\resources\\" + thumbnailName;
             if (destination.equals(sourcePath.toString())) {
                 return;
             }
             File desFile = new File(destination);
-			
-			byte[] buffer = new byte[1024];
-			int dataNum;
-			FileInputStream fis;
-			FileOutputStream fos;
-			if (srcFile.isDirectory()) {
-				String filepath = srcFile.getAbsolutePath();
-				filepath = filepath.replaceAll("\\\\", "/");
-				String toFilepath = desFile.getAbsolutePath();
-				toFilepath = toFilepath.replaceAll("\\\\", "/");
-				int lastIndex = filepath.lastIndexOf("/");
-				toFilepath = toFilepath + filepath.substring(lastIndex, filepath.length());
-				File copy = new File(toFilepath);
-				if (!copy.exists()) {
-					copy.mkdir();
-				}
-				for (File f : srcFile.listFiles()) {
-					copyThumbnail(f, copy);
-				}
-			} else {
-				if (desFile.isDirectory()) {
-					String filepath = srcFile.getAbsolutePath();
-					filepath = filepath.replaceAll("\\\\", "/");
-					String toFilepath = desFile.getAbsolutePath();
-					toFilepath = toFilepath.replaceAll("\\\\", "/");
-					int lastIndex = filepath.lastIndexOf("/");
-					toFilepath = toFilepath + filepath.substring(lastIndex, filepath.length());
-					File newFile = new File(toFilepath);
-					fis = new FileInputStream(srcFile);
-					fos = new FileOutputStream(newFile);
-					while ((dataNum = fis.read(buffer)) != -1) {
-						fos.write(buffer, 0, dataNum);
-					}
-				} else {
-					fis = new FileInputStream(srcFile);
-					fos = new FileOutputStream(desFile);
-					while ((dataNum = fis.read(buffer)) != -1) {
-						fos.write(buffer, 0, dataNum);
-					}
-				}
-			}
-		}
+
+            byte[] buffer = new byte[1024];
+            int dataNum;
+            FileInputStream fis;
+            FileOutputStream fos;
+            if (srcFile.isDirectory()) {
+                String filepath = srcFile.getAbsolutePath();
+                filepath = filepath.replaceAll("\\\\", "/");
+                String toFilepath = desFile.getAbsolutePath();
+                toFilepath = toFilepath.replaceAll("\\\\", "/");
+                int lastIndex = filepath.lastIndexOf("/");
+                toFilepath = toFilepath + filepath.substring(lastIndex, filepath.length());
+                File copy = new File(toFilepath);
+                if (!copy.exists()) {
+                    copy.mkdir();
+                }
+                for (File f : srcFile.listFiles()) {
+                    copyThumbnail(f, copy);
+                }
+            } else {
+                if (desFile.isDirectory()) {
+                    String filepath = srcFile.getAbsolutePath();
+                    filepath = filepath.replaceAll("\\\\", "/");
+                    String toFilepath = desFile.getAbsolutePath();
+                    toFilepath = toFilepath.replaceAll("\\\\", "/");
+                    int lastIndex = filepath.lastIndexOf("/");
+                    toFilepath = toFilepath + filepath.substring(lastIndex, filepath.length());
+                    File newFile = new File(toFilepath);
+                    fis = new FileInputStream(srcFile);
+                    fos = new FileOutputStream(newFile);
+                    while ((dataNum = fis.read(buffer)) != -1) {
+                        fos.write(buffer, 0, dataNum);
+                    }
+                } else {
+                    fis = new FileInputStream(srcFile);
+                    fos = new FileOutputStream(desFile);
+                    while ((dataNum = fis.read(buffer)) != -1) {
+                        fos.write(buffer, 0, dataNum);
+                    }
+                }
+            }
+        }
 
     }
 
@@ -1044,8 +1079,44 @@ public class AddAndEditViewController {
     private void showEditInformation() {
         Alert editLost = new Alert(Alert.AlertType.INFORMATION);
         editLost.setHeaderText("Sorry for your inconvenience. \nPlease press ENTER to save.");
-        editLost.setContentText("Edits will only be saved if you press \"Enter\", clicking outside or press ESC will ignore what you have just entered. \nAfter pressing \"Enter\", edits will be saved and move to the next cell automatically for you.");
+        editLost.setContentText("Edits will only be saved if you press \"Enter\", clicking outside or press ESC will ignore what you have just entered.");
         editLost.show();
+        hasShowEditInformation = true;
+    }
+
+    private ButtonType showTooLongInformation(Label label, TextInputControl textFld) {
+        String labelText = label.getText();
+        int maxLength = 0;
+        switch (labelText) {
+            case "Title":
+                maxLength = 80;
+                break;
+            case "Brief Introduction":
+                maxLength = 250;
+                break;
+            case "Detailed Description":
+                maxLength = 500;
+                break;
+        }
+        if (textFld.getText().length() > maxLength) {
+            Alert tooLongAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            tooLongAlert.setTitle("Something too long...");
+            tooLongAlert.setHeaderText("Text in " + label.getText() + " is longer than maximum " + maxLength + " letters.");
+            tooLongAlert.setContentText("Press OK so the application read the first " + maxLength + " letters, or Cancel to edit it yourself.");
+            Optional<ButtonType> autoOrManual = tooLongAlert.showAndWait();
+            if (autoOrManual.isPresent()) {
+                if (autoOrManual.get() == ButtonType.OK) {
+                    textFld.setText(textFld.getText().substring(0, 80));
+                    return ButtonType.OK;
+                } else {
+                    return ButtonType.CANCEL;
+                }
+            }
+
+        } else {
+            return ButtonType.OK;
+        }
+        return ButtonType.OK;
     }
 
 }
